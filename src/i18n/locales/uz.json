@@ -41,5 +41,8 @@
   "submit": "Yuborish",
   "cencel": "Bekor qilish",
   "themeChange": "Temani o'zgartiring",
-  "languageChange": "Tilni o'zgartiring"
+  "languageChange": "Tilni o'zgartiring",
+  "category": "Turkum",
+  "selectCategoryPlacholder": "Turkumni tanlang",
+  "search": "Qidirish"
 }

@@ -1,19 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Label } from "@radix-ui/react-label";
 import { useTranslation } from "react-i18next";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectGroup,
-} from "@radix-ui/react-select";
-import { Upload } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { SearchbleSelect } from "@/components/component/Searchble-Select";
+import { ImageUpload } from "@/components/component/Image-Upload";
 
 const productSchema = z.object({
   name: z.string().min(1, "productRequired"),
@@ -40,8 +33,7 @@ const productSchema = z.object({
 
 export default function CreateProduct() {
   const { t } = useTranslation();
-  const [selectedImage, setSelectedImage] = useState(null);
-
+  
   const form = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -56,6 +48,7 @@ export default function CreateProduct() {
 
   const onSubmit = (data) => {
     const formData = new FormData();
+    console.log(data);
     Object.keys(data).forEach((key) => {
       if (key === "image" && data[key]) {
         formData.append(key, data[key]);
@@ -67,20 +60,12 @@ export default function CreateProduct() {
     // TODO: Implement product creation logic
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedImage(URL.createObjectURL(file));
-      form.setValue("image", file);
-    }
-  };
-
   return (
-    <div className="max-w-2xl p-6">
+    <div className="max-w-[900px] p-6">
       <h1 className="text-2xl font-bold mb-6">Create New Product</h1>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 max-w-[800px]"
+        className="space-y-4 max-w-full"
       >
         <div className="flex items-center gap-x-5">
           <div className="space-y-2 w-full">
@@ -141,7 +126,10 @@ export default function CreateProduct() {
 
         <div className="flex items-center gap-x-4 justify-between">
           <div className="space-y-2 w-full">
-            <Label htmlFor="percentage" className="text-gray-700 dark:text-white font-medium">
+            <Label
+              htmlFor="percentage"
+              className="text-gray-700 dark:text-white font-medium"
+            >
               {t("percentage")}*
             </Label>
             <input
@@ -157,32 +145,31 @@ export default function CreateProduct() {
               </p>
             )}
           </div>
-          <div className="w-full">
-            <Label htmlFor="percentage" className="text-gray-700 font-medium">
+          <div className="space-y-2 w-full">
+            <Label
+              htmlFor="percentage"
+              className="text-gray-700 dark:text-white font-medium"
+            >
               {t("category")}*
             </Label>
-            <Select>
-              <SelectTrigger className="w-full bg-primaryColor">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="apple">Apple</SelectItem>
-                  <SelectItem value="banana">Banana</SelectItem>
-                  <SelectItem value="blueberry">Blueberry</SelectItem>
-                  <SelectItem value="grapes">Grapes</SelectItem>
-                  <SelectItem value="pineapple">Pineapple</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <SearchbleSelect placeholder="selectCategoryPlacholder" />
+            {form.formState.errors.percentage && (
+              <p className="text-red-500 leading-none text-sm">
+                {t(form.formState.errors.percentage.message)}
+              </p>
+            )}
           </div>
         </div>
         {/* Image Uploade */}
         <div className="space-y-2 max-w-[350px]">
-          <Label htmlFor="image" className="text-gray-700 dark:text-white font-medium">
+          <Label
+            htmlFor="image"
+            className="text-gray-700 dark:text-white font-medium"
+          >
             {t("image")}
           </Label>
-          <div className="w-full">
+          <ImageUpload maxImages={5} />
+          {/* <div className="w-full">
             <label
               htmlFor="image-upload"
               className="flex flex-col items-center justify-center w-[350px] h-34 border-2 border-gray-300 border-dashed rounded-[8px] cursor-pointer bg-gray-50 dark:bg-darkBgInputs hover:bg-gray-100"
@@ -214,7 +201,7 @@ export default function CreateProduct() {
                 {t(form.formState.errors.image.message)}
               </p>
             )}
-          </div>
+          </div> */}
         </div>
 
         <div className="flex items-center gap-x-4 pt-5">

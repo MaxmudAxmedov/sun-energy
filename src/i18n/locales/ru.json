@@ -41,5 +41,8 @@
   "submit": "Отправить",
   "cencel": "Отменить",
   "themeChange": "Сменить Тему",
-  "languageChange": "Сменить Язык"
+  "languageChange": "Сменить Язык",
+  "category": "Категория",
+  "selectCategoryPlacholder": "Выберите категории",
+  "search": "Поиск"
 }

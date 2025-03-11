@@ -9,9 +9,9 @@ export default function Layout() {
     return <Navigate to="/login" />;
   }
   return (
-    <div className="grid grid-cols-mainGrid">
+    <div className="flex">
       <Navbar />
-      <div className="bg-layoutBgColor dark:bg-darkPrimaryColor">
+      <div className="bg-layoutBgColor w-full dark:bg-darkPrimaryColor">
         <div className="container">
           <Outlet />
         </div>

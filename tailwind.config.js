@@ -23,6 +23,7 @@ export default {
         gray3: "#8C8E90",
         darkBorderInput: "#4B5563",
         darkBgInputs: "#22222A",
+        darkPlacholderColor: "#9CA3AF",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

@@ -11,6 +11,7 @@
   "setting": "Settings",
   "language": "Language",
   "dark": "Dark",
+  "category": "Categorys",
   "light": "Light",
   "system": "System",
   "themeChange": "Change Theme",
@@ -41,5 +42,7 @@
   "image": "Image",
   "chooseImage": "Choose image",
   "searchClient": "Search Client",
-  "languageChange": "Change Language"
+  "languageChange": "Change Language",
+  "selectCategoryPlacholder": "Select categorys",
+  "search": "Search"
 }
