@@ -6,7 +6,7 @@ export default function Contract() {
     <div>
       <DynamicHeader
         title="contract"
-        btnName="createContract"
+        btnName="create"
         inputPlacholder="searchContract"
         btnNavigate="createContract"
       />
