@@ -61,8 +61,8 @@ export default function CreateProduct() {
   };
 
   return (
-    <div className="max-w-[900px] p-6">
-      <h1 className="text-2xl font-bold mb-6">Create New Product</h1>
+    <div className="max-w-[900px] tablet:p-6 pt-2">
+      <h1 className="text-2xl font-bold mb-6">{t("createProduct")}</h1>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 max-w-full"

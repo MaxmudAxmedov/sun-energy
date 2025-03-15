@@ -6,7 +6,7 @@ export default function Clients() {
     <div>
       <DynamicHeader
         title="clients"
-        btnName="createClient"
+        btnName="create"
         inputPlacholder="searchClient"
         btnNavigate="/createClient"
       />

@@ -6,7 +6,7 @@ export default function Base() {
     <div>
       <DynamicHeader
         title="base"
-        btnName="createBase"
+        btnName="create"
         inputPlacholder="searchBase"
         btnNavigate="createBase"
       />

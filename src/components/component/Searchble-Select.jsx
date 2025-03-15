@@ -36,7 +36,7 @@ export const SearchbleSelect = ({
     { value: "item9", label: "Item 9" },
     { value: "item10", label: "Item 10" },
   ];
-
+  
   const handleSelect = (currentValue) => {
     setSelectedValue(currentValue);
     onValueChange?.(currentValue);

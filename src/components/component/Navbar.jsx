@@ -25,7 +25,7 @@ export default function Navbar() {
 
   return (
     <div
-      className={`h-screen dark:bg-darkSecondary bg-white flex flex-col transition-all duration-300 ${
+      className={`h-screen hidden dark:bg-darkSecondary bg-white desktop:flex flex-col transition-all duration-300 ${
         isCollapsed ? "w-[80px]" : "w-[290px]"
       }`}
     >
@@ -77,7 +77,10 @@ export default function Navbar() {
                   <TooltipTrigger className="cursor-pointer">
                     <item.icon size={20} />
                   </TooltipTrigger>
-                  <TooltipContent side="left" className="z-50 ml-5 bg-primaryColor dark:bg-primaryColor dark:text-white">
+                  <TooltipContent
+                    side="left"
+                    className="z-50 ml-5 bg-primaryColor dark:bg-primaryColor dark:text-white"
+                  >
                     <p>{t(item.title)}</p>
                   </TooltipContent>
                 </Tooltip>
