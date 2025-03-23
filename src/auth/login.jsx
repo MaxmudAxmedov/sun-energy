@@ -2,29 +2,44 @@ import React from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useNavigate } from "react-router-dom";
 import { Spinner } from "@/components/component/spinner";
 import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import {
+  FormControl,
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutateData } from "@/hook/useApi";
+
+const formSchema = z.object({
+  login: z.string().min(1, { message: "login is required" }),
+  password: z.string().min(1, { message: "password is required" }),
+});
 
 export default function LoginPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { mutate, isLoading } = useMutateData();
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      login: "nuriddin9909",
+      password: "",
+    },
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      localStorage.setItem("token", "your-auth-token");
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+  const submitData = (data) => {
+      mutate({
+      endpoint: "/verify",
+      method: "POST",
+      data: data,
+      navigatePath: "/",
+    });
   };
 
   return (
@@ -41,39 +56,60 @@ export default function LoginPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-200">
-                Login
-              </Label>
-              <Input
-                id="email"
-                type="text"
-                placeholder="Enter your login"
-                className="bg-slate-800 border-slate-700 text-slate-200"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-slate-200">
-                Password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                className="bg-slate-800 border-slate-700 text-slate-200"
-                required
-              />
-            </div>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className={`w-full bg-blue-600 hover:bg-blue-700 text-white`}
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(submitData)}
+              className="space-y-4"
             >
-              {isLoading ? <Spinner /> : "Login"}
-            </Button>
-          </form>
+              <FormField
+                control={form.control}
+                name="login"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-slate-200">Login</FormLabel>
+                    <FormControl>
+                      <Input
+                        required
+                        type="text"
+                        className="bg-slate-800 border-slate-700 text-slate-200"
+                        placeholder="Login"
+                        {...field}
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-slate-200">Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        required
+                        type="password"
+                        className="bg-slate-800 border-slate-700 text-slate-200"
+                        placeholder="Password"
+                        {...field}
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full bg-blue-600 hover:bg-blue-700 text-white`}
+              >
+                {isLoading ? <Spinner /> : "Login"}
+              </Button>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>

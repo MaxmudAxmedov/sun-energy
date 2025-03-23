@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PlusIcon } from "@/assets/icons/plus-icon";
 import { SearchIcon } from "@/assets/icons/search-icon";
 import { PlusIconSmall } from "@/assets/icons/plus-icon-small";
+import { useDebounce } from "use-debounce";
 
-export const DynamicHeader = ({ title, btnNavigate, inputPlacholder }) => {
+export const DynamicHeader = ({
+  title,
+  btnNavigate,
+  inputPlacholder,
+  onSearch = () => {},
+}) => {
   const { t } = useTranslation();
+  const [search, setSearch] = useState("");
+  const [debouncedSearch] = useDebounce(search, 500);
+
+  useEffect(() => {
+    onSearch(debouncedSearch);
+  }, [debouncedSearch, onSearch]);
+
+  const handleInputChange = (e) => {
+    e.preventDefault();
+    setSearch(e.target.value);
+  };
+
   return (
     <div className="flex flex-col desktop:flex-row desktop:items-center justify-between desktop:mt-8 tablet:mt-3">
       <div className="flex items-center justify-between w-full">
@@ -26,6 +44,8 @@ export const DynamicHeader = ({ title, btnNavigate, inputPlacholder }) => {
           <input
             placeholder={t(inputPlacholder)}
             type="text"
+            value={search}
+            onChange={handleInputChange}
             className="py-1.5 tablet:py-2 bg-transparent pr-10 w-full outline-none placeholder:text-gray3 dark:placeholder:text-[#8C8E90] dark:text-[#8C8E90]"
           />
         </div>

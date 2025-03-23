@@ -3,38 +3,37 @@ import { Button } from "../ui/button";
 import { Eye, Trash2, Upload, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-export const ImageUpload = ({ maxImages = 5 }) => {
+export const ImageUpload = ({ maxImages = 5, onChange }) => {
   const [images, setImages] = useState([]);
   const [viewingImage, setViewingImage] = useState(null);
   const fileInputRef = useRef(null);
   const { t } = useTranslation();
 
   console.log(images);
+
   const handleImageUpload = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const newImages = [];
+    const files = e.target.files;
+    if (!files.length) return;
 
-      Array.from(e.target.files).forEach((file) => {
-        if (images.length + newImages.length < maxImages) {
-          const imageUrl = URL.createObjectURL(file);
-          newImages.push(imageUrl);
-        }
-      });
-
-      setImages([...images, ...newImages]);
-
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+    const newImages = [];
+    Array.from(files).forEach((file) => {
+      if (images.length + newImages.length < maxImages) {
+        const imageUrl = URL.createObjectURL(file);
+        newImages.push({ file, imageUrl });
       }
-    }
+    });
+
+    setImages([...images, ...newImages]);
+    // Pass the updated images to the parent via onChange
+    onChange([...images, ...newImages].map((img) => img.file));
   };
 
   const handleDeleteImage = (index) => {
     const newImages = [...images];
-    URL.revokeObjectURL(newImages[index]);
+    newImages[index];
     newImages.splice(index, 1);
     setImages(newImages);
+    onChange(newImages.map((img) => img.file));
   };
 
   const openImageViewer = (imageUrl) => {
@@ -45,20 +44,24 @@ export const ImageUpload = ({ maxImages = 5 }) => {
     setViewingImage(null);
   };
 
+  if (fileInputRef.current) {
+    fileInputRef.current.value = "";
+  }
+
   return (
     <div className="w-[710px]">
       {/* Image thumbnails */}
-      <div className="flex  flex-wrap gap-4 mb-4">
+      <div>
         {/* Upload button */}
-        {images.length < maxImages && (
+        {images.length < maxImages ? (
           <div className="w-32">
             <label
               htmlFor="image-upload"
-              className="flex flex-col items-center justify-center w-full h-[80px] border border-dashed rounded-md cursor-pointer bg-white hover:bg-gray-50"
+              className="flex flex-col items-center justify-center w-[303px] h-[39px] border border-dashed cursor-pointer bg-white p-2 dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
             >
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                <p className="text-xs text-gray-500 text-center">
+              <div className="flex items-center justify-between gap-x-2">
+                <Upload className="w-5 h-5 text-gray-400 " />
+                <p className="text-[14px] text-gray-500 text-center">
                   {t("chooseImage")}
                 </p>
               </div>
@@ -73,36 +76,63 @@ export const ImageUpload = ({ maxImages = 5 }) => {
               />
             </label>
           </div>
+        ) : (
+          <div className="w-32">
+            <label
+              htmlFor="image-upload"
+              className="flex flex-col items-center justify-center w-[303px] h-[39px] border border-dashed cursor-not-allowed bg-white p-2 dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+            >
+              <div className="flex items-center justify-between gap-x-2">
+                {/* <Upload className="w-5 h-5 text-gray-400 " /> */}
+                <p className="text-[14px] text-gray-500 text-center">
+                  {t("canNotChooseImage")}
+                </p>
+              </div>
+              <input
+                id="image-upload"
+                type="file"
+                accept="image/*"
+                multiple
+                disabled
+                className="hidden"
+              />
+            </label>
+          </div>
         )}
 
-        {images.map((image, index) => (
-          <div key={index} className="relative group hover:opacity-80 transition-all duration-300">
-            <span className="absolute hidden group-hover:block left-[50px] top-[40px]">
-              <Eye className="w-5 h-5 text-white"/>
-            </span>
-            <div
-              className="w-32 h-[100px] border border-dashed rounded-md overflow-hidden cursor-pointer"
-              onClick={() => openImageViewer(image)}
-            >
-              <img
-                src={image || "/placeholder.svg"}
-                alt={`Uploaded image ${index + 1}`}
-                width={100}
-                height={60}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <button
-              className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDeleteImage(index);
-              }}
-            >
-              <Trash2 size={14} />
-            </button>
-          </div>
-        ))}
+        <div className="flex gap-2 mt-2">
+          {images.map((image, index) => {
+            console.log(image);
+            return (
+              <div
+                key={index}
+                className="relative h-[100px] group w-32 hover:opacity-80 transition-all duration-300"
+              >
+                <div
+                  className="w-32 h-[100px] border border-dashed rounded-md overflow-hidden cursor-pointer"
+                  onClick={() => openImageViewer(image)}
+                >
+                  <img
+                    src={image || "/placeholder.svg"}
+                    alt={`Uploaded image ${index + 1}`}
+                    width={100}
+                    height={60}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <button
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteImage(index);
+                  }}
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Image viewer modal */}

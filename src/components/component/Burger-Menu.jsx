@@ -40,7 +40,7 @@ export const BurgerMenu = () => {
       </button>
 
       <nav
-        className="fixed top-0 h-screen right-0 bg-white dark:bg-darkSecondary w-[300px] transition-transform duration-300 desktop:hidden"
+        className="fixed top-0 h-screen right-0 bg-white dark:bg-darkSecondary z-50 w-[300px] transition-transform duration-300 desktop:hidden"
         style={{
           boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
           transform: isOpen ? "translateX(0)" : "translateX(100%)",

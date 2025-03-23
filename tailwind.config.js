@@ -5,7 +5,8 @@ export default {
   theme: {
     extend: {
       screens: {
-        desktop: "992px",
+        desktop: "1180px",
+        bigTablet: "708px",
         tablet: "525px",
       },
       borderRadius: {
