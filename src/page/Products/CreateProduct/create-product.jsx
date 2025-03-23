@@ -1,20 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Label } from "@radix-ui/react-label";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { SearchbleSelect } from "@/components/component/Searchble-Select";
 import { ImageUpload } from "@/components/component/Image-Upload";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { SearchbleSelect } from "@/components/component/Searchble-Select";
+import { useGetData } from "@/hook/useApi";
+import { useMutateData } from "@/hook/useApi";
+import { Spinner } from "@/components/component/spinner";
 
 const productSchema = z.object({
   name: z.string().min(1, "productRequired"),
   description: z.string().min(1, "descriptionRequired"),
-  price: z.string().min(1, "Price is required"),
-  category: z.string().min(1, "Category is required"),
-  percentage: z.string().min(1, "percentageRequired"),
-  image: z
+  price: z.string().min(1, "priceRequired"),
+  count_of_product: z.string().min(1, "countOfProductRequired"),
+  category_id: z.string().min(1, "categoryRequired"),
+  percent: z.string().min(1, "percentRequired"),
+  photos: z
     .custom(
       (file) => {
         if (!(file instanceof File)) return false;
@@ -28,198 +41,262 @@ const productSchema = z.object({
         message: "Image must be JPG, JPEG or PNG format and less than 5MB",
       }
     )
-    .optional(),
+    .array()
+    .min(1, "imageRequired"),
 });
 
 export default function CreateProduct() {
   const { t } = useTranslation();
-  
+  const [search, setSearch] = useState("");
+  const { data: productCategoryData, isLoading } = useGetData({
+    endpoint: "/product-categories",
+    enabled: true,
+    params: {
+      search,
+    },
+    getQueryKey: "/product-category",
+  });
+  const { mutate, isLoading: mutateLoading } = useMutateData();
+
+  // console.log(productCategoryData);
+
   const form = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
       description: "",
       price: "",
-      category: "",
-      percentage: "",
-      image: null,
+      category_id: "",
+      percent: "",
+      count_of_product: "",
+      photos: null,
     },
   });
 
   const onSubmit = (data) => {
-    const formData = new FormData();
     console.log(data);
-    Object.keys(data).forEach((key) => {
-      if (key === "image" && data[key]) {
-        formData.append(key, data[key]);
-      } else {
-        formData.append(key, data[key]);
-      }
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("price", Number(data.price));
+    formData.append("category_id", data.category_id);
+    formData.append("percent", data.percent);
+    formData.append("count_of_product", data.count_of_product);
+
+    for (let i = 0; i < data.photos.length; i++) {
+      formData.append("photos", data.photos[i]);
+    }
+    mutate({
+      endpoint: "/product-images",
+      data: formData,
+      toastCreateMessage: "productCreated",
+      navigatePath: "/",
+      mutateQueryKey: "/products",
     });
-    console.log(Object.fromEntries(formData));
-    // TODO: Implement product creation logic
   };
 
   return (
     <div className="max-w-[900px] tablet:p-6 pt-2">
       <h1 className="text-2xl font-bold mb-6">{t("createProduct")}</h1>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 max-w-full"
-      >
-        <div className="flex items-center gap-x-5">
-          <div className="space-y-2 w-full">
-            <Label
-              htmlFor="name"
-              className="text-gray-700 dark:text-white font-medium"
-            >
-              {t("productName")}*
-            </Label>
-            <input
-              id="name"
-              {...form.register("name")}
-              placeholder={t("enterProductName")}
-              className="w-full p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-            />
-            {form.formState.errors.name && (
-              <p className="text-red-500 leading-none text-sm">
-                {t(form.formState.errors.name.message)}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2 w-full">
-            <Label
-              htmlFor="price"
-              className="text-gray-700 dark:text-white font-medium"
-            >
-              {t("price")}*
-            </Label>
-            <input
-              id="price"
-              type="number"
-              {...form.register("price")}
-              placeholder={t("enterPrice")}
-              className="w-full p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-            />
-            {form.formState.errors.price && (
-              <p className="text-red-500 leading-none text-sm">
-                {t(form.formState.errors.price.message)}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="description">{t("description")}*</Label>
-          <textarea
-            id="description"
-            {...form.register("description")}
-            placeholder={t("enterDescription")}
-            className="w-full p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-md h-32"
-          />
-          {form.formState.errors.description && (
-            <p className="text-red-500 text-sm leading-none">
-              {t(form.formState.errors.name.message)}
-            </p>
-          )}
-        </div>
-
-        <div className="flex items-center gap-x-4 justify-between">
-          <div className="space-y-2 w-full">
-            <Label
-              htmlFor="percentage"
-              className="text-gray-700 dark:text-white font-medium"
-            >
-              {t("percentage")}*
-            </Label>
-            <input
-              id="percentage"
-              type="text"
-              {...form.register("percentage")}
-              placeholder={t("enterPercentage") + " %"}
-              className="w-full p-2 border rounded-[8px] dark:bg-darkBgInputs dark:border-darkBorderInput"
-            />
-            {form.formState.errors.percentage && (
-              <p className="text-red-500 leading-none text-sm">
-                {t(form.formState.errors.percentage.message)}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2 w-full">
-            <Label
-              htmlFor="percentage"
-              className="text-gray-700 dark:text-white font-medium"
-            >
-              {t("category")}*
-            </Label>
-            <SearchbleSelect placeholder="selectCategoryPlacholder" />
-            {form.formState.errors.percentage && (
-              <p className="text-red-500 leading-none text-sm">
-                {t(form.formState.errors.percentage.message)}
-              </p>
-            )}
-          </div>
-        </div>
-        {/* Image Uploade */}
-        <div className="space-y-2 max-w-[350px]">
-          <Label
-            htmlFor="image"
-            className="text-gray-700 dark:text-white font-medium"
-          >
-            {t("image")}
-          </Label>
-          <ImageUpload maxImages={5} />
-          {/* <div className="w-full">
-            <label
-              htmlFor="image-upload"
-              className="flex flex-col items-center justify-center w-[350px] h-34 border-2 border-gray-300 border-dashed rounded-[8px] cursor-pointer bg-gray-50 dark:bg-darkBgInputs hover:bg-gray-100"
-            >
-              {selectedImage ? (
-                <img
-                  src={selectedImage}
-                  alt="Preview"
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <div className="flex gap-x-3 items-center justify-center pt-5 pb-5">
-                  <Upload className="w-5 h-5 text-gray-400" />
-                  <p className="text-sm text-gray-500">
-                    <span className="font-semibold">{t("chooseImage")}</span>
-                  </p>
-                </div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 max-w-full"
+        >
+          <div className="flex flex-col bigTablet:flex-row bigTablet:items-center space-y-4 bigTablet:space-y-0 gap-x-5">
+            {/* Product Name */}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="full_name"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("productName")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("enterProductName")}
+                      {...field}
+                      className="w-[300px] tablet:w-[450px] bigTablet:w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-              <input
-                id="image-upload"
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </label>
-            {form.formState.errors.image && (
-              <p className="text-red-500 mt-1 leading-none text-sm">
-                {t(form.formState.errors.image.message)}
-              </p>
-            )}
-          </div> */}
-        </div>
+            />
+            {/* Count of Product */}
+            <FormField
+              control={form.control}
+              name="count_of_product"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="count_of_product"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("countOfProduct")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="integer"
+                      placeholder={t("enterCountOfProduct")}
+                      {...field}
+                      className="w-[300px] tablet:w-[450px] bigTablet:w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-        <div className="flex items-center gap-x-4 pt-5">
-          <NavLink
-            to={"/"}
-            type="reset"
-            className="w-[180px] text-center bg-red-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-          >
-            {t("cencel")}
-          </NavLink>
-          <button
-            type="submit"
-            className="w-[180px] bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-          >
-            {t("submit")}
-          </button>
-        </div>
-      </form>
+          {/* Product Description */}
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel
+                  htmlFor="description"
+                  className="text-gray-700 dark:text-white font-medium"
+                >
+                  {t("description")}*
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    type="text"
+                    placeholder={t("enterDescription")}
+                    {...field}
+                    className="bigTablet:w-[620px] w-[300px] tablet:w-[450px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex flex-col bigTablet:flex-row bigTablet:items-center bigTablet:space-y-0 space-y-4 gap-x-4">
+            {/* Precent */}
+            <FormField
+              control={form.control}
+              name="percent"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="percent"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("percent")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="integer"
+                      placeholder={t("enterPercent")}
+                      {...field}
+                      className="w-[300px] tablet:w-[450px] bigTablet:w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Price */}
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="price"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("price")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder={t("enterPrice")}
+                      {...field}
+                      className="w-[303px] tablet:w-[450px] bigTablet::w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex flex-col bigTablet:flex-row bigTablet:items-center bigTablet:space-y-0 space-y-4 gap-x-4">
+            <FormField
+              control={form.control}
+              name="category_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="category_id"
+                    className="text-gray-700 block dark:text-white font-medium"
+                  >
+                    {t("category")}*
+                  </FormLabel>
+                  <FormControl>
+                    <SearchbleSelect
+                      options={productCategoryData?.Data?.product_categories}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      emptyMessage={"EmptyMessage"}
+                      placeholder={t("chooseCategory")}
+                      searchPlaceholder={t("searchCategory")}
+                      onSearch={setSearch}
+                      loading={isLoading}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Image Uploade */}
+            <FormField
+              control={form.control}
+              name="photos"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="photos"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("image")}*
+                  </FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      maxImages={5}
+                      onChange={(files) => field.onChange(files)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex items-center gap-x-4 pt-5">
+            <NavLink
+              to={"/"}
+              type="reset"
+              className="w-[180px] text-center bg-red-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+            >
+              {t("cencel")}
+            </NavLink>
+            <button
+              type="submit"
+              className="w-[180px] bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+            >
+              {mutateLoading ? <Spinner /> : t("submit")}
+            </button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }
