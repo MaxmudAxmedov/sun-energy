@@ -220,7 +220,7 @@ export default function CreateProduct() {
                       type="text"
                       placeholder={t("enterPrice")}
                       {...field}
-                      className="w-[303px] tablet:w-[450px] bigTablet::w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                      className="w-[303px] tablet:w-[450px] bigTablet:w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -228,58 +228,55 @@ export default function CreateProduct() {
               )}
             />
           </div>
-          <div className="flex flex-col bigTablet:flex-row bigTablet:items-center bigTablet:space-y-0 space-y-4 gap-x-4">
-            <FormField
-              control={form.control}
-              name="category_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel
-                    htmlFor="category_id"
-                    className="text-gray-700 block dark:text-white font-medium"
-                  >
-                    {t("category")}*
-                  </FormLabel>
-                  <FormControl>
-                    <SearchbleSelect
-                      options={productCategoryData?.Data?.product_categories}
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      emptyMessage={"EmptyMessage"}
-                      placeholder={t("chooseCategory")}
-                      searchPlaceholder={t("searchCategory")}
-                      onSearch={setSearch}
-                      loading={isLoading}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Image Uploade */}
-            <FormField
-              control={form.control}
-              name="photos"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel
-                    htmlFor="photos"
-                    className="text-gray-700 dark:text-white font-medium"
-                  >
-                    {t("image")}*
-                  </FormLabel>
-                  <FormControl>
-                    <ImageUpload
-                      maxImages={5}
-                      onChange={(files) => field.onChange(files)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="category_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel
+                  htmlFor="category_id"
+                  className="text-gray-700 block dark:text-white font-medium"
+                >
+                  {t("category")}*
+                </FormLabel>
+                <FormControl>
+                  <SearchbleSelect
+                    options={productCategoryData?.Data?.product_categories}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    emptyMessage={"EmptyMessage"}
+                    placeholder={t("chooseCategory")}
+                    searchPlaceholder={t("searchCategory")}
+                    onSearch={setSearch}
+                    loading={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Image Uploade */}
+          <FormField
+            control={form.control}
+            name="photos"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel
+                  htmlFor="photos"
+                  className="text-gray-700 dark:text-white font-medium"
+                >
+                  {t("image")}*
+                </FormLabel>
+                <FormControl>
+                  <ImageUpload
+                    maxImages={5}
+                    onChange={(files) => field.onChange(files)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="flex items-center gap-x-4 pt-5">
             <NavLink
               to={"/"}
