@@ -110,10 +110,10 @@ export const ImageUpload = ({ maxImages = 5, onChange }) => {
               >
                 <div
                   className="w-32 h-[100px] border border-dashed rounded-md overflow-hidden cursor-pointer"
-                  onClick={() => openImageViewer(image)}
+                  onClick={() => openImageViewer(image.imageUrl)}
                 >
                   <img
-                    src={image || "/placeholder.svg"}
+                    src={image.imageUrl || "/placeholder.svg"}
                     alt={`Uploaded image ${index + 1}`}
                     width={100}
                     height={60}
