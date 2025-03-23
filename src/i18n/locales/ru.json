@@ -35,6 +35,8 @@
   "enterCountOfProduct": "Введите количество продукта",
   "countOfProductRequired": "Количество продукта является обязательным",
   "percent": "Процент",
+  "precent": "Процент",
+  "count": "Количество",
   "enterPercent": "Введите процент",
   "percentRequired": "Процент является обязательным",
   "imageRequired": "Изображение является обязательным",

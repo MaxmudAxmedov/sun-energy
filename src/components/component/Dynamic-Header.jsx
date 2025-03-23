@@ -18,6 +18,7 @@ export const DynamicHeader = ({
 
   useEffect(() => {
     onSearch(debouncedSearch);
+    // client.invalidateQueries({ queryKey: ["/products"] });
   }, [debouncedSearch, onSearch]);
 
   const handleInputChange = (e) => {
