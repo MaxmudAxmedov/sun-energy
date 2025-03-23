@@ -41,6 +41,8 @@
   "percentRequired": "Percent is required",
   "imageRequired": "Image is required",
   "categoryRequired": "Category is required",
+  "count": "Count",
+  "precent": "Precent",
   "productCreated": "Product created",
   "productUpdated": "Product updated",
   "productDeleted": "Product deleted",

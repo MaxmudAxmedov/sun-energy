@@ -25,7 +25,6 @@ export default function Products() {
     },
     getQueryKey: "/products",
   });
-  console.log(data);
 
   const handleCategory = (categoryId) => {
     const category = data?.Data?.products?.find(
@@ -47,15 +46,32 @@ export default function Products() {
       },
     },
     {
+      header: "img",
+      cell: ({ row }) => {
+        console.log(row.original);
+        const photoSrc =
+          row?.original?.photos?.length > 0 ? row.original.photos[0] : null;
+        return (
+          <div>
+            <img
+              src={photoSrc}
+              alt=""
+              className="w-[40px] h-[35px] rounded-md"
+            />
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "name",
       header: "fullName",
     },
-    {
-      header: "description",
-      cell: ({ row }) => {
-        return <div className="w-[100px]">{row.original.description}</div>;
-      },
-    },
+    // {
+    //   header: "description",
+    //   cell: ({ row }) => {
+    //     return <div className="w-[100px]">{row.original.description}</div>;
+    //   },
+    // },
     {
       header: "category",
       cell: ({ row }) => {
@@ -103,7 +119,6 @@ export default function Products() {
     {
       header: "actions",
       cell: ({ row }) => {
-        console.log(row.original);
         return (
           <div className="flex items-center gap-3">
             <button

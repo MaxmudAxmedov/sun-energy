@@ -46,6 +46,11 @@ export default function EditEmployee() {
   });
   console.log(positions);
 
+  const positionMapData = positions?.Data?.positions?.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+
   const { data: employee, isLoading: employeeLoading } = useGetData({
     endpoint: `/employee/${id}`,
     enabled: !!id,
@@ -176,10 +181,10 @@ export default function EditEmployee() {
                       <SelectValue placeholder={t("choosePosition")} />
                     </SelectTrigger>
                     <SelectContent>
-                      {positions?.Data?.positions?.map((item) => (
-                        <SelectGroup key={item.id}>
-                          <SelectItem value={item.id.toString()}>
-                            {item.name}
+                      {positionMapData?.map((item) => (
+                        <SelectGroup key={item.value}>
+                          <SelectItem value={item.value.toString()}>
+                            {item.label}
                           </SelectItem>
                         </SelectGroup>
                       ))}
