@@ -1,0 +1,12 @@
+  frontend:
+    image: ibodulla07/sunuz-app:latest
+    container_name: sunuz-frontend
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`admin.quyosh-panellari.uz`)" 
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - traefik-network
