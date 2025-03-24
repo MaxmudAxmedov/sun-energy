@@ -53,8 +53,15 @@ export const useMutateData = () => {
     mutationFn: ({ endpoint, method = "POST", data }) =>
       fetchData({ endpoint, method, data }),
     onSuccess: (data, variables) => {
-      toast.success(t(variables.toastCreateMessage));
-      client.invalidateQueries({ queryKey: [variables.mutateQueryKey] });
+      {
+        variables.toastCreateMessage &&
+          toast.success(t(variables.toastCreateMessage));
+      }
+
+      {
+        variables.mutateQueryKey &&
+          client.invalidateQueries({ queryKey: [variables.mutateQueryKey] });
+      }
       {
         variables.navigatePath && navigateing(variables.navigatePath);
       }
@@ -66,7 +73,7 @@ export const useMutateData = () => {
     },
     onError: (error) => {
       console.error("Mutation error:", error.response.data.Data);
-      toast.error(error.response.data.Data);
+      toast.error(error);
     },
   });
 };

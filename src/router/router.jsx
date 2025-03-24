@@ -47,6 +47,9 @@ const EditPosition = lazy(() =>
 const EditClient = lazy(() =>
   import("../page/Clients/Edit-Client/edit-client")
 );
+const EditProduct = lazy(() =>
+  import("../page/Products/Edit-Product/edit-product")
+);
 
 // Loading skeleton
 const Loader = () => (
@@ -82,6 +85,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <CreateProduct />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/editProduct/:id",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <EditProduct />
           </Suspense>
         ),
       },
