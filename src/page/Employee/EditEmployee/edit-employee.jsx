@@ -44,7 +44,6 @@ export default function EditEmployee() {
     enabled: true,
     getQueryKey: "/positions",
   });
-  console.log(positions);
 
   const positionMapData = positions?.Data?.positions?.map((item) => ({
     value: item.id,

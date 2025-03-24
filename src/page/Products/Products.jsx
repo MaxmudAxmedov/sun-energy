@@ -123,7 +123,7 @@ export default function Products() {
           <div className="flex items-center gap-3">
             <button
               onClick={() =>
-                navigate(`/editProductCategory/${row.original.id}`)
+                navigate(`/editProduct/${row.original.id}`)
               }
               className=" bg-green-100 py-2 px-3 rounded-[15px]"
             >

@@ -16,6 +16,7 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutateData } from "@/hook/useApi";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   login: z.string().min(1, { message: "login is required" }),
@@ -24,7 +25,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const { t } = useTranslation();
-  const { mutate, isLoading } = useMutateData();
+  const { mutate, isLoading, isError } = useMutateData();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,13 +35,16 @@ export default function LoginPage() {
   });
 
   const submitData = (data) => {
-      mutate({
+    mutate({
       endpoint: "/verify",
-      method: "POST",
       data: data,
       navigatePath: "/",
     });
   };
+
+  if (isError) {
+    toast.error("Login or password is incorrect");
+  }
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-slate-950">
