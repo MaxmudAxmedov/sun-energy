@@ -4,6 +4,7 @@ import { getState } from "@/lib/storage";
 import { useLocation } from "react-router-dom";
 
 import { Navigate, Outlet } from "react-router-dom";
+import LogoMobile from "@/assets/imgs/logo-img.jpg";
 
 export default function Layout() {
   const isAuth = getState("authToken");
@@ -21,10 +22,10 @@ export default function Layout() {
             className={
               pathname === "/createProduct"
                 ? "hidden"
-                : "flex desktop:hidden items-center justify-between mt-1 mb-3"
+                : "flex desktop:hidden items-center justify-between mt-2 mb-3"
             }
           >
-            <p>icon</p>
+            <img className="w-[70px] h-[40px] rounded-md" src={LogoMobile} alt="" />
             <BurgerMenu />
           </span>
           <Outlet />
