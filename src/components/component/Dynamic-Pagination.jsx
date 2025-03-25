@@ -4,7 +4,7 @@ import { RightChevronIcon } from "@/assets/icons/right-chevron-icon";
 import { LeftChevronIcon } from "@/assets/icons/left-chevron-icon";
 
 export const DynamicPagination = ({ data, setPage, limit, page }) => {
-  const totalItems = data?.Data.count || 0;
+  const totalItems = data?.data?.Data?.count || 0;
   const totalPages = Math.ceil(totalItems / limit);
 
   const handlePageChange = (newPage) => {
