@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { LogOutIcon } from "@/assets/icons/log-out-icon";
+import Logo from "@/assets/imgs/logo-img.jpg";
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -45,9 +46,12 @@ export default function Navbar() {
               }`}
             >
               {!isCollapsed && (
-                <p className="text-textPrimaryColor dark:text-white text-xl font-semibold">
-                  Sun Energy
-                </p>
+                <div className="flex items-center gap-x-2">
+                  <img className="w-[70px] h-[40px] rounded-md" src={Logo} alt="" />
+                  <p className="text-textPrimaryColor dark:text-white text-xl font-semibold">
+                    Sun Energy
+                  </p>
+                </div>
               )}
             </div>
             <button

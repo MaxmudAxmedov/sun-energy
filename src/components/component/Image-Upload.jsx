@@ -106,7 +106,7 @@ export const ImageUpload = ({ maxImages = 5, onChange }) => {
             return (
               <div
                 key={index}
-                className="relative h-[100px] group w-32 hover:opacity-80 transition-all duration-300"
+                className="relative h-[100px] group w-32 desktop:hover:opacity-80 transition-all duration-300"
               >
                 <div
                   className="w-32 h-[100px] border border-dashed rounded-md overflow-hidden cursor-pointer"
@@ -121,7 +121,7 @@ export const ImageUpload = ({ maxImages = 5, onChange }) => {
                   />
                 </div>
                 <button
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 desktop:opacity-0 desktop:group-hover:opacity-100 transition-opacity"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDeleteImage(index);
