@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-export const FetchingRrror = () => {
+export const FetchingError = () => {
   const { t } = useTranslation();
   return (
     <div className="desktop:mt-20 tablet:mt-16 mt-12">

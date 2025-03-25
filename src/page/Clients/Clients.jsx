@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 import { DataTable } from "@/components/component/Dynamic-Table";
-import { FetchingRrror } from "@/components/component/Fetching-error";
+import { FetchingError } from "@/components/component/FetchingError";
 import { MainScletot } from "@/components/component/main-scletot";
 import { useGetData } from "@/hook/useApi";
 import dayjs from "dayjs";
@@ -100,7 +100,7 @@ export default function Clients() {
   if (isError)
     return (
       <div>
-        <FetchingRrror />
+        <FetchingError />
       </div>
     );
 

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 import { MainScletot } from "@/components/component/main-scletot";
 import dayjs from "dayjs";
-import { FetchingRrror } from "@/components/component/Fetching-Error";
+import { FetchingError } from "@/components/component/FetchingError";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 
 export default function Employee() {
@@ -105,7 +105,7 @@ export default function Employee() {
   if (isError)
     return (
       <div>
-        <FetchingRrror />
+        <FetchingError />
       </div>
     );
 

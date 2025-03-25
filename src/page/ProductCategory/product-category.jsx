@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 import { useGetData } from "@/hook/useApi";
 import { MainScletot } from "@/components/component/main-scletot";
-import { FetchingRrror } from "@/components/component/Fetching-Error";
+import { FetchingError } from "@/components/component/FetchingError";
 
 import dayjs from "dayjs";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
@@ -95,7 +95,7 @@ export default function ProductCategory() {
   }
 
   if (isError) {
-    return <FetchingRrror />;
+    return <FetchingError />;
   }
 
   return (

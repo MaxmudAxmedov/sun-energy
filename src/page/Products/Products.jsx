@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FetchingRrror } from "@/components/component/Fetching-Error";
+import { FetchingError } from "@/components/component/FetchingError";
 import { MainScletot } from "@/components/component/main-scletot";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 import { DataTable } from "@/components/component/Dynamic-Table";
@@ -162,7 +162,7 @@ export default function Products() {
     }
 
     if (isError) {
-        return <FetchingRrror />;
+        return <FetchingError />;
     }
 
     return (
