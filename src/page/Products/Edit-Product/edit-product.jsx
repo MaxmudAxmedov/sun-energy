@@ -63,7 +63,7 @@ export default function EditProduct() {
     const { data: productDataById, isLoading: productLoading } = useGetData({
         endpoint: `/product/${id}`,
         enabled: !!id,
-        getQueryKey: "/products",
+        getQueryKey: "products",
     });
 
     const { mutate, isLoading: mutateLoading } = useMutateData();

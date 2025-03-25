@@ -91,7 +91,7 @@ export default function CreateProduct() {
             data: formData,
             toastCreateMessage: "productCreated",
             navigatePath: "/",
-            mutateQueryKey: "/products",
+            mutateQueryKey: "products",
         });
     };
 
