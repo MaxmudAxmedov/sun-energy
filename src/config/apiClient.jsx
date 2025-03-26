@@ -23,6 +23,7 @@ const refreshAccessToken = async () => {
   const refresh_token = getState("refreshToken");
   console.log(refresh_token);
   const response = await apiClient.post("/refresh-token", { refresh_token });
+  console.log(response);
   const { access_token } = response.data.Data;
   saveState("authToken", access_token);
   return access_token;
