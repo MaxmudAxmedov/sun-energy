@@ -239,7 +239,7 @@ export default function CreateProduct() {
                                     htmlFor="category_id"
                                     className="text-gray-700 block dark:text-white font-medium"
                                 >
-                                    {t("category")}*
+                                    {t("productCategory")}*
                                 </FormLabel>
                                 <FormControl>
                                     <SearchbleSelect
@@ -250,7 +250,7 @@ export default function CreateProduct() {
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         emptyMessage={"EmptyMessage"}
-                                        placeholder={t("chooseCategory")}
+                                        placeholder={t("chooseProductCategory")}
                                         searchPlaceholder={t("searchCategory")}
                                         onSearch={setSearch}
                                         loading={isLoading}
