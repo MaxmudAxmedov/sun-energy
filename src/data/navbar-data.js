@@ -10,6 +10,13 @@ import { SettingIcon } from "@/assets/icons/setting-icon";
 
 export const NavbarData = [
   {
+    id: 6,
+    title: "report",
+    path: "/report",
+    icon: ReportIcon,
+    subNav: "/createReport",
+  },
+  {
     id: 1,
     title: "products",
     path: "/",
@@ -36,20 +43,6 @@ export const NavbarData = [
     path: "/employee",
     icon: EmployeeIcon,
     subNav: "/createEmployee",
-  },
-  {
-    id: 5,
-    title: "base",
-    path: "/base",
-    icon: BaseIcon,
-    subNav: "/createBase",
-  },
-  {
-    id: 6,
-    title: "report",
-    path: "/report",
-    icon: ReportIcon,
-    subNav: "/createReport",
   },
   {
     id: 7,

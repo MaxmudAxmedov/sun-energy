@@ -38,7 +38,7 @@ export default function LoginPage() {
     mutate({
       endpoint: "/verify",
       data: data,
-      navigatePath: "/",
+      navigatePath: "/report",
     });
   };
 
