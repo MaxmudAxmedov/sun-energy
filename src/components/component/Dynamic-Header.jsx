@@ -32,7 +32,7 @@ export const DynamicHeader = ({
                     {t(title)}
                 </h1>
                 <NavLink
-                    className="bg-primaryColor desktop:hidden text-white tablet:px-2 tablet:py-2 tablet:text-[12px] flex gap-1 items-center tablet:w-[95px] w-[79px] px-1.5 py-1.5 rounded-[8px] text-[10px]"
+                    className="bg-primaryColor desktop:hidden text-white tablet:px-2 tablet:py-2 tablet:text-[14px] flex gap-1 items-center tablet:w-[95px] w-[79px] px-1.5 py-1.5 rounded-[8px] text-[13px]"
                     to={btnNavigate}
                 >
                     <PlusIconSmall /> {t("create")}
