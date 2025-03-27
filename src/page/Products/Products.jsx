@@ -63,7 +63,7 @@ export default function Products() {
       },
     },
     {
-      header: "img",
+      header: "image",
       cell: ({ row }) => {
         const photoSrc =
           row?.original?.photos?.length > 0 ? row.original.photos[0] : null;

@@ -43,7 +43,7 @@ export default function LoginPage() {
   };
 
   if (isError) {
-    toast.error("Login or password is incorrect");
+    toast.error(t("LoginOrPasswordIsIncorrect"));
   }
 
   return (
