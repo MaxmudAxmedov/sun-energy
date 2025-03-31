@@ -114,6 +114,7 @@
   "passportSeries": "Passport series",
   "enterPassportSeries": "Example: AA1234567",
   "passportSeriesRequired": "Passport series is required",
+  "lastName": "Last name",
   "phoneNumber": "Phone number",
   "phoneNumberRequired": "Phone number is required",
   "secondName": "Second name",

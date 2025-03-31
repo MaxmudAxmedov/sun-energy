@@ -62,7 +62,7 @@ const formSchema = z.object({
     .refine((value) => /^\d{9}$/.test(value), {
       message: "phoneNumberRequired",
     }),
-  passportSeries: z
+    passport_series: z
     .string()
     .min(1, { message: "Pasport seriyasi kiritilishi shart" })
     .regex(/^[A-Z]{2}\d{7}$/, {
@@ -97,7 +97,7 @@ export default function CreateClients() {
       address: "",
       viloyatlar: "",
       tuman: "",
-      passportSeries: "",
+      passport_series: "",
     },
   });
 
@@ -333,7 +333,7 @@ export default function CreateClients() {
                             : employeesData?.Data?.employees?.map((item) => (
                                 <SelectGroup key={item.id}>
                                   <SelectItem value={item.id}>
-                                    {item.full_name}
+                                    {item?.first_name}
                                   </SelectItem>
                                 </SelectGroup>
                               ))}
@@ -350,7 +350,7 @@ export default function CreateClients() {
           <div>
             <FormField
               control={form.control}
-              name="passportSeries"
+              name="passport_series"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
