@@ -11,6 +11,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 import { useNavigate } from "react-router-dom";
+import { DownloadIcon } from "@/assets/icons/download-icon";
+import { Download } from "lucide-react";
 
 const params = {
   search: "",
@@ -141,6 +143,9 @@ export default function Products() {
               endpoint={`product`}
               mutateQueryKey={"products"}
             />
+            <div className="hover:scale-110 cursor-pointer transition-all duration-200 w-[28px] h-[28px] flex items-center justify-center rounded-md">
+              <Download />
+            </div>
           </div>
         );
       },

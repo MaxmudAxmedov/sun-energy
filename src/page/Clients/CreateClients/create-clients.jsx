@@ -39,6 +39,9 @@ const formSchema = z.object({
   address: z.string().min(1, {
     message: "addressRequired",
   }),
+  referred_by: z.string().min(1, {
+    message: "addressRequired",
+  }),
   viloyat: z.string().min(1, {
     message: "provinceRequired",
   }),
@@ -62,7 +65,7 @@ const formSchema = z.object({
     .refine((value) => /^\d{9}$/.test(value), {
       message: "phoneNumberRequired",
     }),
-    passport_series: z
+  passport_series: z
     .string()
     .min(1, { message: "Pasport seriyasi kiritilishi shart" })
     .regex(/^[A-Z]{2}\d{7}$/, {
@@ -86,6 +89,18 @@ export default function CreateClients() {
     getQueryKey: "/employees",
   });
 
+  const {
+    data: productsData,
+    isLoading: productsLoading,
+    isError: productsIsError,
+  } = useGetData({
+    endpoint: "/products",
+    enabled: true,
+    getQueryKey: "/products",
+  });
+
+  console.log(productsData);
+
   // console.log(employeesData);
 
   const form = useForm({
@@ -98,6 +113,7 @@ export default function CreateClients() {
       viloyatlar: "",
       tuman: "",
       passport_series: "",
+      referred_by: "",
     },
   });
 
@@ -182,6 +198,50 @@ export default function CreateClients() {
                         />
                       </div>
                     </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Choose Employee */}
+            <FormField
+              control={form.control}
+              name="product"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="product"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("products")}
+                  </FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-[300px] bg-white" {...field}>
+                        <SelectValue placeholder={t("enterProducts")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {productsLoading
+                            ? t("loading")
+                            : productsIsError
+                            ? "Error"
+                            : productsData?.Data?.products?.length === 0
+                            ? t("datasNotFound")
+                            : productsData?.Data?.products?.map((item) => (
+                                <SelectGroup key={item.id}>
+                                  <SelectItem value={item.id}>
+                                    {item?.name}
+                                  </SelectItem>
+                                </SelectGroup>
+                              ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -347,7 +407,8 @@ export default function CreateClients() {
             />
           </div>
 
-          <div>
+          <div className="flex flex-wrap gap-4">
+            {/* passport_series */}
             <FormField
               control={form.control}
               name="passport_series"
@@ -364,6 +425,30 @@ export default function CreateClients() {
                       placeholder={t("enterPassportSeries")}
                       {...field}
                       maxLength={9}
+                      className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* referred_by */}
+            <FormField
+              control={form.control}
+              name="referred_by"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="referred_by"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("referredBy")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("enterReferredBy")}
+                      {...field}
                       className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                     />
                   </FormControl>
