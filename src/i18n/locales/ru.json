@@ -129,6 +129,7 @@
   "secondNameRequired": "Фамилия является обязательным",
   "phoneNumber": "Номер телефона",
   "phoneNumberRequired": "Номер телефона является обязательным",
+  "lastName": "Фамилия",
   "selectProducts": "Выберите продукты",
   "purchasedProducts": "Покупанные продукты",
   "purchasedProductsRequired": "Покупанные продукты являются обязательными",

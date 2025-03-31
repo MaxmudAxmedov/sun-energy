@@ -37,9 +37,20 @@ export default function Employee() {
       },
     },
     {
-      accessorKey: "full_name",
-      header: "fullName",
+      accessorKey: "first_name",
+      header: "name",
     },
+    {
+      accessorKey: "last_name",
+      header: "lastName",
+    },
+    // {
+    //   header: "name",
+    //   cell: ({ row }) => {
+    //     return <div>{row?.original?.full_name}</div>;
+    //   },
+    // },
+
     {
       accessorKey: "phone",
       header: "phoneNumber",
