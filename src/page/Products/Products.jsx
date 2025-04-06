@@ -11,8 +11,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 import { useNavigate } from "react-router-dom";
-import { DownloadIcon } from "@/assets/icons/download-icon";
 import { Download } from "lucide-react";
+import { useGetData } from "@/hook/useApi";
+import { Spinner } from "@/components/component/spinner";
+import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 
 const params = {
   search: "",
@@ -45,12 +47,19 @@ export default function Products() {
   });
 
   const handleCategory = (categoryId) => {
-    if (!isLoading) {
-      const category = data?.data?.Data?.products?.find(
-        (item) => item.category_id === categoryId
-      );
-      return category?.name;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { data, isLoading, isError } = useGetData({
+      endpoint: `/product-category/${categoryId}`,
+      enabled: true,
+      getQueryKey: "/product-category",
+    });
+    {
+      isLoading && <Spinner />;
     }
+    {
+      isError && "error";
+    }
+    return data?.name;
   };
 
   const handleSearch = (value) => {
@@ -172,14 +181,14 @@ export default function Products() {
       <div className="mt-6">
         <DataTable data={data?.data?.Data?.products} columns={column} />
       </div>
-      {/* <div className="mt-3">
-                <DynamicPagination
-                    data={data}
-                    setPage={setPage}
-                    limit={initialParams.limit}
-                    page={page}
-                />
-            </div> */}
+      <div className="mt-3">
+        <DynamicPagination
+          data={data}
+          setPage={setPage}
+          limit={initialParams.limit}
+          page={page}
+        />
+      </div>
     </div>
   );
 }

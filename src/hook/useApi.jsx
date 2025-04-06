@@ -96,6 +96,10 @@ export const useMutateData = () => {
     },
     onError: (error) => {
       console.error("Mutation error:", error);
+      if (error.response?.status === 409) {
+        toast.error(t("canNotAddSameInfo"));
+        return;
+      }
       const errorMessage =
         error.response?.data?.Data?.message ||
         error.message ||

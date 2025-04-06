@@ -31,18 +31,18 @@ export function DataTable({ columns, data = [] }) {
             {table?.getHeaderGroups()?.map((headerGroup) => (
               <TableRow
                 className="bg-mauiMist dark:bg-darkMainSecond"
-                key={headerGroup.id}
+                key={headerGroup?.id}
               >
                 {headerGroup?.headers?.map((header) => {
                   return (
                     <TableHead
                       className="font-bold text-hormagauntPurple dark:text-white"
-                      key={header.id}
+                      key={header?.id}
                     >
                       {header?.isPlaceholder
                         ? null
                         : flexRender(
-                            t(header.column.columnDef.header),
+                            t(header?.column?.columnDef?.header),
                             header.getContext()
                           )}
                     </TableHead>

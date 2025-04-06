@@ -34,6 +34,9 @@ const CreateProductCategory = lazy(() =>
     "../page/ProductCategory/Create-Product-Category/create-product-category"
   )
 );
+const CreateContract = lazy(() =>
+  import("../page/Contract/CreateContract/creatr-contract")
+);
 
 const EditEmploye = lazy(() =>
   import("../page/Employee/EditEmployee/edit-employee")
@@ -157,6 +160,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <Contract />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/createContract",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <CreateContract />
           </Suspense>
         ),
       },
