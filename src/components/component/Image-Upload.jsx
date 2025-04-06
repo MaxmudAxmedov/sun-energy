@@ -9,7 +9,6 @@ export const ImageUpload = ({ maxImages = 5, onChange }) => {
   const fileInputRef = useRef(null);
   const { t } = useTranslation();
 
-  console.log(images);
 
   const handleImageUpload = (e) => {
     const files = e.target.files;
@@ -102,7 +101,6 @@ export const ImageUpload = ({ maxImages = 5, onChange }) => {
 
         <div className="flex gap-2 mt-2">
           {images.map((image, index) => {
-            console.log(image);
             return (
               <div
                 key={index}

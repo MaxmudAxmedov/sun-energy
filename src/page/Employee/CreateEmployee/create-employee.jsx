@@ -26,11 +26,12 @@ import { useMutateData } from "@/hook/useApi";
 import { Spinner } from "@/components/component/spinner";
 import { clientAddressData } from "@/data/viloyatlar";
 import { ImageUpload } from "@/components/component/Image-Upload";
+import { NavLink } from "react-router-dom";
 
 const formSchema = z.object({
-  name: z.string().min(1, "fullNameRequired"),
-  secondName: z.string().min(1, "fullNameRequired"),
-  lastName: z.string().min(1, "fullNameRequired"),
+  first_name: z.string().min(1, "fullNameRequired"),
+  last_name: z.string().min(1, "fullNameRequired"),
+  patronymic: z.string().min(1, "fullNameRequired"),
   phone: z.string().min(1, "phoneNumberRequired"),
   position_id: z.string().min(1, "positionRequired"),
   viloyat: z.string().min(1, {
@@ -42,7 +43,7 @@ const formSchema = z.object({
   address: z.string().min(1, {
     message: "addressRequired",
   }),
-  photos: z
+  photo: z
     .custom(
       (file) => {
         if (!(file instanceof File)) return false;
@@ -75,20 +76,26 @@ export default function CreateEmployee() {
     enabled: true,
     getQueryKey: "/positions",
   });
-  console.log(data);
-  const { mutate, isLoading: muatateLoading } = useMutateData();
+  const {
+    mutate,
+    isLoading: muatateLoading,
+    isError: mutateError,
+  } = useMutateData();
+  console.log("mutateError", mutateError);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      secondName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
+      patronymic: "",
       phone: "",
       position_id: "",
       passport_series: "",
       viloyat: "",
       tuman: "",
+      address: "",
+      photo: [],
     },
   });
 
@@ -96,13 +103,26 @@ export default function CreateEmployee() {
   const setValues = form.setValue;
 
   const onSubmit = (data) => {
-    const newData = {
-      ...data,
-      phone: prefixForServer + data.phone,
-    };
+    console.log("Form Data:", data);
+    const formData = new FormData();
+
+    formData.append("first_name", data.first_name);
+    formData.append("last_name", data.last_name);
+    formData.append("patronymic", data.patronymic);
+    formData.append("phone", `${prefixForServer}${data.phone}`);
+    formData.append("position_id", data.position_id);
+    formData.append("passport_series", data.passport_series);
+    formData.append(
+      "residential_address ",
+      data.viloyat + " " + data.tuman + " " + data.address
+    );
+
+    for (let i = 0; i < data.photo.length; i++) {
+      formData.append("photo", data.photo[i]);
+    }
     mutate({
       endpoint: "/employee",
-      data: newData,
+      data: formData,
       toastCreateMessage: "employeeCreated",
       navigatePath: "/employee",
       mutateQueryKey: "/employees",
@@ -113,11 +133,11 @@ export default function CreateEmployee() {
       <h1 className="text-2xl font-bold mb-8 pt-6">{t("createEmployee")}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="flex items-center gap-x-3">
-            {/* Name */}
+          <div className="flex items-center flex-wrap gap-x-3">
+            {/* First Name */}
             <FormField
               control={form.control}
-              name="name"
+              name="first_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
@@ -137,14 +157,14 @@ export default function CreateEmployee() {
                 </FormItem>
               )}
             />
-            {/* Second Name */}
+            {/* Last Name */}
             <FormField
               control={form.control}
-              name="second_name"
+              name="last_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="name"
+                    htmlFor="last_name"
                     className="text-gray-700 dark:text-white font-medium"
                   >
                     {t("secondName")}*
@@ -161,14 +181,14 @@ export default function CreateEmployee() {
               )}
             />
 
-            {/* Last Name */}
+            {/* Patronymic */}
             <FormField
               control={form.control}
-              name="last_name"
+              name="patronymic"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="name"
+                    htmlFor="patronymic"
                     className="text-gray-700 dark:text-white font-medium"
                   >
                     {t("lastName")}*
@@ -185,7 +205,8 @@ export default function CreateEmployee() {
               )}
             />
           </div>
-          <div className="flex items-center gap-x-3">
+
+          <div className="flex items-center flex-wrap gap-x-3">
             {/* Phone Number */}
             <FormField
               control={form.control}
@@ -294,11 +315,11 @@ export default function CreateEmployee() {
             {/* Viloyat */}
             <FormField
               control={form.control}
-              name="viloyatlar"
+              name="viloyat"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="employee_id"
+                    htmlFor="viloyat"
                     className="text-gray-700 dark:text-white font-medium"
                   >
                     {t("province")}
@@ -342,7 +363,7 @@ export default function CreateEmployee() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="employee_id"
+                    htmlFor="tuman"
                     className="text-gray-700 dark:text-white font-medium"
                   >
                     {t("district")}
@@ -385,7 +406,7 @@ export default function CreateEmployee() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="full_name"
+                    htmlFor="address"
                     className="text-gray-700 dark:text-white font-medium"
                   >
                     {t("address")}*
@@ -422,10 +443,19 @@ export default function CreateEmployee() {
               </FormItem>
             )}
           />
+          <div className="flex items-center gap-x-4">
+            <NavLink
+              to={"/employee"}
+              type="reset"
+              className="w-[120px] text-center bg-red-500 text-white py-[6px] px-2 rounded-md transition-all duration-150 hover:bg-red-400"
+            >
+              {t("cencel")}
+            </NavLink>
 
-          <Button type="submit" className="mt-4">
-            {muatateLoading ? <Spinner /> : t("submit")}
-          </Button>
+            <Button type="submit">
+              {muatateLoading ? <Spinner /> : t("submit")}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

@@ -25,6 +25,7 @@ import { useGetData } from "@/hook/useApi";
 import { useMutateData } from "@/hook/useApi";
 import { Spinner } from "@/components/component/spinner";
 import { clientAddressData } from "@/data/viloyatlar";
+import { NavLink } from "react-router-dom";
 
 const isValidUUID = (uuid) => {
   const uuidRegex =
@@ -37,9 +38,6 @@ const formSchema = z.object({
     message: "firstNameRequired",
   }),
   address: z.string().min(1, {
-    message: "addressRequired",
-  }),
-  referred_by: z.string().min(1, {
     message: "addressRequired",
   }),
   viloyat: z.string().min(1, {
@@ -89,18 +87,6 @@ export default function CreateClients() {
     getQueryKey: "/employees",
   });
 
-  const {
-    data: productsData,
-    isLoading: productsLoading,
-    isError: productsIsError,
-  } = useGetData({
-    endpoint: "/products",
-    enabled: true,
-    getQueryKey: "/products",
-  });
-
-  console.log(productsData);
-
   // console.log(employeesData);
 
   const form = useForm({
@@ -113,7 +99,6 @@ export default function CreateClients() {
       viloyatlar: "",
       tuman: "",
       passport_series: "",
-      referred_by: "",
     },
   });
 
@@ -121,12 +106,31 @@ export default function CreateClients() {
   const setValues = form.setValue;
 
   const onSubmit = (data) => {
-    console.log("Client Submiot Data :", data);
     if (!isValidUUID(data.employee_id)) {
       return;
     }
-    const fullPhoneNumber = `${prefixServer}${data.phone}`;
-    const finalData = { ...data, phone: fullPhoneNumber };
+
+    const {
+      full_name,
+      phone,
+      employee_id,
+      address,
+      viloyat,
+      tuman,
+      passport_series,
+    } = data;
+
+    const residential_address = `${viloyat} ${tuman} ${address}`;
+
+    const fullPhoneNumber = `${prefixServer}${phone}`;
+    const finalData = {
+      phone: fullPhoneNumber,
+      full_name,
+      employee_id,
+      passport_series,
+      residential_address,
+    };
+    console.log(finalData);
     mutate({
       endpoint: "/client",
       method: "POST",
@@ -207,14 +211,14 @@ export default function CreateClients() {
             {/* Choose Employee */}
             <FormField
               control={form.control}
-              name="product"
+              name="employee_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="product"
+                    htmlFor="employee_id"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("products")}
+                    {t("employee")}
                   </FormLabel>
                   <FormControl>
                     <Select
@@ -222,20 +226,20 @@ export default function CreateClients() {
                       defaultValue={field.value}
                     >
                       <SelectTrigger className="w-[300px] bg-white" {...field}>
-                        <SelectValue placeholder={t("enterProducts")} />
+                        <SelectValue placeholder={t("chooseEmployee")} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {productsLoading
+                          {isLoading
                             ? t("loading")
-                            : productsIsError
+                            : isError
                             ? "Error"
-                            : productsData?.Data?.products?.length === 0
+                            : employeesData?.Data?.employees?.length === 0
                             ? t("datasNotFound")
-                            : productsData?.Data?.products?.map((item) => (
+                            : employeesData?.Data?.employees?.map((item) => (
                                 <SelectGroup key={item.id}>
                                   <SelectItem value={item.id}>
-                                    {item?.name}
+                                    {item?.first_name}
                                   </SelectItem>
                                 </SelectGroup>
                               ))}
@@ -336,9 +340,7 @@ export default function CreateClients() {
                 </FormItem>
               )}
             />
-          </div>
 
-          <div className="flex flex-wrap gap-4">
             {/* Address */}
             <FormField
               control={form.control}
@@ -357,49 +359,6 @@ export default function CreateClients() {
                       {...field}
                       className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Choose Employee */}
-            <FormField
-              control={form.control}
-              name="employee_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel
-                    htmlFor="employee_id"
-                    className="text-gray-700 dark:text-white font-medium"
-                  >
-                    {t("employee")}
-                  </FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-[300px] bg-white" {...field}>
-                        <SelectValue placeholder={t("chooseEmployee")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {isLoading
-                            ? t("loading")
-                            : isError
-                            ? "Error"
-                            : employeesData?.Data?.employees?.length === 0
-                            ? t("datasNotFound")
-                            : employeesData?.Data?.employees?.map((item) => (
-                                <SelectGroup key={item.id}>
-                                  <SelectItem value={item.id}>
-                                    {item?.first_name}
-                                  </SelectItem>
-                                </SelectGroup>
-                              ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -432,35 +391,19 @@ export default function CreateClients() {
                 </FormItem>
               )}
             />
-
-            {/* referred_by */}
-            <FormField
-              control={form.control}
-              name="referred_by"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel
-                    htmlFor="referred_by"
-                    className="text-gray-700 dark:text-white font-medium"
-                  >
-                    {t("referredBy")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t("enterReferredBy")}
-                      {...field}
-                      className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
-
-          <Button type="submit">
-            {isMutating ? <Spinner /> : t("submit")}
-          </Button>
+          <div className="flex items-center gap-4">
+            <NavLink
+              to={"/clients"}
+              type="reset"
+              className="w-[120px] text-center bg-red-500 text-white py-[6px] px-2 rounded-md transition-all duration-150 hover:bg-red-400"
+            >
+              {t("cencel")}
+            </NavLink>
+            <Button type="submit">
+              {isMutating ? <Spinner /> : t("submit")}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
