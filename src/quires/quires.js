@@ -1,4 +1,5 @@
 import { getProducts } from "@/service/product";
+import { getReports } from "@/service/report";
 
 export function getProductsQuery(params) {
     return {
@@ -6,3 +7,10 @@ export function getProductsQuery(params) {
         queryFn: async () => getProducts(params),
     };
 }
+export function getReportsQuery(params) {
+    return {
+        queryKey: ["reports", params],
+        queryFn: async () => getReports(params),
+    };
+}
+
