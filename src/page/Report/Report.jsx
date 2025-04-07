@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getReportsQuery } from "@/quires/quires";
 import ChartComponent from "./ReportChart";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import ReCharts from "./ReCharts";
 const initialParams = {
     product_name: "",
     client_name: "",
@@ -13,28 +14,37 @@ export default function Report() {
     const [params, setParams] = useState(initialParams);
     const { data } = useQuery({ ...getReportsQuery(params) });
     const item = data?.data?.Data;
-    console.log(item);
+
     return (
         <div>
-            <div className="flex justify-between gap-3 mt-3">
-                <Card className="w-[20%] text-center pt-4">
+            <div className="flex justify-between gap-3 mt-4">
+                <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">All Quantity</CardTitle>
-                    <CardContent>{item?.count}</CardContent>
+                    <CardContent className="text-[22px]">
+                        {item?.count}
+                    </CardContent>
                 </Card>
-                <Card className="w-[20%] text-center pt-4">
+                <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">Total Items Sold</CardTitle>
-                    <CardContent>{item?.total_items_sold}</CardContent>
+                    <CardContent className="text-[22px]">
+                        {item?.total_items_sold}
+                    </CardContent>
                 </Card>
-                <Card className="w-[20%] text-center pt-4">
+                <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">Total Price</CardTitle>
-                    <CardContent>{item?.total_trade}</CardContent>
+                    <CardContent className="text-[22px]">
+                        {(item?.total_trade)?.toLocaleString()} <smal className='text-[16px]'>sum</smal>
+                    </CardContent>
                 </Card>
-                <Card className="w-[20%] text-center pt-4">
+                <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">Clients</CardTitle>
-                    <CardContent>{item?.unique_clients}</CardContent>
+                    <CardContent className="text-[22px]">
+                        {item?.unique_clients}
+                    </CardContent>
                 </Card>
             </div>
-            <ChartComponent data={data?.data}></ChartComponent>
+            {/* <ChartComponent data={data?.data}></ChartComponent> */}
+            <ReCharts data={data?.data} />
         </div>
     );
 }
