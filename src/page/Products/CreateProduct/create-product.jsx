@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useTranslation } from "react-i18next";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { ImageUpload } from "@/components/component/Image-Upload";
 import {
     Form,
@@ -19,6 +19,7 @@ import { SearchbleSelect } from "@/components/component/Searchble-Select";
 import { useGetData } from "@/hook/useApi";
 import { useMutateData } from "@/hook/useApi";
 import { Spinner } from "@/components/component/spinner";
+import { SingleImageUpload } from "@/components/component/SingleUpload";
 
 const productSchema = z.object({
     name: z.string().min(1, "productRequired"),
@@ -27,28 +28,38 @@ const productSchema = z.object({
     count_of_product: z.string().min(1, "countOfProductRequired"),
     category_id: z.string().min(1, "categoryRequired"),
     percent: z.string().min(1, "percentRequired"),
-    photos: z
-        .custom(
-            (file) => {
-                if (!(file instanceof File)) return false;
-                const maxSize = 5 * 1024 * 1024; // 5MB
-                const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-                if (file.size > maxSize) return false;
-                if (!allowedTypes.includes(file.type)) return false;
-                return true;
-            },
-            {
-                message:
-                    "Image must be JPG, JPEG or PNG format and less than 5MB",
+    photo: z.custom(
+        (value) => {
+            if (!value) return false;
+            if (value instanceof File) {
+                const maxSize = 5 * 1024 * 1024;
+                const allowedTypes = [
+                    "image/jpeg",
+                    "image/png",
+                    "image/jpg",
+                    "image/webp",
+                ];
+                return (
+                    value.size <= maxSize && allowedTypes.includes(value.type)
+                );
             }
-        )
-        .array()
-        .min(1, "imageRequired"),
+            if (typeof value === "string") {
+                return true;
+            }
+
+            return false;
+        },
+        {
+            message:
+                "Image must be JPG, JPEG or PNG or WEBP format and less than 5MB",
+        }
+    ),
 });
 
 export default function CreateProduct() {
     const { t } = useTranslation();
     const [search, setSearch] = useState("");
+    const { id } = useParams();
     const { data: productCategoryData, isLoading } = useGetData({
         endpoint: "/product-categories",
         enabled: true,
@@ -57,9 +68,14 @@ export default function CreateProduct() {
         },
         getQueryKey: "/product-category",
     });
-    const { mutate, isLoading: mutateLoading } = useMutateData();
 
-    // console.log(productCategoryData);
+    const { data: productDataById, isLoading: productLoading } = useGetData({
+        endpoint: `/product/${id}`,
+        enabled: !!id,
+        getQueryKey: "products",
+    });
+
+    const { mutate, isLoading: mutateLoading } = useMutateData();
 
     const form = useForm({
         resolver: zodResolver(productSchema),
@@ -70,11 +86,27 @@ export default function CreateProduct() {
             category_id: "",
             percent: "",
             count_of_product: "",
-            photos: null,
+            photo: "",
         },
     });
 
+    useEffect(() => {
+        if (productDataById && id) {
+            form.reset({
+                name: productDataById.name || "",
+                description: productDataById.description || "",
+                price: String(productDataById.price) || "",
+                count_of_product:
+                    String(productDataById.count_of_product) || "",
+                category_id: productDataById.category_id || "",
+                percent: String(productDataById.percent) || "",
+                photo: productDataById?.photo,
+            });
+        }
+    }, [productDataById, id, form]);
+
     const onSubmit = (data) => {
+        console.log(data);
         const formData = new FormData();
         formData.append("name", data.name);
         formData.append("description", data.description);
@@ -82,22 +114,24 @@ export default function CreateProduct() {
         formData.append("category_id", data.category_id);
         formData.append("percent", data.percent);
         formData.append("count_of_product", data.count_of_product);
+        formData.append("photo", data.photo);
 
-        for (let i = 0; i < data.photos.length; i++) {
-            formData.append("photos", data.photos[i]);
-        }
         mutate({
-            endpoint: "/product-images",
+            endpoint: id ? `/product/${id}/images` : "/product-images",
             data: formData,
-            toastCreateMessage: "productCreated",
+            method: id ? "PUT" : "POST",
+            toastCreateMessage: id ? "productUpdated" : "productCreated",
             navigatePath: "/",
-            mutateQueryKey: "products",
+            mutateQueryKey: "/product-categories",
         });
     };
 
     return (
         <div className="max-w-[900px] tablet:p-6 pt-2">
-            <h1 className="text-2xl font-bold mb-6">{t("createProduct")}</h1>
+            <h1 className="text-2xl font-bold mb-6">
+                {" "}
+                {id ? "Edit Product" : t("createProduct")}
+            </h1>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
@@ -263,22 +297,33 @@ export default function CreateProduct() {
                     {/* Image Uploade */}
                     <FormField
                         control={form.control}
-                        name="photos"
+                        name="photo"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel
-                                    htmlFor="photos"
+                                    htmlFor="photo"
                                     className="text-gray-700 dark:text-white font-medium"
                                 >
                                     {t("image")}*
                                 </FormLabel>
                                 <FormControl>
-                                    <ImageUpload
+                                    <SingleImageUpload
+                                        defaultImage={productDataById?.photo}
+                                        onChange={(file) => {
+                                            field.onChange(file);
+                                            console.log(file);
+                                        }}
+                                    />
+
+                                    {/* <ImageUpload
                                         maxImages={5}
                                         onChange={(files) =>
                                             field.onChange(files)
                                         }
-                                    />
+                                        defaultImages={
+                                            productDataById?.photo || []
+                                        }
+                                    /> */}
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

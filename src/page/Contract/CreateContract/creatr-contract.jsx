@@ -37,6 +37,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 const isValidUUID = (uuid) => {
     const uuidRegex =
@@ -63,11 +65,18 @@ const formSchema = z.object({
         .refine((value) => isValidUUID(value), {
             message: "Invalid employee ID format",
         }),
+    accessory_cost: z.string().min(1, {
+        message: "Accessory cost",
+    }),
+    dont_calculate: z.boolean().default(false).optional(),
+    service_cost: z.string().min(1, {
+        message: "Service cost",
+    }),
 });
 
 export default function CreatrContract() {
     const { t } = useTranslation();
-    const { mutate, isLoading: isMutating } = useMutateData();
+    const { mutate, isLoading: isMutating, isSuccess } = useMutateData();
     const [products, setProducts] = useState(() => {
         const saved = localStorage.getItem("products");
         return saved ? JSON.parse(saved) : [];
@@ -96,21 +105,18 @@ export default function CreatrContract() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             client_id: "",
-            // count_of_product: "",
-            // product_id: "",
-            // total_price: "",
+            accessory_cost: 0,
+            dont_calculate: false,
+            service_cost: 0,
+            total_price: 0,
         },
     });
 
     const onSubmit = (data) => {
-        // if (!isValidUUID(data.employee_id)) {
-        //   return;
-        // }
-
-        // const { count_of_product, total_price, product_id, client_id } = data;
-        // const { product_id, client_id } = data;
+        console.log(data);
         const res = products.map((i) => {
             return {
+                kvat: Number(i.kvat),
                 product_id: i.product_id,
                 quantity: i.count,
                 total_price: i.total_price,
@@ -118,18 +124,13 @@ export default function CreatrContract() {
             };
         });
         const body = {
+            accessory_cost: Number(data.accessory_cost),
+            dont_calculate: data.dont_calculate,
             client_id: data.client_id,
             order_items: res,
+            service_cost: Number(data.service_cost),
             total_price: totalItem.price,
         };
-        console.log(body);
-        // const newFormatData = {
-        //     client_id,
-        //     product_id,
-        //     count_of_product: Number(count_of_product),
-        //     total_price: Number(totalPrice),
-        // };
-        // console.log("New Format Data :", newFormatData);
         mutate({
             endpoint: "/trade",
             data: body,
@@ -137,6 +138,7 @@ export default function CreatrContract() {
             toastCreateMessage: "contractCreated",
             mutateQueryKey: "/trades",
         });
+        localStorage.removeItem("products");
     };
 
     useEffect(() => {
@@ -181,75 +183,152 @@ export default function CreatrContract() {
                             </Button>
                         </div>
                     </div>
-                    <div className="flex flex-wrap gap-4">
-                        <FormField
-                            control={form.control}
-                            name="client_id"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel
-                                        htmlFor="client"
-                                        className="text-gray-700 dark:text-white font-medium"
-                                    >
-                                        {t("clients")}
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
+
+                    <div className="grid grid-cols-2">
+                        <div className="flex flex-wrap gap-4">
+                            <FormField
+                                control={form.control}
+                                name="client_id"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel
+                                            htmlFor="client"
+                                            className="text-gray-700 dark:text-white font-medium"
                                         >
-                                            <SelectTrigger
-                                                className="w-[300px] bg-white"
-                                                {...field}
+                                            {t("clients")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
                                             >
-                                                <SelectValue
-                                                    placeholder={t(
-                                                        "enterClients"
-                                                    )}
-                                                />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    {productsLoading
-                                                        ? t("loading")
-                                                        : productsIsError
-                                                        ? "Error"
-                                                        : clientsData?.Data
-                                                              ?.clients
-                                                              ?.length === 0
-                                                        ? t("datasNotFound")
-                                                        : clientsData?.Data?.clients?.map(
-                                                              (item) => (
-                                                                  <SelectGroup
-                                                                      key={
-                                                                          item.id
-                                                                      }
-                                                                  >
-                                                                      <SelectItem
-                                                                          value={
+                                                <SelectTrigger
+                                                    className="w-[300px] bg-white"
+                                                    {...field}
+                                                >
+                                                    <SelectValue
+                                                        placeholder={t(
+                                                            "enterClients"
+                                                        )}
+                                                    />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {productsLoading
+                                                            ? t("loading")
+                                                            : productsIsError
+                                                            ? "Error"
+                                                            : clientsData?.Data
+                                                                  ?.clients
+                                                                  ?.length === 0
+                                                            ? t("datasNotFound")
+                                                            : clientsData?.Data?.clients?.map(
+                                                                  (item) => (
+                                                                      <SelectGroup
+                                                                          key={
                                                                               item.id
                                                                           }
                                                                       >
-                                                                          {
-                                                                              item?.full_name
-                                                                          }
-                                                                      </SelectItem>
-                                                                  </SelectGroup>
-                                                              )
-                                                          )}
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                                                          <SelectItem
+                                                                              value={
+                                                                                  item.id
+                                                                              }
+                                                                          >
+                                                                              {
+                                                                                  item?.full_name
+                                                                              }
+                                                                          </SelectItem>
+                                                                      </SelectGroup>
+                                                                  )
+                                                              )}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div>
+                            <FormField
+                                control={form.control}
+                                name="accessory_cost"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel
+                                            htmlFor="accessory_cost"
+                                            className="text-gray-700 dark:text-white font-medium"
+                                        >
+                                            {/* {t("name")}* */}
+                                            Accessory cost
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                // placeholder={t("enterName")}
+                                                {...field}
+                                                className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <FormField
+                                control={form.control}
+                                name="dont_calculate"
+                                render={({ field }) => (
+                                    <FormItem className="flex items-center gap-4 p-3">
+                                        <div>
+                                            <FormLabel>
+                                                Dont calculate
+                                            </FormLabel>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                                id="airplane-mode"
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div>
+                            <FormField
+                                control={form.control}
+                                name="service_cost"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel
+                                            htmlFor="service_cost"
+                                            className="text-gray-700 dark:text-white font-medium"
+                                        >
+                                            {/* {t("name")}* */}
+                                            Service cost
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                // placeholder={t("enterName")}
+                                                {...field}
+                                                className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
 
                     <div className="flex justify-between">
                         <TooltipProvider>
-                            <div className="flex gap-3 w-[65%] h-[680px] mt-4 flex-wrap overflow-y-auto">
+                            <div className="flex gap-3 w-[65%] mt-4 flex-wrap overflow-y-auto">
                                 {productsData?.Data?.products?.map((item) => {
                                     return (
                                         <ProductItem

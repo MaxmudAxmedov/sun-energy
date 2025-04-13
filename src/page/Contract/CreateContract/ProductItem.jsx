@@ -8,13 +8,31 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function ProductItem({ item, setProducts, products }) {
     const [productCount, setProductCount] = useState(0);
+    // useEffect(() => {
+    //     const found = products.find((p) => p.product_id === item.id);
+    //     if (found) {
+    //         setProductCount(found.count);
+    //     }
+    // }, [products, item.id]);
+
     useEffect(() => {
         const found = products.find((p) => p.product_id === item.id);
         if (found) {
             setProductCount(found.count);
+            form.setValue("kvat", found.kvat || "");
         }
     }, [products, item.id]);
 
@@ -24,6 +42,14 @@ export default function ProductItem({ item, setProducts, products }) {
             perView: 1,
         },
     });
+    const form = useForm({
+        resolver: zodResolver(),
+        defaultValues: {
+            kvat: 0,
+        },
+    });
+
+    const kvat = form.watch("kvat");
 
     useEffect(() => {
         setProducts((prev) => {
@@ -36,7 +62,8 @@ export default function ProductItem({ item, setProducts, products }) {
                         count: productCount,
                         total_price: productCount * item.price,
                         product_name: item.name,
-                        unit_price: item.price
+                        unit_price: item.price,
+                        kvat: kvat || "",
                     },
                 ];
             } else {
@@ -44,7 +71,6 @@ export default function ProductItem({ item, setProducts, products }) {
             }
         });
     }, [productCount, item]);
-
     return (
         <Card className="w-[340px]">
             <CardContent>
@@ -92,6 +118,32 @@ export default function ProductItem({ item, setProducts, products }) {
                         {productCount} x {item.price.toLocaleString()}
                     </p>
                     <p>{(productCount * item.price).toLocaleString()} sum</p>
+                </div>
+
+                <div>
+                    <FormField
+                        control={form.control}
+                        name="kvat"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel
+                                    htmlFor="service_cost"
+                                    className="text-gray-700 dark:text-white font-medium"
+                                >
+                                    {/* {t("name")}* */}
+                                    kvt
+                                </FormLabel>
+                                <FormControl>
+                                    <Input
+                                        // placeholder={t("enterName")}
+                                        {...field}
+                                        className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
             </CardContent>
 

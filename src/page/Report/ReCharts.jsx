@@ -9,26 +9,7 @@ import {
 } from "recharts";
 
 export default function ReCharts({ data }) {
-    const [item, setItem] = useState([
-        {
-            name: "one",
-            uv: 23453435,
-            pv: 43543335,
-            amt: 323040404,
-        },
-        {
-            name: "two",
-            uv: 23345535,
-            pv: 4354333335,
-            amt: 323040404,
-        },
-        {
-            name: "three",
-            uv: 233435,
-            pv: 433333335,
-            amt: 323040404,
-        },
-    ]);
+    const [item, setItem] = useState([]);
 
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -36,31 +17,40 @@ export default function ReCharts({ data }) {
             setLoading(false);
             return;
         }
-        const purchasedList = data.Data.purchased || [];
+        const purchasedList = data.Data.client_products || [];
+
         const totalPrice = purchasedList.reduce(
             (sum, item) => sum + (item.total_price || 0),
             0
         );
 
-        const res = purchasedList.map((i) => {
-            return {
-                name: i.product_name,
+        const res = purchasedList
+            .map((i) => ({
+                date: i.created_at,
                 uv: i.total_count_of_product,
                 pv: i.total_price,
                 amt: totalPrice,
-            };
-        }, {});
-        setItem((prev) => ([...prev, ...res]));
+            }))
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        setItem(res);
         setLoading(false);
     }, [data]);
 
     if (loading) return <h1>Loading...</h1>;
 
     return (
-        <div className="mt-6">
-            <AreaChart width={1450} height={500} data={item} syncId="anyId">
+        <div className="max-w-[1400px] overflow-x-auto mt-6">
+            <AreaChart width={1100} height={500} data={item} syncId="anyId">
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+                <XAxis
+                    dataKey="date"
+                    angle={-25}
+                    textAnchor="end"
+                    height={80}
+                    interval="preserveStartEnd"
+                    minTickGap={15}
+                />
                 <YAxis />
                 <Tooltip />
                 <Area
