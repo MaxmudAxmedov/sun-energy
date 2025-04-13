@@ -34,14 +34,14 @@ const formSchema = z.object({
   patronymic: z.string().min(1, "fullNameRequired"),
   phone: z.string().min(1, "phoneNumberRequired"),
   position_id: z.string().min(1, "positionRequired"),
-  viloyat: z.string().min(1, {
+  region: z.string().min(1, {
     message: "provinceRequired",
   }),
-  tuman: z.string().min(1, {
+  district: z.string().min(1, {
     message: "districtRequired",
   }),
-  address: z.string().min(1, {
-    message: "addressRequired",
+  street: z.string().min(1, {
+    message: "streetRequired",
   }),
   photo: z
     .custom(
@@ -92,14 +92,14 @@ export default function CreateEmployee() {
       phone: "",
       position_id: "",
       passport_series: "",
-      viloyat: "",
-      tuman: "",
-      address: "",
+      region: "",
+      district: "",
+      street: "",
       photo: [],
     },
   });
 
-  const selectedProvince = form.watch("viloyat");
+  const selectedProvince = form.watch("region");
   const setValues = form.setValue;
 
   const onSubmit = (data) => {
@@ -112,14 +112,14 @@ export default function CreateEmployee() {
     formData.append("phone", `${prefixForServer}${data.phone}`);
     formData.append("position_id", data.position_id);
     formData.append("passport_series", data.passport_series);
-    formData.append(
-      "residential_address ",
-      data.viloyat + " " + data.tuman + " " + data.address
-    );
+    formData.append("region", data.region);
+    formData.append("district", data.district);
+    formData.append("street", data.street);
 
     for (let i = 0; i < data.photo.length; i++) {
       formData.append("photo", data.photo[i]);
     }
+
     mutate({
       endpoint: "/employee",
       data: formData,
@@ -254,7 +254,7 @@ export default function CreateEmployee() {
                     htmlFor="passportSeries"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("passportSeries")}
+                    {t("passportSeries")}*
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -312,26 +312,26 @@ export default function CreateEmployee() {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            {/* Viloyat */}
+            {/* Region */}
             <FormField
               control={form.control}
-              name="viloyat"
+              name="region"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="viloyat"
+                    htmlFor="region"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("province")}
+                    {t("province")}*
                   </FormLabel>
                   <FormControl>
                     <Select
                       defaultValue={field.value}
                       onValueChange={(value) => {
-                        setValues("viloyat", value, {
+                        setValues("region", value, {
                           shouldValidate: true,
                         });
-                        setValues("tuman", "", { shouldValidate: false });
+                        setValues("district", "", { shouldValidate: false });
                       }}
                       value={selectedProvince}
                     >
@@ -356,25 +356,25 @@ export default function CreateEmployee() {
               )}
             />
 
-            {/* Tuman */}
+            {/* District */}
             <FormField
               control={form.control}
-              name="tuman"
+              name="district"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="tuman"
+                    htmlFor="district"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("district")}
+                    {t("district")}*
                   </FormLabel>
                   <FormControl>
                     <Select
                       onValueChange={(value) => {
-                        setValues("tuman", value, { shouldValidate: true });
+                        setValues("district", value, { shouldValidate: true });
                       }}
                       defaultValue={field.value}
-                      value={form.watch("tuman")}
+                      value={form.watch("district")}
                       disabled={!selectedProvince}
                     >
                       <SelectTrigger className="w-[300px] bg-white" {...field}>
@@ -399,21 +399,21 @@ export default function CreateEmployee() {
               )}
             />
 
-            {/* Address */}
+            {/* Street  */}
             <FormField
               control={form.control}
-              name="address"
+              name="street"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="address"
+                    htmlFor="street"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("address")}*
+                    {t("street")}*
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t("enterAddress")}
+                      placeholder={t("enterStreet")}
                       {...field}
                       className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                     />

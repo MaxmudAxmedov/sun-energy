@@ -113,7 +113,6 @@ export default function EditProduct() {
     }
   }, [productDataById, form]);
 
-  console.log(productDataById);
 
   const handleDeleteImage = (index) => {
     const newImages = [...images];

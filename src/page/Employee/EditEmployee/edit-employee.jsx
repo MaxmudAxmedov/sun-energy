@@ -30,25 +30,16 @@ import { ImageUpload } from "@/components/component/Image-Upload";
 import { Trash2, X } from "lucide-react";
 
 const formSchema = z.object({
-  full_name: z.string().min(1, "fullNameRequired"),
+  first_name: z.string().min(1, "firstNameRequired"),
+  last_name: z.string().min(1, "lastNameRequired"),
+  patronymic: z.string().min(1, "patronymicRequired"),
   phone: z.string().min(1, "phoneNumberRequired"),
   position_id: z.string().min(1, "positionRequired"),
-  photo: z
-    .custom(
-      (value) => {
-        if (Array.isArray(value)) {
-          return value.every((file) => file instanceof File);
-        }
-        return false;
-      },
-      {
-        message: "Image must be JPG, JPEG or PNG format and less than 5MB",
-      }
-    )
-    .refine((files) => {
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      return files.every((file) => file.size <= maxSize);
-    }, "Image size must be less than 5MB"),
+  passport_series: z.string().min(1, "passportSeriesRequired"),
+  region: z.string().min(1, "regionRequired"),
+  district: z.string().min(1, "districtRequired"),
+  street: z.string().min(1, "streetRequired"),
+  photo: z.any().optional(),
 });
 
 export default function EditEmployee() {
@@ -88,10 +79,16 @@ export default function EditEmployee() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: "",
       phone: "",
       position_id: "",
       photo: null,
+      region: "",
+      district: "",
+      street: "",
+      passport_series: "",
+      patronymic: "",
+      first_name: "",
+      last_name: "",
     },
   });
 
@@ -102,14 +99,18 @@ export default function EditEmployee() {
         last_name,
         passport_series,
         patronymic,
-        address,
+        street,
+        district,
+        region,
         phone,
         position_id,
       } = employee;
       form.reset({
         first_name,
         last_name,
-        address,
+        street,
+        district,
+        region,
         patronymic,
         passport_series,
         phone: phone.replace(prefixForServer, ""),
@@ -118,7 +119,7 @@ export default function EditEmployee() {
     }
   }, [employee, form]);
 
-  const selectedProvince = form.watch("viloyat");
+  const selectedProvince = form.watch("region");
   const setValues = form.setValue;
 
   const handleDeleteImage = (index) => {
@@ -138,15 +139,31 @@ export default function EditEmployee() {
   };
 
   const onSubmit = (data) => {
-    const newData = {
-      ...data,
-      phone: prefixForServer + data.phone,
-      id: employee.id,
-    };
+    const formData = new FormData();
+    
+    // Add all form fields to FormData
+    Object.keys(data).forEach(key => {
+      if (key === 'phone') {
+        formData.append(key, prefixForServer + data[key]);
+      } else if (key === 'photo' && data[key]) {
+        // Handle photo files
+        if (Array.isArray(data[key])) {
+          data[key].forEach(file => {
+            formData.append('photo', file);
+          });
+        }
+      } else {
+        formData.append(key, data[key]);
+      }
+    });
+
+    // Add employee ID
+    formData.append('id', employee.id);
+
     mutate({
       endpoint: `/employee`,
       method: "PUT",
-      data: newData,
+      data: formData,
       toastCreateMessage: "employeeUpdated",
       navigatePath: "/employee",
       mutateQueryKey: "/employees",
@@ -311,6 +328,7 @@ export default function EditEmployee() {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      value={form.watch("position_id")}
                     >
                       <SelectTrigger className="w-[300px]" {...field}>
                         <SelectValue placeholder={t("choosePosition")} />
@@ -342,25 +360,25 @@ export default function EditEmployee() {
             {/* Viloyat */}
             <FormField
               control={form.control}
-              name="viloyat"
+              name="region"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="viloyat"
+                    htmlFor="region"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("province")}
+                    {t("province")}*
                   </FormLabel>
                   <FormControl>
                     <Select
                       defaultValue={field.value}
                       onValueChange={(value) => {
-                        setValues("viloyat", value, {
+                        setValues("region", value, {
                           shouldValidate: true,
                         });
-                        setValues("tuman", "", { shouldValidate: false });
+                        setValues("district", "", { shouldValidate: false });
                       }}
-                      value={selectedProvince}
+                      value={form.watch("region")}
                     >
                       <SelectTrigger className="w-[300px] bg-white" {...field}>
                         <SelectValue placeholder={t("enterProvince")} />
@@ -386,22 +404,22 @@ export default function EditEmployee() {
             {/* Tuman */}
             <FormField
               control={form.control}
-              name="tuman"
+              name="district"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="tuman"
+                    htmlFor="district"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("district")}
+                    {t("district")}*
                   </FormLabel>
                   <FormControl>
                     <Select
                       onValueChange={(value) => {
-                        setValues("tuman", value, { shouldValidate: true });
+                        setValues("district", value, { shouldValidate: true });
                       }}
                       defaultValue={field.value}
-                      value={form.watch("tuman")}
+                      value={form.watch("district")}
                       disabled={!selectedProvince}
                     >
                       <SelectTrigger className="w-[300px] bg-white" {...field}>
@@ -429,18 +447,18 @@ export default function EditEmployee() {
             {/* Address */}
             <FormField
               control={form.control}
-              name="address"
+              name="street"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="address"
+                    htmlFor="street"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("address")}*
+                    {t("street")}*
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t("enterAddress")}
+                      placeholder={t("enterStreet")}
                       {...field}
                       className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                     />
