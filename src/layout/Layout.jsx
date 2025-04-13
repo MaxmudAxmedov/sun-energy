@@ -16,7 +16,7 @@ export default function Layout() {
   return (
     <div className="flex">
       <Navbar />
-      <div className="bg-layoutBgColor h-screen w-full dark:bg-darkPrimaryColor">
+      <div className="bg-layoutBgColor pb-4 w-full dark:bg-darkPrimaryColor">
         <div className="desktop:container mx-[20px]">
           <span
             className={
