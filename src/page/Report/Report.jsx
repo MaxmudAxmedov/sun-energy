@@ -19,7 +19,7 @@ export default function Report() {
     });
     const item = data?.data?.Data;
 
-    const total = item?.client_products.reduce(
+    const total = item?.client_products?.reduce(
         (initial, obj) => {
             return {
                 price: (initial.price += obj.total_price),
@@ -30,9 +30,9 @@ export default function Report() {
 
     useEffect(() => {
         if (item?.client_products) {
-            const res = item.client_products.reduce(
+            const res = item?.client_products?.reduce(
                 (acc, obj) => {
-                    const itemSum = obj.items.reduce(
+                    const itemSum = obj?.items?.reduce(
                         (sum, item) => ({
                             kvt: sum.kvt + item.kv,
                             qty: sum.qty + item.quantity,
