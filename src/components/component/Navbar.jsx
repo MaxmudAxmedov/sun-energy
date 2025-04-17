@@ -33,8 +33,8 @@ export default function Navbar() {
 
   return (
     <div
-      className={`h-screen hidden  dark:bg-darkSecondary bg-white desktop:flex flex-col transition-all duration-300 ${
-        isCollapsed ? "w-[80px]" : "w-[350px]"
+      className={`h-screen fixed hidden  dark:bg-darkSecondary bg-white desktop:flex flex-col transition-all duration-300 ${
+        isCollapsed ? "w-[80px]" : "w-[300px]"
       }`}
     >
       <div className="flex flex-col justify-between h-screen">

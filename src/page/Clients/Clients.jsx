@@ -118,14 +118,14 @@ export default function Clients() {
         <DataTable data={data?.Data?.clients} columns={column} />
       </div>
 
-      {/* <div className="mt-3">
+      <div className="mt-3">
         <DynamicPagination
           data={data}
           setPage={setPage}
           limit={limit}
           page={page}
         />
-      </div> */}
+      </div>
     </div>
   );
 }
