@@ -26,7 +26,7 @@ export const DynamicHeader = ({
     };
 
     return (
-        <div className="flex flex-col desktop:flex-row desktop:items-center justify-between desktop:mt-8 tablet:mt-3">
+        <div className="flex flex-col desktop:flex-row desktop:items-center justify-between desktop:mt-5 tablet:mt-3">
             <div className="flex items-center justify-between w-full">
                 <h1 className="text-textPrimaryColor dark:text-white text-[18px] desktop:text-[28px] tablet:text-[22px] font-medium">
                     {t(title)}

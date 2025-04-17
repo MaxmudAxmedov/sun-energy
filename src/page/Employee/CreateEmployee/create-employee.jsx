@@ -71,17 +71,32 @@ export default function CreateEmployee() {
   const { t } = useTranslation();
   const prefix = "+998";
   const prefixForServer = "998";
-  const { data, isLoading, isError } = useGetData({
-    endpoint: "/positions",
-    enabled: true,
-    getQueryKey: "/positions",
-  });
-  const {
-    mutate,
-    isLoading: muatateLoading,
-    isError: mutateError,
-  } = useMutateData();
-  console.log("mutateError", mutateError);
+  // const { data, isLoading, isError } = useGetData({
+  //   endpoint: "/positions",
+  //   enabled: true,
+  //   getQueryKey: "/positions",
+  // });
+
+  const positionCustonmData = [
+    {
+      id: 1,
+      name: "leader",
+    },
+    {
+      id: 2,
+      name: "admin",
+    },
+    {
+      id: 3,
+      name: "master",
+    },
+    {
+      id: 4,
+      name: "attractor",
+    },
+  ];
+
+  const { mutate, isLoading: muatateLoading } = useMutateData();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -129,7 +144,7 @@ export default function CreateEmployee() {
     });
   };
   return (
-    <div>
+    <div className="tablet:h-screen">
       <h1 className="text-2xl font-bold mb-8 pt-6">{t("createEmployee")}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -289,16 +304,12 @@ export default function CreateEmployee() {
                         <SelectValue placeholder={t("choosePosition")} />
                       </SelectTrigger>
                       <SelectContent>
-                        {isLoading
-                          ? t("loading")
-                          : isError
-                          ? "Error"
-                          : data?.Data?.positions?.length === 0
+                        {positionCustonmData?.length === 0
                           ? t("datasNotFound")
-                          : data?.Data?.positions?.map((item) => (
+                          : positionCustonmData?.map((item) => (
                               <SelectGroup key={item.id}>
                                 <SelectItem value={item.id}>
-                                  {item.name}
+                                  {t(item.name)}
                                 </SelectItem>
                               </SelectGroup>
                             ))}

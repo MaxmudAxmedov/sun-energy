@@ -19,7 +19,7 @@ export default function Setting() {
     localStorage.setItem("language", lng);
   };
   return (
-    <div>
+    <div className="h-screen">
       <div>
         <h2 className="text-textPrimaryColor dark:text-white font-semibold text-[16px] mb-1 mt-4">
           {t("languageChange")}:

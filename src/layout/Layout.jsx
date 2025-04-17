@@ -25,10 +25,16 @@ export default function Layout() {
                 : "flex desktop:hidden items-center justify-between mt-2 mb-3"
             }
           >
-            <img className="w-[70px] h-[40px] rounded-md" src={LogoMobile} alt="" />
+            <img
+              className="w-[70px] h-[40px] rounded-md"
+              src={LogoMobile}
+              alt=""
+            />
             <BurgerMenu />
           </span>
-          <Outlet />
+          <div className="desktop:ml-[250px]">
+            <Outlet />
+          </div>
         </div>
       </div>
     </div>

@@ -25,7 +25,7 @@ export function DataTable({ columns, data = [] }) {
   const { t } = useTranslation();
   return (
     <div className="w-full">
-      <div className="mx-auto mt-6 max-w-full h-[80vh] overflow-x-hidden  rounded-md bg-white dark:bg-darkSecondary p-4 dark:bg-darkMain">
+      <div className="mx-auto mt-6 max-w-full h-[78vh] overflow-x-hidden  rounded-md bg-white dark:bg-darkSecondary p-4 dark:bg-darkMain">
         <Table>
           <TableHeader>
             {table?.getHeaderGroups()?.map((headerGroup) => (

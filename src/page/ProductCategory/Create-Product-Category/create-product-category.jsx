@@ -43,7 +43,7 @@ export default function CreateProductCategory() {
   };
 
   return (
-    <div className="desktop:mt-4">
+    <div className="desktop:mt-4 h-screen">
       <h1 className="text-2xl font-bold mb-8 pt-6">
         {t("createProductCategory")}
       </h1>
@@ -72,7 +72,7 @@ export default function CreateProductCategory() {
               </FormItem>
             )}
           />
-          <div className="flex items-center desktop:mt-9 gap-x-2">
+          <div className="flex items-center mt-6 desktop:mt-9 gap-x-2">
             <Button type="submit">
               {isLoading ? <Spinner /> : t("submit")}
             </Button>
