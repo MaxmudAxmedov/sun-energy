@@ -78,6 +78,7 @@ export default function Clients() {
               endpoint={`client`}
               dynamicRowId={row.original.id}
               mutateQueryKey={"clients"}
+              deleteToastMessage={"clientDeleted"}
             />
           </div>
         );

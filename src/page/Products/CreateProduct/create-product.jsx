@@ -347,10 +347,9 @@ export default function CreateProduct() {
                 </FormLabel>
                 <FormControl>
                   <SingleImageUpload
-                    defaultImage={productDataById?.photo}
+                    defaultImage={id ? productDataById?.photo : ""}
                     onChange={(file) => {
                       field.onChange(file);
-                      console.log(file);
                     }}
                   />
 
