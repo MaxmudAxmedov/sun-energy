@@ -69,8 +69,8 @@ export default function EditProductCategory() {
   if (productCategoryLoading) return <div>{t("loading")}...</div>;
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-8 pt-6">{t("editEmployee")}</h1>
+    <div className="h-screen">
+      <h1 className="text-2xl font-bold mb-8 pt-6">{t("editProductCategory")}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField

@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Calculator from "@/components/component/Calculator";
+import { DynamicHeader } from "@/components/component/Dynamic-Header";
 
 export default function Setting() {
     const { i18n } = useTranslation();
@@ -21,6 +22,7 @@ export default function Setting() {
     };
     return (
         <div>
+          <DynamicHeader />
             <div>
                 <h2 className="text-textPrimaryColor dark:text-white font-semibold text-[16px] mb-1 mt-4">
                     {t("languageChange")}:
@@ -87,8 +89,6 @@ export default function Setting() {
                         {t("system")}
                     </Button>
                 </div>
-            </div>
-            <div>
                 <Calculator />
             </div>
         </div>

@@ -77,7 +77,7 @@ const Calculator = () => {
             ref={calculatorRef}
         >
             <div className=" p-4 text-2xl text-right">{display}</div>
-            <div className="grid grid-cols-4 gap-px border-t border-[#ccc] bg-[#ccc]">
+            <div className="grid grid-cols-4 gap-px border-t border-[#ccc]">
                 {btns.map((btn) => (
                     <button
                         className="p-5 text-[18px] cursor-pointer hover:bg-[#e0e0e0] border border-[#ccc]"

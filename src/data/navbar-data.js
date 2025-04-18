@@ -1,8 +1,8 @@
-import { BaseIcon } from "@/assets/icons/base-icon";
+// import { BaseIcon } from "@/assets/icons/base-icon";
 import { ClientIcon } from "@/assets/icons/client-icon";
 import { ContractIcon } from "@/assets/icons/contract-icon";
 import { EmployeeIcon } from "@/assets/icons/employee-icon";
-import { PositionIcon } from "@/assets/icons/position-icon";
+// import { PositionIcon } from "@/assets/icons/position-icon";
 import { ProductCategoryIcon } from "@/assets/icons/product-category-icon";
 import { ProductIcon } from "@/assets/icons/product-icon";
 import { ReportIcon } from "@/assets/icons/report-icon";
@@ -51,13 +51,13 @@ export const NavbarData = [
     icon: ContractIcon,
     subNav: "/createContract",
   },
-  {
-    id: 8,
-    title: "position",
-    path: "/position",
-    icon: PositionIcon,
-    subNav: "/createPosition",
-  },
+  // {
+  //   id: 8,
+  //   title: "position",
+  //   path: "/position",
+  //   icon: PositionIcon,
+  //   subNav: "/createPosition",
+  // },
   {
     id: 9,
     title: "setting",
