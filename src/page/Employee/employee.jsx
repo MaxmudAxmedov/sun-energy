@@ -95,6 +95,7 @@ export default function Employee() {
               dynamicRowId={row.original.id}
               endpoint={"employee"}
               mutateQueryKey={"employees"}
+              deleteToastMessage={"employeeDeleted"}
             />
           </div>
         );

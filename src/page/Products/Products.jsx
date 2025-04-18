@@ -11,14 +11,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 import { useNavigate } from "react-router-dom";
-import { Download } from "lucide-react";
 import { useGetData } from "@/hook/useApi";
 import { Spinner } from "@/components/component/spinner";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 
 const params = {
   search: "",
-  limit: "500",
+  limit: "6",
   page: "1",
 };
 
@@ -26,6 +25,7 @@ export default function Products() {
   const [page, setPage] = useState(params.page);
   const [search, setSearch] = useState("");
   const navigate = useNavigate("");
+  const limit = params.limit;
   const [debouncedSearch] = useDebounce(search, 500);
   const [initialParams, setInitialParams] = useState({
     ...params,
@@ -45,6 +45,7 @@ export default function Products() {
     staleTime: Infinity,
     cacheTime: 0,
   });
+
 
   const handleCategory = (categoryId) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -149,10 +150,8 @@ export default function Products() {
               dynamicRowId={row.original.id}
               endpoint={`product`}
               mutateQueryKey={"product-categories"}
+              deleteToastMessage={"productDeleted"}
             />
-            {/* <div className="hover:scale-110 cursor-pointer transition-all duration-200 w-[28px] h-[28px] flex items-center justify-center rounded-md">
-                            <Download />
-                        </div> */}
           </div>
         );
       },
@@ -183,7 +182,7 @@ export default function Products() {
         <DynamicPagination
           data={data}
           setPage={setPage}
-          limit={initialParams.limit}
+          limit={limit}
           page={page}
         />
       </div>

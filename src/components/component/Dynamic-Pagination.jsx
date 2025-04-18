@@ -4,7 +4,7 @@ import { RightChevronIcon } from "@/assets/icons/right-chevron-icon";
 import { LeftChevronIcon } from "@/assets/icons/left-chevron-icon";
 
 export const DynamicPagination = ({ data, setPage, limit, page }) => {
-  const totalItems = data?.data?.Data?.count || 0;
+  const totalItems = data?.Data?.count || 0;
   const totalPages = Math.ceil(totalItems / limit);
 
   const handlePageChange = (newPage) => {
@@ -14,7 +14,7 @@ export const DynamicPagination = ({ data, setPage, limit, page }) => {
   };
 
   return (
-    <div className="flex items-center gap-x-2">
+    <div className="flex items-center gap-x-2 pb-[37px]">
       <Button
         variant="outline"
         size="sm"

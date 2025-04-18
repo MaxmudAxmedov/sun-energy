@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
-import { useGetData } from "@/hook/useApi";
+// import { useGetData } from "@/hook/useApi";
 import { useMutateData } from "@/hook/useApi";
 import { Spinner } from "@/components/component/spinner";
 import { clientAddressData } from "@/data/viloyatlar";

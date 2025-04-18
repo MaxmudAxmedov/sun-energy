@@ -16,6 +16,7 @@ export const CustomDeleteDialog = ({
   dynamicRowId,
   endpoint,
   mutateQueryKey,
+  deleteToastMessage,
 }) => {
   const [open, setOpne] = useState(false);
   const { t } = useTranslation();
@@ -52,6 +53,7 @@ export const CustomDeleteDialog = ({
                 mutateQueryKey={mutateQueryKey}
                 onOpen={setOpne}
                 open={open}
+                deleteToastMessage={deleteToastMessage}
               />
             </DialogDescription>
           </DialogHeader>

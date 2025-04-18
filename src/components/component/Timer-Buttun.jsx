@@ -9,6 +9,7 @@ export const TimerButtun = ({
   open,
   endpoint,
   mutateQueryKey,
+  deleteToastMessage,
 }) => {
   console.log(rowId);
   const [timer, setTimer] = useState(5);
@@ -21,7 +22,7 @@ export const TimerButtun = ({
     mutate({
       endpoint: `/${endpoint}/${productCategoryId}`,
       method: "DELETE",
-      toastCreateMessage: "productCategoryDeleted",
+      toastCreateMessage: deleteToastMessage,
       mutateQueryKey: `/${mutateQueryKey}`,
     });
   };

@@ -83,6 +83,7 @@ export default function ProductCategory() {
               dynamicRowId={row.original.id}
               endpoint={`product-category`}
               mutateQueryKey={"product-category"}
+              deleteToastMessage={"productCategoryDeleted"}
             />
           </div>
         );
