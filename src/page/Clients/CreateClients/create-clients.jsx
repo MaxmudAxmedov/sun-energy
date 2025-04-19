@@ -30,11 +30,13 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getClientById } from "@/service/client";
 import { useQuery } from "@tanstack/react-query";
-const isValidUUID = (uuid) => {
-  const uuidRegex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  return uuid && typeof uuid === "string" && uuidRegex.test(uuid);
-};
+import { ImageUpload } from "@/components/component/Image-Upload";
+
+// const isValidUUID = (uuid) => {
+//   const uuidRegex =
+//     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+//   return uuid && typeof uuid === "string" && uuidRegex.test(uuid);
+// };
 
 // const formSchema = z.object({
 //   full_name: z.string().min(1, {
@@ -87,7 +89,6 @@ const isValidUUID = (uuid) => {
 export const formSchema = z.object({
   company_name: z.string(),
   district: z.string(),
-  employee_id: z.string(),
   full_name: z.string().min(3, "Ism kamida 3 ta harfdan iborat bo'lishi kerak"),
   inn_number: z.string(),
   is_company: z.boolean(),
@@ -98,7 +99,6 @@ export const formSchema = z.object({
       "Pasport seriyasi noto‘g‘ri formatda (masalan: AA1234567)"
     ),
   phone: z.string().min(9),
-  referred_id: z.string(),
   region: z.string(),
   street: z.string(),
 });
@@ -119,44 +119,42 @@ export default function CreateClients() {
     (users) => users?.percent_for_employee
   );
 
-  const { data: clientData, error } = useQuery({
+  const { data: clientData } = useQuery({
     queryKey: ["client", id],
     queryFn: () => getClientById(id),
     enabled: !!id,
   });
 
-  const {
-    data: employeesData,
-    isLoading,
-    isError,
-  } = useGetData({
-    endpoint: "/employees",
-    enabled: true,
-    getQueryKey: "/employees",
-  });
+  // const {
+  //   data: employeesData,
+  //   isLoading,
+  //   isError,
+  // } = useGetData({
+  //   endpoint: "/employees",
+  //   enabled: true,
+  //   getQueryKey: "/employees",
+  // });
 
-  const {
-    data: clientsData,
-    isLoading: clientsLoading,
-    isError: clientsError,
-  } = useGetData({
-    endpoint: "/clients",
-    enabled: true,
-    getQueryKey: "/clients",
-  });
+  // const {
+  //   data: clientsData,
+  //   isLoading: clientsLoading,
+  //   isError: clientsError,
+  // } = useGetData({
+  //   endpoint: "/clients",
+  //   enabled: true,
+  //   getQueryKey: "/clients",
+  // });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       full_name: "",
       phone: "",
-      employee_id: "",
       street: "",
       region: "",
       district: "",
       passport_series: "",
       is_company: false,
-      referred_id: "",
       inn_number: "",
       company_name: "",
       percent_for_employee_custom: 0,
@@ -169,13 +167,11 @@ export default function CreateClients() {
       form.reset({
         full_name: client.full_name,
         phone: client.phone,
-        employee_id: client.employee_id,
         street: client.street,
         region: client.region,
         district: client.district,
         passport_series: client.passport_series,
         is_company: client.is_company,
-        referred_id: client.referred_id,
         inn_number: client.inn_number,
         company_name: client.company_name,
         percent_for_employee_custom: client.percent_for_employee_custom,
@@ -193,41 +189,41 @@ export default function CreateClients() {
   const setValues = form.setValue;
 
   const onSubmitIndividual = (data) => {
+    const formData = new FormData();
     const {
       full_name,
       phone,
-      employee_id,
       street,
       region,
       district,
       passport_series,
-      referred_id,
       is_company,
       inn_number,
       company_name,
       percent_for_employee_custom,
+      photo,
     } = data;
 
     const fullPhoneNumber = `${prefixServer}${phone}`;
-    const finalData = {
-      phone: fullPhoneNumber,
-      full_name,
-      employee_id,
-      passport_series,
-      street,
-      region,
-      district,
-      referred_id,
-      percent_for_employee:
-        percent_for_employee_custom || percent_for_employee?.[0],
-      is_company: is_company || false,
-      inn_number: Number(inn_number) || null,
-      company_name: company_name || null,
-    };
+    formData.append("phone", fullPhoneNumber);
+    formData.append("full_name", full_name);
+    formData.append("passport_series", passport_series);
+    formData.append("street", street);
+    formData.append("region", region);
+    formData.append("district", district);
+    formData.append("is_company", is_company);
+    formData.append("inn_number", inn_number);
+    formData.append("company_name", company_name);
+    formData.append(
+      "percent_for_employee",
+      percent_for_employee_custom || percent_for_employee?.[0]
+    );
+    formData.append("photo", photo);
+
     mutate({
       endpoint: "/client",
       method: "POST",
-      data: finalData,
+      data: formData,
       navigatePath: "/clients",
       toastCreateMessage: "clientCreated",
       mutateQueryKey: "/clients",
@@ -235,38 +231,36 @@ export default function CreateClients() {
   };
 
   const onSubmitLegal = (data) => {
+    const formData = new FormData();
     const {
       full_name,
       phone,
-      employee_id,
       street,
       region,
       district,
       passport_series,
-      referred_id,
       is_company,
       inn_number,
       company_name,
+      photo,
     } = data;
 
     const fullPhoneNumber = `${prefixServer}${phone}`;
-    const finalData = {
-      phone: fullPhoneNumber,
-      full_name,
-      employee_id,
-      passport_series,
-      street,
-      region,
-      district,
-      referred_id,
-      is_company,
-      inn_number: Number(inn_number),
-      company_name,
-    };
+    formData.append("phone", fullPhoneNumber);
+    formData.append("full_name", full_name);
+    formData.append("passport_series", passport_series);
+    formData.append("street", street);
+    formData.append("region", region);
+    formData.append("district", district);
+    formData.append("is_company", is_company);
+    formData.append("inn_number", inn_number);
+    formData.append("company_name", company_name);
+    formData.append("photo", photo);
+
     mutate({
       endpoint: "/client-company",
       method: "POST",
-      data: finalData,
+      data: formData,
       navigatePath: "/clients",
       toastCreateMessage: "clientCreated",
       mutateQueryKey: "/clients",
@@ -361,7 +355,7 @@ export default function CreateClients() {
                   )}
                 />
 
-                {/* Choose Employee */}
+                {/* Choose Employee
                 <FormField
                   control={form.control}
                   name="employee_id"
@@ -404,6 +398,30 @@ export default function CreateClients() {
                             </SelectGroup>
                           </SelectContent>
                         </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                /> */}
+
+                {/* percent_for_employee_custom */}
+                <FormField
+                  control={form.control}
+                  name="percent_for_employee_custom"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="percent_for_employee_custom"
+                        className="text-gray-700 dark:text-white font-medium"
+                      >
+                        {t("percentForEmployee")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t("enterPercentForEmployee")}
+                          {...field}
+                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -534,7 +552,7 @@ export default function CreateClients() {
                 />
               </div>
 
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="space-y-6">
                 {/* passport_series */}
                 <FormField
                   control={form.control}
@@ -559,24 +577,21 @@ export default function CreateClients() {
                     </FormItem>
                   )}
                 />
-
-                {/* passport_series */}
+                {/* Image Uploade */}
                 <FormField
                   control={form.control}
-                  name="percent_for_employee_custom"
+                  name="photo"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel
-                        htmlFor="percent_for_employee_custom"
+                        htmlFor="photos"
                         className="text-gray-700 dark:text-white font-medium"
                       >
-                        {t("percentForEmployee")}
+                        {t("image")}*
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder={t("enterPercentForEmployee")}
-                          {...field}
-                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                        <ImageUpload
+                          onChange={(files) => field.onChange(files)}
                         />
                       </FormControl>
                       <FormMessage />
@@ -670,7 +685,7 @@ export default function CreateClients() {
                 />
 
                 {/* Choose Employee */}
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="employee_id"
                   render={({ field }) => (
@@ -712,6 +727,31 @@ export default function CreateClients() {
                             </SelectGroup>
                           </SelectContent>
                         </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                /> */}
+
+                {/* passport_series */}
+                <FormField
+                  control={form.control}
+                  name="passport_series"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="passportSeries"
+                        className="text-gray-700 dark:text-white font-medium"
+                      >
+                        {t("passportSeries")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t("enterPassportSeries")}
+                          {...field}
+                          maxLength={9}
+                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -845,33 +885,8 @@ export default function CreateClients() {
               </div>
 
               <div className="flex flex-wrap items-center gap-4">
-                {/* passport_series */}
-                <FormField
-                  control={form.control}
-                  name="passport_series"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="passportSeries"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("passportSeries")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("enterPassportSeries")}
-                          {...field}
-                          maxLength={9}
-                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 {/* Choose Client for Referad_id */}
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="referred_id"
                   render={({ field }) => (
@@ -916,35 +931,8 @@ export default function CreateClients() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
 
-                {/* is_company */}
-                <FormField
-                  control={form.control}
-                  name="is_company"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="is_company"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("isCompany")}
-                      </FormLabel>
-                      <FormControl>
-                        <Switch
-                          className="block"
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          id="is_company"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="flex flex-wrap gap-4">
                 {/* inn_number */}
                 <FormField
                   control={form.control}
@@ -992,7 +980,57 @@ export default function CreateClients() {
                     </FormItem>
                   )}
                 />
+
+                {/* is_company */}
+                <FormField
+                  control={form.control}
+                  name="is_company"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="is_company"
+                        className="text-gray-700 dark:text-white font-medium"
+                      >
+                        {t("isCompany")}
+                      </FormLabel>
+                      <FormControl>
+                        <Switch
+                          className="block"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="is_company"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
+
+              <div>
+                {/* Image Uploade */}
+                <FormField
+                  control={form.control}
+                  name="photo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="photos"
+                        className="text-gray-700 dark:text-white font-medium"
+                      >
+                        {t("image")}*
+                      </FormLabel>
+                      <FormControl>
+                        <ImageUpload
+                          onChange={(files) => field.onChange(files)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <div className="flex items-center gap-4">
                 <NavLink
                   to={"/clients"}
