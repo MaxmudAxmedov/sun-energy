@@ -14,7 +14,7 @@ export const DynamicPagination = ({ data, setPage, limit, page }) => {
   };
 
   return (
-    <div className="flex items-center gap-x-2 pb-[37px]">
+    <div className="flex items-center gap-x-2 pb-[6px]">
       <Button
         variant="outline"
         size="sm"
