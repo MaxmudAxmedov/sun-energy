@@ -7,6 +7,7 @@ import { ProductCategoryIcon } from "@/assets/icons/product-category-icon";
 import { ProductIcon } from "@/assets/icons/product-icon";
 import { ReportIcon } from "@/assets/icons/report-icon";
 import { SettingIcon } from "@/assets/icons/setting-icon";
+import { UsersIcon } from "@/assets/icons/users-icons";
 
 export const NavbarData = [
   {
@@ -50,6 +51,13 @@ export const NavbarData = [
     path: "/contract",
     icon: ContractIcon,
     subNav: "/createContract",
+  },
+  {
+    id: 8,
+    title: "users",
+    path: "/users",
+    icon: UsersIcon,
+    subNav: "/createUsers",
   },
   // {
   //   id: 8,
