@@ -57,6 +57,7 @@
   "individualsClients": "Для физических лиц",
   "companyDoesNotExist": "Компания не существует",
   "region": "Область",
+  "balance": "Баланс",
   "enterRegion": "Введите область",
   "regionRequired": "Область является обязательной",
   "enterNewLogin": "Введите новый логин",
