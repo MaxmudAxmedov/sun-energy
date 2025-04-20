@@ -26,6 +26,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import dayjs from "dayjs";
 
 export function DataTable({ columns, data = [] }) {
   const table = useReactTable({
@@ -105,50 +106,78 @@ export function DataTable({ columns, data = [] }) {
           </TableBody>
         </Table>
         {pathname === "/clients" && (
-          <Drawer open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <Drawer
+            direction="right"
+            open={isSheetOpen}
+            onOpenChange={setIsSheetOpen}
+          >
             <DrawerContent>
               <DrawerHeader>
                 <DrawerTitle className="flex flex-col gap-y-5">
-                  <span className="flex gap-x-2">
+                  <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
                     {t("fullName")}:{" "}
-                    <p className="dark:text-[#e2d1d1] text-[#5a5858]">
+                    <p className="dark:text-white text-indigo-700">
                       {selectedRowData?.full_name}
                     </p>
                   </span>
-                  <span className="flex gap-x-2">
+                  <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
                     {t("phoneNumber")}:
-                    <p className="dark:text-[#e2d1d1] text-[#5a5858]">
+                    <p className="dark:text-white text-indigo-700">
                       +{selectedRowData?.phone}
                     </p>
                   </span>
-                  <span className="flex gap-x-2">
-                    {t("companyName")}:
-                    {selectedRowData?.company_name ? (
-                      <p className="dark:text-[#e2d1d1] text-[#5a5858]">
+                  {selectedRowData?.company_name && (
+                    <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
+                      {t("companyName")}:
+                      <p className="dark:text-white text-indigo-700">
                         {selectedRowData?.company_name}
                       </p>
-                    ) : (
-                      <p className="text-red-900 border-b-2 border-red-900 ">
-                        {t("companyDoesNotExist")}
+                    </span>
+                  )}
+                  {selectedRowData?.inn_number !== 0 && (
+                    <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
+                      {t("companyName")}:
+                      <p className="dark:text-white text-indigo-700">
+                        {selectedRowData?.inn_number}
                       </p>
-                    )}
-                  </span>
-                  <span className="flex gap-x-2">
+                    </span>
+                  )}
+                  <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
                     {t("region")}:
-                    <p className="dark:text-[#e2d1d1] text-[#5a5858]">
+                    <p className="dark:text-white text-indigo-700">
                       {selectedRowData?.region}
                     </p>
                   </span>
-                  <span className="flex gap-x-2">
+                  <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
                     {t("district")}:
-                    <p className="dark:text-[#e2d1d1] text-[#5a5858]">
+                    <p className="dark:text-white text-indigo-700">
                       {selectedRowData?.district}
                     </p>
                   </span>
-                  <span className="flex gap-x-2">
+                  <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
                     {t("street")}:
-                    <p className="dark:text-[#e2d1d1] text-[#5a5858]">
+                    <p className="dark:text-white text-indigo-700">
                       {selectedRowData?.street}
+                    </p>
+                  </span>
+                  <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
+                    {t("balance")}:
+                    <p className="dark:text-white text-indigo-700">
+                      {selectedRowData?.balance}
+                    </p>
+                  </span>
+                  <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
+                    {t("createdAt")}:
+                    <p className="dark:text-white text-indigo-700">
+                      {dayjs(selectedRowData?.created_at).format(
+                        "DD.MM.YYYY HH:mm"
+                      )}
+                    </p>
+                  </span>
+                  <span className="flex gap-x-2 text-indigo-900 dark:text-indigo-300">
+                    {t("passportSeries")}:
+                    <p className="dark:text-white text-indigo-700">
+                      {selectedRowData?.passport_series}
                     </p>
                   </span>
                 </DrawerTitle>

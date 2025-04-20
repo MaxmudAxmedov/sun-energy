@@ -166,6 +166,7 @@
   "fullName": "To'liq ismi",
   "companyDoesNotExist": "Kompaniya mavjud emas",
   "region": "Viloyat",
+  "balance": "Balans",
   "enterRegion": "Viloyatni kiriting",
   "regionRequired": "Viloyatni tanlang",
   "enterFullName": "To'liq ismingizni kiriting",
