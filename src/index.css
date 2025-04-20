@@ -28,7 +28,8 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem}
+    --radius: 0.5rem;
+  }
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -53,7 +54,8 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%}
+    --chart-5: 340 75% 55%;
+  }
 }
 
 @layer base {
@@ -63,4 +65,32 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Skrollbarning umumiy kengligi */
+::-webkit-scrollbar {
+  width: 0px; /* Vertikal skrollbar kengligi */
+  height: 12px; /* Gorizontal skrollbar balandligi */
+}
+
+/* Skrollbar yo‘lagi (track) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Yo‘lakning fon rangi */
+  border-radius: 10px; /* Yo‘lakning yumaloqligi */
+}
+
+/* Skrollbar tutqichi (thumb) */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Tutqich rangi */
+  border-radius: 10px; /* Tutqichning yumaloqligi */
+}
+
+/* Tutqich ustiga kelinganda (hover) */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Hover holatida rang */
+}
+
+/* Skrollbarning burchaklari (faqat gorizontal va vertikal skrollbarlar kesishganda) */
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
 }
