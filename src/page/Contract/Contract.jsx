@@ -6,9 +6,12 @@ import dayjs from "dayjs";
 import React, { useState } from "react";
 import DownloadIcon from "@/assets/imgs/download.png";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
+import { DynamicDrawer } from "@/components/component/dynamic-drawer";
 export default function Contract() {
   const [page, setPage] = useState(1);
   //   const [search, setSearch] = useState("");
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const limit = 6;
   const { data, isLoading, isError } = useGetData({
     endpoint: "/trades",
@@ -19,7 +22,11 @@ export default function Contract() {
       //   search,
     },
   });
-  console.log(data?.Data);
+
+  const infoClick = (row) => () => {
+    setSelectedRowData(row);
+    setIsSheetOpen(true);
+  };
   const column = [
     {
       header: "No",
@@ -70,6 +77,17 @@ export default function Contract() {
       cell: ({ row }) => {
         return (
           <div className="flex items-center gap-3">
+            <button
+              onClick={infoClick(row.original)}
+              className=" bg-green-600 py-2 px-3 rounded-[15px]"
+            >
+              info
+            </button>
+            <DynamicDrawer
+              selectedRowData={selectedRowData}
+              isSheetOpen={isSheetOpen}
+              setIsSheetOpen={setIsSheetOpen}
+            />
             <a
               target="blank"
               href={row.original.contract}

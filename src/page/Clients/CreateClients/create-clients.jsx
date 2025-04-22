@@ -92,6 +92,7 @@ export const formSchema = z.object({
   full_name: z.string().min(3, "Ism kamida 3 ta harfdan iborat bo'lishi kerak"),
   inn_number: z.string(),
   is_company: z.boolean(),
+  quarter: z.string(),
   passport_series: z
     .string()
     .regex(
@@ -101,6 +102,22 @@ export const formSchema = z.object({
   phone: z.string().min(9),
   region: z.string(),
   street: z.string(),
+  file: z
+    .custom(
+      (file) => {
+        if (!(file instanceof File)) return false;
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+        if (file.size > maxSize) return false;
+        if (!allowedTypes.includes(file.type)) return false;
+        return true;
+      },
+      {
+        message: "Image must be JPG, JPEG or PNG format and less than 5MB",
+      }
+    )
+    .array()
+    .min(1, "imageRequired"),
 });
 
 export default function CreateClients() {
@@ -153,9 +170,11 @@ export default function CreateClients() {
       street: "",
       region: "",
       district: "",
+      quarter: "",
       passport_series: "",
       is_company: false,
       inn_number: "",
+      file: null,
       company_name: "",
       percent_for_employee_custom: 0,
     },
@@ -175,6 +194,7 @@ export default function CreateClients() {
         inn_number: client.inn_number,
         company_name: client.company_name,
         percent_for_employee_custom: client.percent_for_employee_custom,
+        quarter: client.quarter,
       });
       console.log(client);
       if (client?.is_company) {
@@ -201,7 +221,8 @@ export default function CreateClients() {
       inn_number,
       company_name,
       percent_for_employee_custom,
-      photo,
+      file,
+      quarter,
     } = data;
 
     const fullPhoneNumber = `${prefixServer}${phone}`;
@@ -211,14 +232,23 @@ export default function CreateClients() {
     formData.append("street", street);
     formData.append("region", region);
     formData.append("district", district);
-    formData.append("is_company", is_company);
-    formData.append("inn_number", inn_number);
-    formData.append("company_name", company_name);
+    {
+      is_company && formData.append("is_company", is_company);
+    }
+    {
+      inn_number && formData.append("inn_number", inn_number);
+    }
+    {
+      company_name && formData.append("company_name", company_name);
+    }
+    formData.append("quarter", quarter);
     formData.append(
       "percent_for_employee",
       percent_for_employee_custom || percent_for_employee?.[0]
     );
-    formData.append("photo", photo);
+    for (let i = 0; i < file.length; i++) {
+      formData.append("file", file[i]);
+    }
 
     mutate({
       endpoint: "/client",
@@ -242,7 +272,8 @@ export default function CreateClients() {
       is_company,
       inn_number,
       company_name,
-      photo,
+      quarter,
+      file,
     } = data;
 
     const fullPhoneNumber = `${prefixServer}${phone}`;
@@ -255,7 +286,10 @@ export default function CreateClients() {
     formData.append("is_company", is_company);
     formData.append("inn_number", inn_number);
     formData.append("company_name", company_name);
-    formData.append("photo", photo);
+    formData.append("quarter", quarter);
+    for (let i = 0; i < file.length; i++) {
+      formData.append("file", file[i]);
+    }
 
     mutate({
       endpoint: "/client-company",
@@ -291,7 +325,7 @@ export default function CreateClients() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmitIndividual)}
-              className="space-y-8"
+              className="space-y-6"
             >
               <div className="flex flex-wrap gap-4">
                 {/* Full Name */}
@@ -354,55 +388,6 @@ export default function CreateClients() {
                     </FormItem>
                   )}
                 />
-
-                {/* Choose Employee
-                <FormField
-                  control={form.control}
-                  name="employee_id"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="employee_id"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("employee")}
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <SelectTrigger
-                            className="w-[300px] bg-white"
-                            {...field}
-                          >
-                            <SelectValue placeholder={t("chooseEmployee")} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              {isLoading
-                                ? t("loading")
-                                : isError
-                                ? "Error"
-                                : employeesData?.Data?.employees?.length === 0
-                                ? t("datasNotFound")
-                                : employeesData?.Data?.employees?.map(
-                                    (item) => (
-                                      <SelectGroup key={item.id}>
-                                        <SelectItem value={item.id}>
-                                          {item?.first_name}
-                                        </SelectItem>
-                                      </SelectGroup>
-                                    )
-                                  )}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
 
                 {/* percent_for_employee_custom */}
                 <FormField
@@ -527,6 +512,32 @@ export default function CreateClients() {
                   )}
                 />
 
+                {/* Mahalla */}
+                <FormField
+                  control={form.control}
+                  name="quarter"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="quarter"
+                        className="text-gray-700 dark:text-white font-medium"
+                      >
+                        {t("quarter")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t("enterQuarter")}
+                          {...field}
+                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex items-center gap-x-4">
                 {/* Street */}
                 <FormField
                   control={form.control}
@@ -550,9 +561,7 @@ export default function CreateClients() {
                     </FormItem>
                   )}
                 />
-              </div>
 
-              <div className="space-y-6">
                 {/* passport_series */}
                 <FormField
                   control={form.control}
@@ -577,28 +586,29 @@ export default function CreateClients() {
                     </FormItem>
                   )}
                 />
-                {/* Image Uploade */}
-                <FormField
-                  control={form.control}
-                  name="photo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="photos"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("image")}*
-                      </FormLabel>
-                      <FormControl>
-                        <ImageUpload
-                          onChange={(files) => field.onChange(files)}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
+
+              {/* Image Uploade */}
+              <FormField
+                control={form.control}
+                name="file"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel
+                      htmlFor="photos"
+                      className="text-gray-700 dark:text-white font-medium"
+                    >
+                      {t("image")}*
+                    </FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        onChange={(files) => field.onChange(files)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <div className="flex items-center gap-4">
                 <NavLink
@@ -620,7 +630,7 @@ export default function CreateClients() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmitLegal)}
-              className="space-y-8"
+              className="space-y-6"
             >
               <div className="flex flex-wrap gap-4">
                 {/* Full Name */}
@@ -683,55 +693,6 @@ export default function CreateClients() {
                     </FormItem>
                   )}
                 />
-
-                {/* Choose Employee */}
-                {/* <FormField
-                  control={form.control}
-                  name="employee_id"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="employee_id"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("employee")}
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <SelectTrigger
-                            className="w-[300px] bg-white"
-                            {...field}
-                          >
-                            <SelectValue placeholder={t("chooseEmployee")} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              {isLoading
-                                ? t("loading")
-                                : isError
-                                ? "Error"
-                                : employeesData?.Data?.employees?.length === 0
-                                ? t("datasNotFound")
-                                : employeesData?.Data?.employees?.map(
-                                    (item) => (
-                                      <SelectGroup key={item.id}>
-                                        <SelectItem value={item.id}>
-                                          {item?.first_name}
-                                        </SelectItem>
-                                      </SelectGroup>
-                                    )
-                                  )}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
 
                 {/* passport_series */}
                 <FormField
@@ -859,6 +820,32 @@ export default function CreateClients() {
                   )}
                 />
 
+                {/* Mahalla */}
+                <FormField
+                  control={form.control}
+                  name="quarter"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="quarter"
+                        className="text-gray-700 dark:text-white font-medium"
+                      >
+                        {t("quarter")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t("enterQuarter")}
+                          {...field}
+                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4">
                 {/* Street */}
                 <FormField
                   control={form.control}
@@ -882,81 +869,6 @@ export default function CreateClients() {
                     </FormItem>
                   )}
                 />
-              </div>
-
-              <div className="flex flex-wrap items-center gap-4">
-                {/* Choose Client for Referad_id */}
-                {/* <FormField
-                  control={form.control}
-                  name="referred_id"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="referred_id"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("referred")}
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={form.watch("referred_id")}
-                        >
-                          <SelectTrigger
-                            className="w-[300px] bg-white"
-                            {...field}
-                          >
-                            <SelectValue placeholder={t("chooseReferred")} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              {clientsLoading
-                                ? t("loading")
-                                : clientsError
-                                ? "Error"
-                                : clientsData?.Data?.clients?.length === 0
-                                ? t("datasNotFound")
-                                : clientsData?.Data?.clients?.map((item) => (
-                                    <SelectGroup key={item.id}>
-                                      <SelectItem value={item.id}>
-                                        {item?.full_name}
-                                      </SelectItem>
-                                    </SelectGroup>
-                                  ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
-
-                {/* inn_number */}
-                <FormField
-                  control={form.control}
-                  name="inn_number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="inn_number"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("innNumber")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("enterInnNumber")}
-                          {...field}
-                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 {/* company_name */}
                 <FormField
                   control={form.control}
@@ -1008,10 +920,36 @@ export default function CreateClients() {
               </div>
 
               <div>
+                {/* inn_number */}
+                <FormField
+                  control={form.control}
+                  name="inn_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="inn_number"
+                        className="text-gray-700 dark:text-white font-medium"
+                      >
+                        {t("innNumber")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t("enterInnNumber")}
+                          {...field}
+                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
                 {/* Image Uploade */}
                 <FormField
                   control={form.control}
-                  name="photo"
+                  name="file"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel

@@ -10,11 +10,14 @@ import { DataTable } from "@/components/component/Dynamic-Table";
 import { useNavigate } from "react-router-dom";
 import { EditIcon } from "@/assets/icons/edit-icon";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
+import { DynamicDrawer } from "@/components/component/dynamic-drawer";
 
 export default function ProductCategory() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const limit = 6;
 
   const { data, isLoading, isError } = useGetData({
@@ -27,7 +30,11 @@ export default function ProductCategory() {
     },
     getQueryKey: "/product-category",
   });
-  console.log(data);
+
+  const infoClick = (row) => () => {
+    setSelectedRowData(row);
+    setIsSheetOpen(true);
+  };
 
   const handleSearch = useCallback((value) => {
     setSearch(value);
@@ -71,6 +78,17 @@ export default function ProductCategory() {
         console.log(row.original);
         return (
           <div className="flex items-center gap-3">
+            <button
+              onClick={infoClick(row.original)}
+              className=" bg-green-600 py-2 px-3 rounded-[15px]"
+            >
+              info
+            </button>
+            <DynamicDrawer
+              selectedRowData={selectedRowData}
+              isSheetOpen={isSheetOpen}
+              setIsSheetOpen={setIsSheetOpen}
+            />
             <button
               onClick={() =>
                 navigate(`/editProductCategory/${row.original.id}`)

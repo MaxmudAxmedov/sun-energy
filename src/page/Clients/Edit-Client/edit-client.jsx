@@ -30,6 +30,7 @@ const formSchema = z.object({
   full_name: z.string().min(1, "fullNameRequired"),
   phone: z.string().min(1, "phoneNumberRequired"),
   employee_id: z.string().min(1, "employeeRequired"),
+  passport_series: z.string().min(1, "passportSeriesRequired"),
 });
 
 export default function EditClient() {
@@ -60,16 +61,18 @@ export default function EditClient() {
       full_name: "",
       phone: "",
       employee_id: "",
+      passport_series: "",
     },
   });
 
   useEffect(() => {
     if (client) {
-      const { full_name, phone, employee_id } = client;
+      const { full_name, phone, employee_id, passport_series } = client;
       form.reset({
         full_name,
         phone: phone.replace(prefixForServer, ""),
         employee_id: employee_id?.toString() || "",
+        passport_series: passport_series || "",
       });
     }
   }, [client, form]);

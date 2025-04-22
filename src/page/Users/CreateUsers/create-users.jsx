@@ -27,20 +27,20 @@ import {
 const formSchema = z.object({
   login: z.string().min(1, { message: "loginRequired" }),
   password: z.string().min(1, { message: "passwordRequired" }),
-  lang: z.string().min(1, { message: "langRequired" }),
-  who: z.string().min(1, { message: "whoRequired" }),
+  // lang: z.string().min(1, { message: "langRequired" }),
+  // who: z.string().min(1, { message: "whoRequired" }),
 });
 
-const roleData = [
-  { id: 1, name: "admin" },
-  { id: 2, name: "master" },
-];
+// const roleData = [
+//   { id: 1, name: "admin" },
+//   { id: 2, name: "master" },
+// ];
 
-const langData = [
-  { id: 1, name: "uz" },
-  { id: 2, name: "ru" },
-  { id: 3, name: "en" },
-];
+// const langData = [
+//   { id: 1, name: "uz" },
+//   { id: 2, name: "ru" },
+//   { id: 3, name: "en" },
+// ];
 
 export default function CreateUsers() {
   const { id } = useParams();
@@ -62,8 +62,8 @@ export default function CreateUsers() {
     defaultValues: {
       login: "",
       password: "",
-      lang: "",
-      who: "",
+      // lang: "",
+      // who: "",
     },
   });
 
@@ -71,8 +71,8 @@ export default function CreateUsers() {
     if (userData) {
       form.setValue("login", userData.login);
       form.setValue("password", userData.password);
-      form.setValue("lang", userData.lang);
-      form.setValue("who", userData.who);
+      // form.setValue("lang", userData.lang);
+      // form.setValue("who", userData.who);
     }
   }, [userData, form]);
 
@@ -82,9 +82,9 @@ export default function CreateUsers() {
     const finalData = {
       login: data.login,
       password: data.password,
-      lang: data.lang,
-      who: data.who,
-      id: id ? id : null,
+      // lang: data.lang,
+      // who: data.who,
+      // id: id ? id : null,
     };
 
     mutate({
@@ -114,7 +114,7 @@ export default function CreateUsers() {
                     htmlFor="login"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("login")}*
+                    {t("userNmae")}*
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -156,6 +156,8 @@ export default function CreateUsers() {
                 </FormItem>
               )}
             />
+
+            {/* 
             <FormField
               control={form.control}
               name="lang"
@@ -234,6 +236,7 @@ export default function CreateUsers() {
                 </FormItem>
               )}
             />
+            */}
           </div>
 
           <div className="flex items-center mt-8 desktop:mt-9 gap-x-2">
