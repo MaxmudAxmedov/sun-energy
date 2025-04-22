@@ -10,10 +10,15 @@ import { useNavigate } from "react-router-dom";
 import { EditIcon } from "@/assets/icons/edit-icon";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 
+import OptionImg from "@/assets/imgs/optional-img.jpg";
+import { DynamicDrawer } from "@/components/component/dynamic-drawer";
+
 export default function Clients() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const limit = 6;
   const { data, isLoading, isError } = useGetData({
     endpoint: "/clients",
@@ -21,13 +26,31 @@ export default function Clients() {
     params: { page, limit, search },
     getQueryKey: "/clients",
   });
-  console.log(data);
+
+  const infoClick = (row) => () => {
+    setSelectedRowData(row);
+    setIsSheetOpen(true);
+  };
 
   const column = [
     {
       header: "No",
       cell: ({ row }) => {
         return <div>{row.index + 1}</div>;
+      },
+    },
+    {
+      header: "image",
+      cell: ({ row }) => {
+        return (
+          <div>
+            <img
+              src={row?.original?.file || OptionImg}
+              alt=""
+              className="w-[40px] h-[35px] rounded-md object-cover"
+            />
+          </div>
+        );
       },
     },
     {
@@ -39,13 +62,8 @@ export default function Clients() {
       header: "phoneNumber",
     },
     {
-      accessorKey: "employee_name",
-      header: "employee",
-    },
-    {
       header: "createdAt",
       cell: ({ row }) => {
-        console.log(row.original.created_at);
         return <div>{dayjs(row.original.created_at).format("DD/MM/YYYY")}</div>;
       },
     },
@@ -68,6 +86,17 @@ export default function Clients() {
         // console.log(row.original.id);
         return (
           <div className="flex gap-3">
+            <button
+              onClick={infoClick(row.original)}
+              className=" bg-green-600 py-2 px-3 rounded-[15px]"
+            >
+              info
+            </button>
+            <DynamicDrawer
+              selectedRowData={selectedRowData}
+              isSheetOpen={isSheetOpen}
+              setIsSheetOpen={setIsSheetOpen}
+            />
             <button
               onClick={() => navigate(`/editClient/${row.original.id}`)}
               className=" bg-green-100 py-2 px-3 rounded-[15px]"

@@ -34,6 +34,9 @@ const formSchema = z.object({
   patronymic: z.string().min(1, "fullNameRequired"),
   phone: z.string().min(1, "phoneNumberRequired"),
   position_id: z.string().min(1, "positionRequired"),
+  quarter: z.string().min(1, {
+    message: "quarterRequired",
+  }),
   region: z.string().min(1, {
     message: "provinceRequired",
   }),
@@ -110,6 +113,7 @@ export default function CreateEmployee() {
       region: "",
       district: "",
       street: "",
+      quarter: "",
       photo: [],
     },
   });
@@ -130,6 +134,7 @@ export default function CreateEmployee() {
     formData.append("region", data.region);
     formData.append("district", data.district);
     formData.append("street", data.street);
+    formData.append("quarter", data.quarter);
 
     for (let i = 0; i < data.photo.length; i++) {
       formData.append("photo", data.photo[i]);
@@ -147,7 +152,7 @@ export default function CreateEmployee() {
     <div className="tablet:h-screen">
       <h1 className="text-2xl font-bold mb-8 pt-6">{t("createEmployee")}</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex items-center flex-wrap gap-x-3">
             {/* First Name */}
             <FormField
@@ -410,6 +415,32 @@ export default function CreateEmployee() {
               )}
             />
 
+            {/* Quarter */}
+            <FormField
+              control={form.control}
+              name="quarter"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="quarter"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("quarter")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("enterQuarter")}
+                      {...field}
+                      className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div>
             {/* Street  */}
             <FormField
               control={form.control}

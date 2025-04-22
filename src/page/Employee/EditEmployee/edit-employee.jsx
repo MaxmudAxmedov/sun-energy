@@ -39,6 +39,7 @@ const formSchema = z.object({
   region: z.string().min(1, "regionRequired"),
   district: z.string().min(1, "districtRequired"),
   street: z.string().min(1, "streetRequired"),
+  quarter: z.string().optional(1, "quarterRequired"),
   photo: z.any().optional(),
 });
 
@@ -89,6 +90,7 @@ export default function EditEmployee() {
       patronymic: "",
       first_name: "",
       last_name: "",
+      quarter: "",
     },
   });
 
@@ -104,11 +106,13 @@ export default function EditEmployee() {
         region,
         phone,
         position_id,
+        quarter,
       } = employee;
       form.reset({
         first_name,
         last_name,
         street,
+        quarter,
         district,
         region,
         patronymic,
@@ -140,16 +144,16 @@ export default function EditEmployee() {
 
   const onSubmit = (data) => {
     const formData = new FormData();
-    
+
     // Add all form fields to FormData
-    Object.keys(data).forEach(key => {
-      if (key === 'phone') {
+    Object.keys(data).forEach((key) => {
+      if (key === "phone") {
         formData.append(key, prefixForServer + data[key]);
-      } else if (key === 'photo' && data[key]) {
+      } else if (key === "photo" && data[key]) {
         // Handle photo files
         if (Array.isArray(data[key])) {
-          data[key].forEach(file => {
-            formData.append('photo', file);
+          data[key].forEach((file) => {
+            formData.append("photo", file);
           });
         }
       } else {
@@ -158,7 +162,7 @@ export default function EditEmployee() {
     });
 
     // Add employee ID
-    formData.append('id', employee.id);
+    formData.append("id", employee.id);
 
     mutate({
       endpoint: `/employee`,
@@ -176,7 +180,7 @@ export default function EditEmployee() {
     <div>
       <h1 className="text-2xl font-bold mb-8 pt-6">{t("editEmployee")}</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex items-center flex-wrap gap-x-3">
             {/* First Name */}
             <FormField
@@ -444,6 +448,31 @@ export default function EditEmployee() {
               )}
             />
 
+            {/* Mahalla */}
+            <FormField
+              control={form.control}
+              name="quarter"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="quarter"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("quarter")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("enterQuarter")}
+                      {...field}
+                      className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div>
             {/* Address */}
             <FormField
               control={form.control}
@@ -467,8 +496,6 @@ export default function EditEmployee() {
                 </FormItem>
               )}
             />
-          </div>
-          <div>
             {/* Image Uploade */}
             <FormField
               control={form.control}

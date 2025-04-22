@@ -11,10 +11,15 @@ import dayjs from "dayjs";
 import { FetchingError } from "@/components/component/FetchingError";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 
+import OptionalImage from "@/assets/imgs/optional-img.jpg";
+import { DynamicDrawer } from "@/components/component/dynamic-drawer";
+
 export default function Employee() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const limit = 6;
   const { data, isLoading, isError } = useGetData({
@@ -27,13 +32,30 @@ export default function Employee() {
     },
     getQueryKey: "/employees",
   });
-  console.log(data);
-
+  const infoClick = (row) => () => {
+    setSelectedRowData(row);
+    setIsSheetOpen(true);
+  };
+  
   const column = [
     {
       header: "No",
       cell: ({ row }) => {
         return <div>{row.index + 1}</div>;
+      },
+    },
+    {
+      header: "image",
+      cell: ({ row }) => {
+        return (
+          <div>
+            <img
+              src={row?.original?.photo || OptionalImage}
+              alt=""
+              className="w-[40px] h-[35px] rounded-md"
+            />
+          </div>
+        );
       },
     },
     {
@@ -85,6 +107,17 @@ export default function Employee() {
         // console.log(row.original.id);
         return (
           <div className="flex gap-3">
+            <button
+              onClick={infoClick(row.original)}
+              className=" bg-green-600 py-2 px-3 rounded-[15px]"
+            >
+              info
+            </button>
+            <DynamicDrawer
+              selectedRowData={selectedRowData}
+              isSheetOpen={isSheetOpen}
+              setIsSheetOpen={setIsSheetOpen}
+            />
             <button
               onClick={() => navigate(`/editEmployee/${row.original.id}`)}
               className=" bg-green-100 py-2 px-3 rounded-[15px]"

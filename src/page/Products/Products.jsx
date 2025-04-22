@@ -15,6 +15,9 @@ import { useGetData } from "@/hook/useApi";
 import { Spinner } from "@/components/component/spinner";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 
+import OptionalImage from "@/assets/imgs/optional-img.jpg";
+import { DynamicDrawer } from "@/components/component/dynamic-drawer";
+
 const params = {
   search: "",
   limit: "6",
@@ -25,6 +28,8 @@ export default function Products() {
   const [page, setPage] = useState(params.page);
   const [search, setSearch] = useState("");
   const navigate = useNavigate("");
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const limit = params.limit;
   const [debouncedSearch] = useDebounce(search, 500);
   const [initialParams, setInitialParams] = useState({
@@ -46,6 +51,10 @@ export default function Products() {
     cacheTime: 0,
   });
 
+  const infoClick = (row) => () => {
+    setSelectedRowData(row);
+    setIsSheetOpen(true);
+  };
 
   const handleCategory = (categoryId) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -80,7 +89,7 @@ export default function Products() {
         return (
           <div>
             <img
-              src={row?.original?.photo}
+              src={row?.original?.photo || OptionalImage}
               alt=""
               className="w-[40px] h-[35px] rounded-md"
             />
@@ -140,6 +149,17 @@ export default function Products() {
       cell: ({ row }) => {
         return (
           <div className="flex items-center gap-3">
+            <button
+              onClick={infoClick(row.original)}
+              className=" bg-green-600 py-2 px-3 rounded-[15px]"
+            >
+              info
+            </button>
+            <DynamicDrawer
+              selectedRowData={selectedRowData}
+              isSheetOpen={isSheetOpen}
+              setIsSheetOpen={setIsSheetOpen}
+            />
             <button
               onClick={() => navigate(`/editProduct/${row.original.id}`)}
               className="bg-green-100 py-2 px-3 rounded-[15px]"
