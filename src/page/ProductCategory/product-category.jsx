@@ -79,7 +79,7 @@ export default function ProductCategory() {
         console.log(row.original);
         return (
           <div className="flex items-center gap-3">
-            <button
+            {/* <button
               onClick={infoClick(row.original)}
               className=" bg-green-600 py-2 px-3 rounded-[15px]"
             >
@@ -89,7 +89,7 @@ export default function ProductCategory() {
               selectedRowData={selectedRowData}
               isSheetOpen={isSheetOpen}
               setIsSheetOpen={setIsSheetOpen}
-            />
+            /> */}
             <button
               onClick={() =>
                 navigate(`/editProductCategory/${row.original.id}`)
