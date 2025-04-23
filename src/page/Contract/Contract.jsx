@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import DownloadIcon from "@/assets/imgs/download.png";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 import { DynamicDrawer } from "@/components/component/dynamic-drawer";
+import { EyeIcon } from "@/assets/icons/eye-icon";
 export default function Contract() {
   const [page, setPage] = useState(1);
   //   const [search, setSearch] = useState("");
@@ -81,7 +82,7 @@ export default function Contract() {
               onClick={infoClick(row.original)}
               className=" bg-green-600 py-2 px-3 rounded-[15px]"
             >
-              info
+              <EyeIcon />
             </button>
             <DynamicDrawer
               selectedRowData={selectedRowData}

@@ -17,6 +17,7 @@ import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 
 import OptionalImage from "@/assets/imgs/optional-img.jpg";
 import { DynamicDrawer } from "@/components/component/dynamic-drawer";
+import { EyeIcon } from "@/assets/icons/eye-icon";
 
 const params = {
   search: "",
@@ -153,7 +154,7 @@ export default function Products() {
               onClick={infoClick(row.original)}
               className=" bg-green-600 py-2 px-3 rounded-[15px]"
             >
-              info
+              <EyeIcon />
             </button>
             <DynamicDrawer
               selectedRowData={selectedRowData}

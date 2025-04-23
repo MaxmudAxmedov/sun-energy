@@ -13,6 +13,7 @@ import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog"
 
 import OptionalImage from "@/assets/imgs/optional-img.jpg";
 import { DynamicDrawer } from "@/components/component/dynamic-drawer";
+import { EyeIcon } from "@/assets/icons/eye-icon";
 
 export default function Employee() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function Employee() {
     setSelectedRowData(row);
     setIsSheetOpen(true);
   };
-  
+
   const column = [
     {
       header: "No",
@@ -111,7 +112,7 @@ export default function Employee() {
               onClick={infoClick(row.original)}
               className=" bg-green-600 py-2 px-3 rounded-[15px]"
             >
-              info
+              <EyeIcon />
             </button>
             <DynamicDrawer
               selectedRowData={selectedRowData}

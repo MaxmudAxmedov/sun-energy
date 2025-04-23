@@ -9,9 +9,13 @@ import { EditIcon } from "@/assets/icons/edit-icon";
 import { useNavigate } from "react-router-dom";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
+import { DynamicDrawer } from "@/components/component/dynamic-drawer";
+import { EyeIcon } from "@/assets/icons/eye-icon";
 export default function Users() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
+  // const [selectedRowData, setSelectedRowData] = useState(null);
+  // const [isSheetOpen, setIsSheetOpen] = useState(false);
   const limit = 6;
   const { data, isLoading, isError } = useGetData({
     endpoint: "/users",
@@ -22,7 +26,11 @@ export default function Users() {
     enabled: true,
     getQueryKey: "/users",
   });
-  console.log(data);
+
+  // const infoClick = (row) => () => {
+  //   setSelectedRowData(row);
+  //   setIsSheetOpen(true);
+  // };
 
   if (isLoading) return <MainScletot />;
   if (isError) return <FetchingError />;
@@ -67,6 +75,17 @@ export default function Users() {
       cell: ({ row }) => {
         return (
           <div className="flex items-center gap-3">
+            {/* <button
+              onClick={infoClick(row.original)}
+              className=" bg-green-600 py-2 px-3 rounded-[15px]"
+            >
+              <EyeIcon />
+            </button>
+            <DynamicDrawer
+              selectedRowData={selectedRowData}
+              isSheetOpen={isSheetOpen}
+              setIsSheetOpen={setIsSheetOpen}
+            /> */}
             <button
               onClick={() => navigate(`/createUsers/${row.original.id}`)}
               className=" bg-green-100 py-2 px-3 rounded-[15px]"
