@@ -142,6 +142,7 @@ export default function Clients() {
             <div>
                 <FetchingError />
             </div>
+
         );
 
     return (
