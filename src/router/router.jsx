@@ -177,6 +177,14 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: "/createContract/:id",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <CreateContract />
+          </Suspense>
+        ),
+      },
       // {
       //     path: "/position",
       //     element: (

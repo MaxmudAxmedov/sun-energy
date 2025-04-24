@@ -90,13 +90,13 @@ export default function ProductItem({ item, setProducts, products }) {
                 </div>
 
                 <CardTitle className="my-3 text-[19px]">{item?.name}</CardTitle>
-                <div className="border-l-[3px] p-1">
-                    <p className="h-[22px]">
+                <div className="border-l-[3px] p-3">
+                    <p className="h-[45px]">
                         {item.description.length > 25 ? (
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <span className="cursor-pointer">
-                                        {item.description.slice(0, 25)}...
+                                    <span className="cursor-pointer break-words">
+                                        {item.description.slice(0, 50)}...
                                     </span>
                                 </TooltipTrigger>
                                 <TooltipContent className={"w-[320px] p-3"}>
@@ -118,32 +118,6 @@ export default function ProductItem({ item, setProducts, products }) {
                         {productCount} x {item.price.toLocaleString()}
                     </p>
                     <p>{(productCount * item.price).toLocaleString()} sum</p>
-                </div>
-
-                <div>
-                    <FormField
-                        control={form.control}
-                        name="kvat"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel
-                                    htmlFor="service_cost"
-                                    className="text-gray-700 dark:text-white font-medium"
-                                >
-                                    {/* {t("name")}* */}
-                                    kvt
-                                </FormLabel>
-                                <FormControl>
-                                    <Input
-                                        // placeholder={t("enterName")}
-                                        {...field}
-                                        className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                 </div>
             </CardContent>
 
