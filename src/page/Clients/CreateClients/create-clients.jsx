@@ -21,7 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetData } from "@/hook/useApi";
 import { useMutateData } from "@/hook/useApi";
 import { Spinner } from "@/components/component/spinner";
 import { clientAddressData } from "@/data/viloyatlar";
@@ -31,6 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getClientById } from "@/service/client";
 import { useQuery } from "@tanstack/react-query";
 import { ImageUpload } from "@/components/component/Image-Upload";
+import { Trash2, X } from "lucide-react";
 
 // const isValidUUID = (uuid) => {
 //   const uuidRegex =
@@ -124,17 +124,12 @@ export default function CreateClients() {
   const { t } = useTranslation();
   const { id } = useParams();
   const { mutate, isLoading: isMutating } = useMutateData();
+  const [images, setImages] = useState([]);
+  const [viewingImage, setViewingImage] = useState(null);
   const prefix = "+998";
   const prefixServer = "998";
   const [selectedTab, setSelectedTab] = useState("jismoniy");
-  const { data: userData } = useGetData({
-    endpoint: "/users",
-    enabled: true,
-    getQueryKey: "/users",
-  });
-  const percent_for_employee = userData?.Data?.users?.map(
-    (users) => users?.percent_for_employee
-  );
+
 
   const { data: clientData } = useQuery({
     queryKey: ["client", id],
@@ -193,10 +188,8 @@ export default function CreateClients() {
         is_company: client.is_company,
         inn_number: client.inn_number,
         company_name: client.company_name,
-        percent_for_employee_custom: client.percent_for_employee_custom,
         quarter: client.quarter,
       });
-      console.log(client);
       if (client?.is_company) {
         setSelectedTab("yuridik");
       } else {
@@ -220,7 +213,6 @@ export default function CreateClients() {
       is_company,
       inn_number,
       company_name,
-      percent_for_employee_custom,
       file,
       quarter,
     } = data;
@@ -242,10 +234,6 @@ export default function CreateClients() {
       company_name && formData.append("company_name", company_name);
     }
     formData.append("quarter", quarter);
-    formData.append(
-      "percent_for_employee",
-      percent_for_employee_custom || percent_for_employee?.[0]
-    );
     for (let i = 0; i < file.length; i++) {
       formData.append("file", file[i]);
     }
@@ -258,6 +246,22 @@ export default function CreateClients() {
       toastCreateMessage: "clientCreated",
       mutateQueryKey: "/clients",
     });
+  };
+
+  const handleDeleteImage = (index) => {
+    const newImages = [...images];
+    newImages[index];
+    newImages.splice(index, 1);
+    setImages(newImages);
+    onchange(newImages.map((img) => img.file));
+  };
+
+  const openImageViewer = (imageUrl) => {
+    setViewingImage(imageUrl);
+  };
+
+  const closeImageViewer = () => {
+    setViewingImage(null);
   };
 
   const onSubmitLegal = (data) => {
@@ -584,6 +588,61 @@ export default function CreateClients() {
                   </FormItem>
                 )}
               />
+
+              {id && (
+                <div className="flex gap-2 mt-2">
+                  <div className="relative h-[100px] group w-32 desktop:hover:opacity-80 transition-all duration-300">
+                    <div
+                      className="w-32 h-[100px] border border-dashed rounded-md overflow-hidden cursor-pointer"
+                      onClick={() => openImageViewer(clientData?.data?.file)}
+                    >
+                      <img
+                        src={clientData?.data?.file || "/placeholder.svg"}
+                        alt={`Uploaded image`}
+                        width={100}
+                        height={60}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <button
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 desktop:opacity-0 desktop:group-hover:opacity-100 transition-opacity"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteImage(1);
+                        setImages((prev) =>
+                          prev.filter((_, index) => index !== 0)
+                        );
+                      }}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+              )}
+              {/* Image viewer modal */}
+              {viewingImage && (
+                <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+                  <div className="relative max-w-4xl max-h-[90vh] w-full">
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-[-30px] right-[-100px] z-10"
+                      onClick={closeImageViewer}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                    <div className="p-2 rounded-lg overflow-hidden">
+                      <img
+                        src={viewingImage || "/placeholder.svg"}
+                        alt="Enlarged image"
+                        width={1200}
+                        height={800}
+                        className="max-h-[80vh] rounded-lg mx-w-[1400px] mx-auto object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-center gap-4">
                 <NavLink
