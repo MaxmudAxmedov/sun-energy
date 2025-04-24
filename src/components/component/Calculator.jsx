@@ -37,7 +37,7 @@ const Calculator = () => {
         } else if (value === "X") {
             setDisplay((prev) => {
                 if (prev === "0" || prev === "Xato") return "0";
-                if (prev.length === 1) return "0";
+                if (prev?.length === 1) return "0";
                 return prev.slice(0, -1);
             });
         } else {
@@ -61,12 +61,12 @@ const Calculator = () => {
         }
 
         if (key === "Enter" || key === "/") {
-            event.preventDefault();
+            event?.preventDefault();
         }
     };
 
     useEffect(() => {
-        calculatorRef.current.focus();
+        calculatorRef?.current.focus();
     }, []);
 
     return (
@@ -78,7 +78,7 @@ const Calculator = () => {
         >
             <div className=" p-4 text-2xl text-right">{display}</div>
             <div className="grid grid-cols-4 gap-px border-t border-[#ccc]">
-                {btns.map((btn) => (
+                {btns?.map((btn) => (
                     <button
                         className="p-5 text-[18px] cursor-pointer hover:bg-[#e0e0e0] border border-[#ccc]"
                         key={btn}
