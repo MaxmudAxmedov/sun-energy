@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { useMutateData } from "@/hook/useApi";
+import { useGetData, useMutateData } from "@/hook/useApi";
 
 export default function Setting() {
   const { i18n } = useTranslation();
@@ -29,9 +29,19 @@ export default function Setting() {
   const { t } = useTranslation();
   const { mutate } = useMutateData();
 
+  const { data: userData } = useGetData({
+    endpoint: "/users",
+    enabled: true,
+    getQueryKey: "/users",
+  });
+
+  const percent_for_employee = userData?.Data?.users?.map(
+    (users) => users?.percent_for_employee
+  );
+
   const form = useForm({
     defaultValues: {
-      percent: "",
+      percent: percent_for_employee[0],
     },
   });
 
