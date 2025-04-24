@@ -22,14 +22,12 @@ import ProductDrawer from "./ProductDrawer";
 
 const params = {
   search: "",
-  limit: "6",
-  page: "1",
+  limit: 1000,
 };
 
 export default function Products() {
   const [page, setPage] = useState(params.page);
   const [search, setSearch] = useState("");
-  const navigate = useNavigate("");
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const limit = params.limit;
@@ -210,14 +208,14 @@ export default function Products() {
       <div className="mt-6">
         <DataTable data={data?.data?.Data?.products} columns={column} />
       </div>
-      <div className="mt-3">
+      {/* <div className="mt-3">
         <DynamicPagination
           data={data}
           setPage={setPage}
           limit={limit}
           page={page}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

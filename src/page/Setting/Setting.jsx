@@ -22,7 +22,6 @@ import {
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { useMutateData } from "@/hook/useApi";
-import { toast } from "sonner";
 
 export default function Setting() {
   const { i18n } = useTranslation();
@@ -120,41 +119,43 @@ export default function Setting() {
             {t("system")}
           </Button>
         </div>
-        <div className="flex justify-between max-w-[700px]">
+        <div className="flex justify-between max-w-[850px]">
           <Calculator />
           <div className="tablet:mt-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(submitData)}>
-                <FormField
-                  control={form.control}
-                  name="percent"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="percent"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("percentForEmployee")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          value={field.value}
-                          required
-                          placeholder={
-                            t("enterPercentForEmployee") +
-                            "                         %"
-                          }
-                          {...field}
-                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" className="mt-4">
-                  {t("submit")}
-                </Button>
+                <div className="flex items-end gap-x-5">
+                  <FormField
+                    control={form.control}
+                    name="percent"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="percent"
+                          className="text-gray-700 dark:text-white font-medium"
+                        >
+                          {t("percentForEmployee")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            value={field.value}
+                            required
+                            placeholder={
+                              t("enterPercentForEmployee") +
+                              "                         %"
+                            }
+                            {...field}
+                            className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" className="mt-4">
+                    {t("submit")}
+                  </Button>
+                </div>
               </form>
             </Form>
           </div>

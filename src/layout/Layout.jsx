@@ -32,7 +32,7 @@ export default function Layout() {
             />
             <BurgerMenu />
           </span>
-          <div className="desktop:ml-[300px]">
+          <div className="desktop:ml-[300px] min-h-[95vh]">
             <Outlet />
           </div>
         </div>

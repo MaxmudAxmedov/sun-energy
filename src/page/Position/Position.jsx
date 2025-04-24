@@ -2,7 +2,7 @@ import { DeleteIcon } from "@/assets/icons/delete-icon";
 import { EditIcon } from "@/assets/icons/edit-icon";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
-import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
+// import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 import { DataTable } from "@/components/component/Dynamic-Table";
 import { MainScletot } from "@/components/component/main-scletot";
 import { useGetData } from "@/hook/useApi";
@@ -12,15 +12,15 @@ import { useNavigate } from "react-router-dom";
 
 export default function Position() {
     const navigate = useNavigate();
-    const [page, setPage] = useState(1);
+    // const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
 
-    const limit = 6;
+    const limit = 1000;
     const { data, isLoading, isError } = useGetData({
         endpoint: "/positions",
         enabled: true,
         params: {
-            page,
+            // page,
             limit,
             search,
         },
@@ -92,7 +92,6 @@ export default function Position() {
 
     const handleSearch = useCallback((value) => {
         setSearch(value);
-        setPage(1);
     }, []);
 
     if (isLoading)

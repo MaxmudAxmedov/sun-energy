@@ -16,11 +16,10 @@ export default function Users() {
   const [page, setPage] = useState(1);
   // const [selectedRowData, setSelectedRowData] = useState(null);
   // const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const limit = 6;
+  const limit = 1000;
   const { data, isLoading, isError } = useGetData({
     endpoint: "/users",
     params: {
-      page: page,
       limit,
     },
     enabled: true,
@@ -114,14 +113,14 @@ export default function Users() {
       <div className="mt-6">
         <DataTable data={data?.Data?.users} columns={column} />
       </div>
-      <div className="mt-3">
+      {/* <div className="mt-3">
         <DynamicPagination
           data={data}
           setPage={setPage}
           limit={limit}
           page={page}
         />
-      </div>
+      </div> */}
     </div>
   );
 }
