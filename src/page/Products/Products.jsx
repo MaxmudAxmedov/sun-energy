@@ -51,6 +51,7 @@ export default function Products() {
     staleTime: Infinity,
     cacheTime: 0,
   });
+  console.log(data);
 
   const infoClick = (row) => () => {
     setSelectedRowData(row);
