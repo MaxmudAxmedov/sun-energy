@@ -47,11 +47,20 @@ export default function Products() {
     //     }));
     // }, [debouncedSearch]);
 
+
+  const { data, isLoading, isError } = useQuery({
+    ...getProductsQuery(initialParams),
+    staleTime: Infinity,
+    cacheTime: 0,
+  });
+  console.log(data);
+  
     const { data, isLoading, isError } = useQuery({
         ...getProductsQuery(initialParams),
         staleTime: Infinity,
         cacheTime: 0,
     });
+
 
     const infoClick = (row) => () => {
         setSelectedRowData(row);
