@@ -143,6 +143,7 @@
   "fullName": "Полное имя",
   "enterFullName": "Введите полное имя",
   "choosePosition": "Выберите позицию",
+  "percentChanged": "Процент изменен",
   "fullNameRequired": "Полное имя является обязательным",
   "positionRequired": "Позиция является обязательной",
   "userNmae": "Имя пользователя",

@@ -388,23 +388,23 @@ export default function CreateClients() {
                     </FormItem>
                   )}
                 />
-
-                {/* percent_for_employee_custom */}
+                {/* passport_series */}
                 <FormField
                   control={form.control}
-                  name="percent_for_employee_custom"
+                  name="passport_series"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel
-                        htmlFor="percent_for_employee_custom"
+                        htmlFor="passportSeries"
                         className="text-gray-700 dark:text-white font-medium"
                       >
-                        {t("percentForEmployee")}
+                        {t("passportSeries")}
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={t("enterPercentForEmployee")}
+                          placeholder={t("enterPassportSeries")}
                           {...field}
+                          maxLength={9}
                           className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                         />
                       </FormControl>
@@ -554,31 +554,6 @@ export default function CreateClients() {
                         <Input
                           placeholder={t("enterStreet")}
                           {...field}
-                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* passport_series */}
-                <FormField
-                  control={form.control}
-                  name="passport_series"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="passportSeries"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("passportSeries")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("enterPassportSeries")}
-                          {...field}
-                          maxLength={9}
                           className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                         />
                       </FormControl>
@@ -869,6 +844,7 @@ export default function CreateClients() {
                     </FormItem>
                   )}
                 />
+
                 {/* company_name */}
                 <FormField
                   control={form.control}
@@ -987,4 +963,32 @@ export default function CreateClients() {
       </Tabs>
     </div>
   );
+}
+
+{
+  /*
+    <FormField
+    control={form.control}
+    name="percent_for_employee_custom"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel
+          htmlFor="percent_for_employee_custom"
+          className="text-gray-700 dark:text-white font-medium"
+        >
+          {t("percentForEmployee")}
+        </FormLabel>
+        <FormControl>
+          <Input
+            placeholder={t("enterPercentForEmployee")}
+            {...field}
+            className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+  
+  */
 }

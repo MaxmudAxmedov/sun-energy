@@ -43,8 +43,8 @@ export default function Users() {
       },
     },
     {
-      accessorKey: "id",
-      header: "ID",
+      accessorKey: "login",
+      header: "name",
     },
     {
       accessorKey: "percent_for_employee",

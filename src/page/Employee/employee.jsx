@@ -2,8 +2,7 @@ import React, { useCallback, useState } from "react";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 import { useGetData } from "@/hook/useApi";
 import { DataTable } from "@/components/component/Dynamic-Table";
-import { EditIcon } from "@/assets/icons/edit-icon";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 // import { Button } from "@/components/ui/button";
 import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 import { MainScletot } from "@/components/component/main-scletot";
@@ -12,12 +11,10 @@ import { FetchingError } from "@/components/component/FetchingError";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 
 import OptionalImage from "@/assets/imgs/optional-img.jpg";
-import { DynamicDrawer } from "@/components/component/dynamic-drawer";
-import { EyeIcon } from "@/assets/icons/eye-icon";
 import EmployeDrawer from "./EmployeDrawer";
 
 export default function Employee() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
     const [selectedRowData, setSelectedRowData] = useState(null);
