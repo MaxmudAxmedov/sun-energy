@@ -17,8 +17,8 @@ export default function ProductCategory() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [selectedRowData, setSelectedRowData] = useState(null);
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  // const [selectedRowData, setSelectedRowData] = useState(null);
+  // const [isSheetOpen, setIsSheetOpen] = useState(false);
   const limit = 6;
 
   const { data, isLoading, isError } = useGetData({
@@ -32,10 +32,10 @@ export default function ProductCategory() {
     getQueryKey: "/product-category",
   });
 
-  const infoClick = (row) => () => {
-    setSelectedRowData(row);
-    setIsSheetOpen(true);
-  };
+  // const infoClick = (row) => () => {
+  //   setSelectedRowData(row);
+  //   setIsSheetOpen(true);
+  // };
 
   const handleSearch = useCallback((value) => {
     setSearch(value);

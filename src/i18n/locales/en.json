@@ -113,6 +113,8 @@
   "quarter": "Quarter",
   "enterQuarter": "Enter quarter",
   "quarterRequired": "Quarter is required",
+  "percentChanged": "Percent changed",
+  "chooseClient": "Choose client",
   "clientName": "Client Name",
   "accessoryCost": "Accessory cost",
   "serviceCost": "Service cost",
