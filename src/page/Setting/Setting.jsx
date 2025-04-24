@@ -21,27 +21,19 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { useGetData, useMutateData } from "@/hook/useApi";
+import { useMutateData } from "@/hook/useApi";
+import { saveState } from "@/lib/storage";
 
 export default function Setting() {
   const { i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
   const { mutate } = useMutateData();
-
-  const { data: userData } = useGetData({
-    endpoint: "/users",
-    enabled: true,
-    getQueryKey: "/users",
-  });
-
-  const percent_for_employee = userData?.Data?.users?.map(
-    (users) => users?.percent_for_employee
-  );
+  let percentMain = localStorage.getItem("percent") || 0;
 
   const form = useForm({
     defaultValues: {
-      percent: percent_for_employee[0],
+      percent: percentMain,
     },
   });
 
@@ -51,9 +43,8 @@ export default function Setting() {
   };
 
   const submitData = (data) => {
-    console.log(data);
-    const percentNummeric = parseFloat(data.percent.replace(",", "."));
-    console.log(percentNummeric);
+    const percentNummeric = parseFloat(data?.percent?.replace(",", "."));
+    saveState("percent", percentNummeric);
 
     mutate({
       endpoint: `/employee-income/${percentNummeric}`,
@@ -75,24 +66,24 @@ export default function Setting() {
         </h2>
         <DropdownMenu>
           <DropdownMenuTrigger className="px-4 py-1.5 rounded-lg bg-gray-700 text-white hover:bg-gray-600">
-            {i18n.language.toUpperCase()}
+            {i18n?.language.toUpperCase()}
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem
               onClick={() => changeLanguage("en")}
-              className={i18n.language === "en" ? "bg-blue-500/10" : ""}
+              className={i18n?.language === "en" ? "bg-blue-500/10" : ""}
             >
               English
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => changeLanguage("uz")}
-              className={i18n.language === "uz" ? "bg-blue-500/10" : ""}
+              className={i18n?.language === "uz" ? "bg-blue-500/10" : ""}
             >
               O'zbekcha
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => changeLanguage("ru")}
-              className={i18n.language === "ru" ? "bg-blue-500/10" : ""}
+              className={i18n?.language === "ru" ? "bg-blue-500/10" : ""}
             >
               Русский
             </DropdownMenuItem>
@@ -148,7 +139,7 @@ export default function Setting() {
                         </FormLabel>
                         <FormControl>
                           <Input
-                            value={field.value}
+                            value={field?.value}
                             required
                             placeholder={
                               t("enterPercentForEmployee") +
