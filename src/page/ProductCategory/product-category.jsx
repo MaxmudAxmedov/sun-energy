@@ -5,27 +5,27 @@ import { MainScletot } from "@/components/component/main-scletot";
 import { FetchingError } from "@/components/component/FetchingError";
 
 import dayjs from "dayjs";
-import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
+// import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 import { DataTable } from "@/components/component/Dynamic-Table";
 import { useNavigate } from "react-router-dom";
 import { EditIcon } from "@/assets/icons/edit-icon";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
-import { DynamicDrawer } from "@/components/component/dynamic-drawer";
-import { EyeIcon } from "@/assets/icons/eye-icon";
+// import { DynamicDrawer } from "@/components/component/dynamic-drawer";
+// import { EyeIcon } from "@/assets/icons/eye-icon";
 
 export default function ProductCategory() {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   // const [selectedRowData, setSelectedRowData] = useState(null);
   // const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const limit = 6;
+  const limit = 1000;
 
   const { data, isLoading, isError } = useGetData({
     endpoint: "/product-categories",
     enabled: true,
     params: {
-      page,
+      // page,
       limit,
       search,
     },
@@ -39,7 +39,7 @@ export default function ProductCategory() {
 
   const handleSearch = useCallback((value) => {
     setSearch(value);
-    setPage(1);
+    // setPage(1);
   }, []);
 
   const column = [
@@ -131,7 +131,7 @@ export default function ProductCategory() {
       <div className="mt-6">
         <DataTable data={data?.Data?.product_categories} columns={column} />
       </div>
-
+      {/* 
       <div className="mt-3">
         <DynamicPagination
           data={data}
@@ -139,7 +139,7 @@ export default function ProductCategory() {
           limit={limit}
           page={page}
         />
-      </div>
+      </div> */}
     </div>
   );
 }
