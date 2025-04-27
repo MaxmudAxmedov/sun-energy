@@ -112,6 +112,7 @@
   "userNmae": "Username",
   "quarter": "Quarter",
   "enterQuarter": "Enter quarter",
+  "searchDistrict": "Search district",
   "quarterRequired": "Quarter is required",
   "percentChanged": "Percent changed",
   "show_on_landing": "Show on landing",
