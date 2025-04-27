@@ -109,6 +109,8 @@
   "quantity": "Miqdori",
   "total_price": "Umumiy narx",
   "unit_price": "Donasining narxi",
+  "show_on_landing": "Landingda ko'rsatish",
+  "show_on_landing_required": "Landingda ko'rsatish majburiy",
   "infos": "Hamma ma'lumotlar",
   "createEmployee": "Xodim qo'shish",
   "quarter": "Mahalla",

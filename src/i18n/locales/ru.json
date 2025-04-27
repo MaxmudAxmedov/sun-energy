@@ -142,6 +142,8 @@
   "positonEdited": "Позиция успешно отредактирована",
   "fullName": "Полное имя",
   "enterFullName": "Введите полное имя",
+  "show_on_landing": "Показать на главной странице",
+  "show_on_landing_required": "Показать на главной странице является обязательным",
   "choosePosition": "Выберите позицию",
   "percentChanged": "Процент изменен",
   "fullNameRequired": "Полное имя является обязательным",

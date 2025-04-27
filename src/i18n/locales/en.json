@@ -114,6 +114,8 @@
   "enterQuarter": "Enter quarter",
   "quarterRequired": "Quarter is required",
   "percentChanged": "Percent changed",
+  "show_on_landing": "Show on landing",
+  "show_on_landing_required": "Show on landing is required",
   "chooseClient": "Choose client",
   "clientName": "Client Name",
   "accessoryCost": "Accessory cost",

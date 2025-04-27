@@ -4,16 +4,13 @@ import { MainScletot } from "@/components/component/main-scletot";
 // import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 import { DataTable } from "@/components/component/Dynamic-Table";
 import dayjs from "dayjs";
-import { EditIcon } from "@/assets/icons/edit-icon";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 import { getProductsQuery } from "@/quires/quires";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
-import { useNavigate } from "react-router-dom";
 import { useGetData } from "@/hook/useApi";
 import { Spinner } from "@/components/component/spinner";
-import { DynamicPagination } from "@/components/component/Dynamic-Pagination";
 
 import OptionalImage from "@/assets/imgs/optional-img.jpg";
 import { DynamicDrawer } from "@/components/component/dynamic-drawer";
@@ -26,11 +23,9 @@ const params = {
 };
 
 export default function Products() {
-  const [page, setPage] = useState(params.page);
   const [search, setSearch] = useState("");
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const limit = params.limit;
   const [debouncedSearch] = useDebounce(search, 500);
   const [initialParams, setInitialParams] = useState({
     ...params,
@@ -120,12 +115,13 @@ export default function Products() {
         return <div>{row.original.count_of_product}</div>;
       },
     },
-    {
-      header: "precent",
-      cell: ({ row }) => {
-        return <div>{row.original.percent} %</div>;
-      },
-    },
+    // {
+    //   header: "precent",
+    //   cell: ({ row }) => {
+    //     console.log(row.original.percent);
+    //     return <div>{row.original.percent} %</div>;
+    //   },
+    // },
     {
       header: "createdAt",
       cell: ({ row }) => {

@@ -5,7 +5,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/providers/ThemeProvider";
-import React from "react";
+import React, { use, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,10 @@ export default function Setting() {
       percent: percentMain,
     },
   });
+
+  useEffect(() => {
+    form.setValue("percent", percentMain);
+  }, [form, percentMain]);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
