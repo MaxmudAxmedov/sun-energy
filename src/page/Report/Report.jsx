@@ -17,6 +17,7 @@ export default function Report() {
         qty: 0,
     });
     const item = data?.data?.Data;
+    console.log("item", item);
 
     const total = item?.client_products?.reduce(
         (initial, obj) => {

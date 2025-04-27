@@ -27,7 +27,20 @@ import { Spinner } from "@/components/component/spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { clientAddressData } from "@/data/viloyatlar";
 import { ImageUpload } from "@/components/component/Image-Upload";
-import { Trash2, X } from "lucide-react";
+import { Check, ChevronsUpDown, Trash2, X } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   first_name: z.string().min(1, "firstNameRequired"),
@@ -72,8 +85,6 @@ export default function EditEmployee() {
     enabled: !!id,
     getQueryKey: "/employees",
   });
-
-  console.log("employee", employee);
 
   const { mutate, isLoading: mutateLoading } = useMutateData();
 
@@ -121,7 +132,7 @@ export default function EditEmployee() {
         position_id: position_id?.toString() || "",
       });
     }
-  }, [employee, form]);
+  }, [employee, form, positions]);
 
   const selectedProvince = form.watch("region");
   const setValues = form.setValue;
@@ -404,10 +415,78 @@ export default function EditEmployee() {
                 </FormItem>
               )}
             />
-            
 
             {/* Tuman */}
             <FormField
+              control={form.control}
+              name="district"
+              render={({ field }) => (
+                <FormItem className="flex flex-col mt-2.5">
+                  <FormLabel
+                    htmlFor="district"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("district")}*
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-[300px] justify-between bg-white dark:bg-darkBgInputs dark:border-darkBorderInput",
+                            !field.value && "text-muted-foreground"
+                          )}
+                          disabled={!selectedProvince}
+                        >
+                          {field.value
+                            ? clientAddressData?.tumanlar[
+                                selectedProvince
+                              ]?.find((district) => district === field.value)
+                            : t("enterDistrict")}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] p-0">
+                      <Command>
+                        <CommandInput placeholder={t("searchDistrict")} />
+                        <CommandEmpty>{t("noDistrictFound")}</CommandEmpty>
+                        <CommandGroup>
+                          {selectedProvince &&
+                            clientAddressData?.tumanlar[selectedProvince]?.map(
+                              (district) => (
+                                <CommandItem
+                                  key={district}
+                                  value={district}
+                                  onSelect={() => {
+                                    form.setValue("district", district, {
+                                      shouldValidate: true,
+                                    });
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      field.value === district
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {district}
+                                </CommandItem>
+                              )
+                            )}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* <FormField
               control={form.control}
               name="district"
               render={({ field }) => (
@@ -447,7 +526,7 @@ export default function EditEmployee() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* Mahalla */}
             <FormField

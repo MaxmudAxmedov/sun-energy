@@ -30,7 +30,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getClientById } from "@/service/client";
 import { useQuery } from "@tanstack/react-query";
 import { ImageUpload } from "@/components/component/Image-Upload";
-import { Trash2, X } from "lucide-react";
+import { Trash2, X, Check, ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 // const isValidUUID = (uuid) => {
 //   const uuidRegex =
@@ -129,7 +142,6 @@ export default function CreateClients() {
   const prefix = "+998";
   const prefixServer = "998";
   const [selectedTab, setSelectedTab] = useState("jismoniy");
-
 
   const { data: clientData } = useQuery({
     queryKey: ["client", id],
@@ -473,44 +485,69 @@ export default function CreateClients() {
                   control={form.control}
                   name="district"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex flex-col mt-2.5">
                       <FormLabel
-                        htmlFor="employee_id"
+                        htmlFor="district"
                         className="text-gray-700 dark:text-white font-medium"
                       >
-                        {t("district")}
+                        {t("district")}*
                       </FormLabel>
-                      <FormControl>
-                        <Select
-                          defaultValue={field.value}
-                          onValueChange={(value) => {
-                            setValues("district", value, {
-                              shouldValidate: true,
-                            });
-                          }}
-                          value={form.watch("district")}
-                          disabled={!selectedProvince}
-                        >
-                          <SelectTrigger
-                            className="w-[300px] bg-white"
-                            {...field}
-                          >
-                            <SelectValue placeholder={t("enterDistrict")} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-[300px] justify-between bg-white dark:bg-darkBgInputs dark:border-darkBorderInput",
+                                !field.value && "text-muted-foreground"
+                              )}
+                              disabled={!selectedProvince}
+                            >
+                              {field.value
+                                ? clientAddressData?.tumanlar[
+                                    selectedProvince
+                                  ]?.find(
+                                    (district) => district === field.value
+                                  )
+                                : t("enterDistrict")}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[300px] p-0 ">
+                          <Command>
+                            <CommandInput placeholder={t("searchDistrict")} />
+                            <CommandEmpty>{t("noDistrictFound")}</CommandEmpty>
+                            <CommandGroup className="max-h-[340px] overflow-y-auto">
                               {selectedProvince &&
                                 clientAddressData?.tumanlar[
                                   selectedProvince
-                                ]?.map((tuman, index) => (
-                                  <SelectItem key={index} value={tuman}>
-                                    {tuman}
-                                  </SelectItem>
+                                ]?.map((district) => (
+                                  <CommandItem
+                                    key={district}
+                                    value={district}
+                                    onSelect={() => {
+                                      form.setValue("district", district, {
+                                        shouldValidate: true,
+                                      });
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        field.value === district
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {district}
+                                  </CommandItem>
                                 ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -809,46 +846,69 @@ export default function CreateClients() {
                   control={form.control}
                   name="district"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex flex-col mt-2.5">
                       <FormLabel
-                        htmlFor="employee_id"
+                        htmlFor="district"
                         className="text-gray-700 dark:text-white font-medium"
                       >
-                        {t("district")}
+                        {t("district")}*
                       </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={(value) => {
-                            setValues("district", value, {
-                              shouldValidate: true,
-                            });
-                          }}
-                          defaultValue={field.value}
-                          value={form.watch("district")}
-                          disabled={!selectedProvince}
-                        >
-                          <SelectTrigger
-                            className="w-[300px] bg-white"
-                            {...field}
-                          >
-                            <SelectValue placeholder={t("enterDistrict")} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-[300px] justify-between bg-white dark:bg-darkBgInputs dark:border-darkBorderInput",
+                                !field.value && "text-muted-foreground"
+                              )}
+                              disabled={!selectedProvince}
+                            >
+                              {field.value
+                                ? clientAddressData?.tumanlar[
+                                    selectedProvince
+                                  ]?.find(
+                                    (district) => district === field.value
+                                  )
+                                : t("enterDistrict")}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[300px] p-0">
+                          <Command>
+                            <CommandInput placeholder={t("searchDistrict")} />
+                            <CommandEmpty>{t("noDistrictFound")}</CommandEmpty>
+                            <CommandGroup className="max-h-[340px] overflow-y-auto">
                               {selectedProvince &&
                                 clientAddressData?.tumanlar[
                                   selectedProvince
-                                ]?.map((tuman, index) => {
-                                  return (
-                                    <SelectItem key={index} value={tuman}>
-                                      {tuman}
-                                    </SelectItem>
-                                  );
-                                })}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
+                                ]?.map((district) => (
+                                  <CommandItem
+                                    key={district}
+                                    value={district}
+                                    onSelect={() => {
+                                      form.setValue("district", district, {
+                                        shouldValidate: true,
+                                      });
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        field.value === district
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {district}
+                                  </CommandItem>
+                                ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}

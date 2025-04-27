@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -65,7 +65,7 @@ const productSchema = z.object({
 
 export default function CreateProduct() {
   const { t } = useTranslation();
-  const [search, setSearch] = useState("");
+  //   const [search, setSearch] = useState("");
   const { id } = useParams();
   const {
     data: productCategoryData,
@@ -74,9 +74,6 @@ export default function CreateProduct() {
   } = useGetData({
     endpoint: "/product-categories",
     enabled: true,
-    params: {
-      search,
-    },
     getQueryKey: "/product-category",
   });
 
