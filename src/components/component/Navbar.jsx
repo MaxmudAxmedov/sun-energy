@@ -47,10 +47,16 @@ export default function Navbar() {
             >
               {!isCollapsed && (
                 <div className="flex items-center gap-x-2">
-                  <img className="w-[70px] h-[40px] rounded-md" src={Logo} alt="" />
-                  <p className="text-textPrimaryColor dark:text-white text-xl font-semibold">
-                    Sun Energy
-                  </p>
+                  <NavLink to="/report" className="flex items-center gap-x-2">
+                    <img
+                      className="w-[70px] h-[40px] rounded-md"
+                      src={Logo}
+                      alt=""
+                    />
+                    <p className="text-textPrimaryColor dark:text-white text-xl font-semibold">
+                      Sun Energy
+                    </p>
+                  </NavLink>
                 </div>
               )}
             </div>
