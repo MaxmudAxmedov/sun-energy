@@ -57,6 +57,7 @@ export default function CreateUsers() {
 
   console.log(userData);
 
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -82,9 +83,9 @@ export default function CreateUsers() {
     const finalData = {
       login: data.login,
       password: data.password,
-      // lang: data.lang,
-      // who: data.who,
-      // id: id ? id : null,
+      lang: undefined,
+      who: undefined,
+      id: id ? id : null,
     };
 
     mutate({
@@ -247,7 +248,7 @@ export default function CreateUsers() {
               type="button"
               variant="outline"
               className="py-[19px]"
-              onClick={() => navigate("/users")}
+              onClick={() => navigate("/setting")}
             >
               {t("cancel")}
             </Button>

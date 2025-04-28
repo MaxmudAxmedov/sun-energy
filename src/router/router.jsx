@@ -233,14 +233,14 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: "/users",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Users />
-          </Suspense>
-        ),
-      },
+      // {
+      //   path: "/users",
+      //   element: (
+      //     <Suspense fallback={<Loader />}>
+      //       <Users />
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: "/createUsers/:id",
         element: (
