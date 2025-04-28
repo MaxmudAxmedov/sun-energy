@@ -55,9 +55,6 @@ export default function CreateUsers() {
     enabled: true,
   });
 
-  console.log(userData);
-
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,8 +80,8 @@ export default function CreateUsers() {
     const finalData = {
       login: data.login,
       password: data.password,
-      lang: undefined,
-      who: undefined,
+      lang: "uz",
+      who: "admin",
       id: id ? id : null,
     };
 
@@ -93,7 +90,7 @@ export default function CreateUsers() {
       method: id === "new" ? "POST" : "PUT",
       data: finalData,
       toastCreateMessage: id === "new" ? "userCreated" : "userUpdated",
-      navigatePath: "/users",
+      navigatePath: "/setting",
       mutateQueryKey: "/users",
     });
   };
