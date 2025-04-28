@@ -39,14 +39,18 @@ export default function EmployeDrawer({
             open={isSheetOpen}
             setOpen={setIsSheetOpen}
             trigger={
-                <Button variant="default" onClick={infoClick(row.original)}>
+                <Button
+                    variant="default"
+                    className="bg-primaryColor hover:bg-blue-500"
+                    onClick={infoClick(row.original)}
+                >
                     <EyeIcon />
                 </Button>
             }
             action={
                 <div className="flex justify-between gap-3">
                     <Button
-                        className="p-6 w-[100%]"
+                        className="p-6 w-[100%] bg-green-600 hover:bg-green-600 text-white"
                         onClick={() =>
                             navigate(`/editEmployee/${selectedRowData.id}`)
                         }

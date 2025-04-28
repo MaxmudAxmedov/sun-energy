@@ -3,7 +3,7 @@ import { getReports } from "@/service/report";
 
 export function getProductsQuery(params) {
     return {
-        queryKey: ["/product-categories", params],
+        queryKey: ["product", params.search],
         queryFn: async () => getProducts(params),
     };
 }
@@ -13,4 +13,3 @@ export function getReportsQuery(params) {
         queryFn: async () => getReports(params),
     };
 }
-

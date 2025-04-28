@@ -5,18 +5,20 @@ import { PlusIcon } from "@/assets/icons/plus-icon";
 import { SearchIcon } from "@/assets/icons/search-icon";
 import { PlusIconSmall } from "@/assets/icons/plus-icon-small";
 import { useDebounce } from "use-debounce";
-
+import Calc from "../../assets/imgs/calculator.png";
+import CalculatorModal from "./CalculatorModal";
 export const DynamicHeader = ({
     title,
     btnNavigate,
     inputPlacholder,
     isInput = false,
+    isCreat = true,
     onSearch = () => {},
 }) => {
     const { t } = useTranslation();
     const [search, setSearch] = useState("");
     const [debouncedSearch] = useDebounce(search, 500);
-
+    const [openCalculator, setOpenCalculator] = useState(false);
     useEffect(() => {
         onSearch(debouncedSearch);
     }, [debouncedSearch, onSearch]);
@@ -39,6 +41,13 @@ export const DynamicHeader = ({
                 </NavLink>
             </div>
             <div className="flex items-center gap-x-3">
+                <img
+                    src={Calc}
+                    alt="Calculator"
+                    width={35}
+                    onClick={() => setOpenCalculator(true)}
+                    className="cursor-pointer"
+                />
                 {isInput && (
                     <div className="flex items-center w-full desktop:w-[350px] mb-2 tablet:mb-3 desktop:mb-0 mt-3 tablet:mt-4 desktop:mt-0 gap-x-2 pl-4 bg-white dark:bg-gray-700 rounded-[8px] border-[1px] dark:border-[#8C8E90] border-gray5">
                         <SearchIcon />
@@ -52,12 +61,19 @@ export const DynamicHeader = ({
                     </div>
                 )}
 
-                <NavLink
-                    className="bg-primaryColor hidden text-white desktop:flex gap-2 items-center w-[130px] px-4 py-2 rounded-[8px] text-[16px]"
-                    to={btnNavigate}
-                >
-                    <PlusIcon /> {t("create")}
-                </NavLink>
+                {isCreat && (
+                    <NavLink
+                        className="bg-primaryColor hidden text-white desktop:flex gap-2 items-center w-[130px] px-4 py-2 rounded-[8px] text-[16px]"
+                        to={btnNavigate}
+                    >
+                        <PlusIcon /> {t("create")}
+                    </NavLink>
+                )}
+
+                <CalculatorModal
+                    open={openCalculator}
+                    setOpen={setOpenCalculator}
+                />
             </div>
         </div>
     );
