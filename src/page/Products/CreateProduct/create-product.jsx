@@ -36,7 +36,13 @@ const productSchema = z.object({
   price: z.string().min(1, "priceRequired"),
   count_of_product: z.string().min(1, "countOfProductRequired"),
   category_id: z.string().min(1, "categoryRequired"),
+  power_system: z.string().min(1, "powerSystemRequired"),
   show_on_landing: z.boolean().optional(),
+  mark_up: z
+    .string({ invalid_type_error: "markUpRequired" })
+    .min(0, { message: "markUpRequired" })
+    .max(100, { message: "markUpRequired" }),
+  watt: z.string().min(1, "wattRequired"),
   photo: z.custom(
     (value) => {
       if (!value) return false;
@@ -63,9 +69,14 @@ const productSchema = z.object({
   ),
 });
 
+const powerSystems = [
+  { id: "on-grid", label: "On-Grid" },
+  { id: "off-grid", label: "Off-Grid" },
+  { id: "hybrid", label: "Hybrid" },
+];
+
 export default function CreateProduct() {
   const { t } = useTranslation();
-  //   const [search, setSearch] = useState("");
   const { id } = useParams();
   const {
     data: productCategoryData,
@@ -101,6 +112,9 @@ export default function CreateProduct() {
       count_of_product: "",
       photo: "",
       show_on_landing: "",
+      mark_up: "",
+      watt: "",
+      power_system: "",
     },
   });
 
@@ -114,6 +128,9 @@ export default function CreateProduct() {
         category_id: productDataById.category_id || "",
         photo: productDataById?.photo,
         show_on_landing: productDataById?.show_on_landing || false,
+        mark_up: productDataById.mark_up || "",
+        watt: String(productDataById.watt) || "",
+        power_system: productDataById.power_system || "",
       });
     }
   }, [productDataById, id, form]);
@@ -128,6 +145,9 @@ export default function CreateProduct() {
     formData.append("count_of_product", data.count_of_product);
     formData.append("photo", data.photo);
     formData.append("show_on_landing", data.show_on_landing);
+    formData.append("mark_up", Number(data.mark_up));
+    formData.append("watt", data.watt || "");
+    formData.append("power_system", data.power_system || "");
 
     mutate({
       endpoint: id ? `/product/${id}/images` : "/product-images",
@@ -230,32 +250,95 @@ export default function CreateProduct() {
             />
           </div>
 
-          {/* Product Description */}
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="description"
-                  className="text-gray-700 dark:text-white font-medium"
-                >
-                  {t("description")}*
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    type="text"
-                    placeholder={t("enterDescription")}
-                    {...field}
-                    className="bigTablet:w-[620px] w-[300px] tablet:w-[450px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex items-center flex-wrap gap-x-3">
+            {/* Product Description */}
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="description"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("description")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      type="text"
+                      placeholder={t("enterDescription")}
+                      {...field}
+                      className="bigTablet:w-[611px] w-[300px] tablet:w-[450px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
+            {/* Poweer System */}
+            <FormField
+              control={form.control}
+              name="power_system"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="poweer_system"
+                    className="text-gray-700 block dark:text-white font-medium"
+                  >
+                    {t("poweerSystem")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      value={field.value}
+                    >
+                      <SelectTrigger className="w-[300px] bg-white" {...field}>
+                        <SelectValue placeholder={t("choosePoweerSystem")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {powerSystems?.map((item) => (
+                            <SelectGroup key={item.id}>
+                              <SelectItem value={item.id}>
+                                {item?.label}
+                              </SelectItem>
+                            </SelectGroup>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="flex items-end space-y-4 flex-wrap gap-x-3">
+            {/* Watt */}
+            <FormField
+              control={form.control}
+              name="watt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="watt"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("watt")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("enterWatt")}
+                      {...field}
+                      className="w-[300px] tablet:w-[450px] bigTablet:w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="category_id"
@@ -321,6 +404,33 @@ export default function CreateProduct() {
                       checked={field.value}
                       onCheckedChange={field.onChange}
                       id="show_on_landing"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div>
+            {/* mark_up */}
+            <FormField
+              control={form.control}
+              name="mark_up"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="mark_up"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("markUp")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder={t("enterMarkUp")}
+                      {...field}
+                      className="w-[300px] tablet:w-[450px] bigTablet:w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                     />
                   </FormControl>
                   <FormMessage />
