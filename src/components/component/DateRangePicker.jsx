@@ -58,6 +58,8 @@ export default function DateRangePicker({ value, onChange }) {
                         onChange={handleSelect}
                         moveRangeOnFirstSelection={false}
                         rangeColors={["#3b82f6"]}
+                        direction="vertical"
+                        scroll={{ enabled: true }}
                     />
                 </div>
             )}
