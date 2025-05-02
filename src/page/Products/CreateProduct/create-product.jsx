@@ -36,13 +36,10 @@ const productSchema = z.object({
   price: z.string().min(1, "priceRequired"),
   count_of_product: z.string().min(1, "countOfProductRequired"),
   category_id: z.string().min(1, "categoryRequired"),
-  power_system: z.string().min(1, "powerSystemRequired"),
+  power_system: z.string().optional(),
   show_on_landing: z.boolean().optional(),
-  mark_up: z
-    .string({ invalid_type_error: "markUpRequired" })
-    .min(0, { message: "markUpRequired" })
-    .max(100, { message: "markUpRequired" }),
-  watt: z.string().min(1, "wattRequired"),
+  mark_up: z.string().optional(),
+  watt: z.string().optional(),
   photo: z.custom(
     (value) => {
       if (!value) return false;
@@ -129,7 +126,7 @@ export default function CreateProduct() {
         photo: productDataById?.photo,
         show_on_landing: productDataById?.show_on_landing || false,
         mark_up: productDataById.mark_up || "",
-        watt: String(productDataById.watt) || "",
+        watt: String(productDataById.watt) || 0,
         power_system: productDataById.power_system || "",
       });
     }
@@ -146,7 +143,7 @@ export default function CreateProduct() {
     formData.append("photo", data.photo);
     formData.append("show_on_landing", data.show_on_landing);
     formData.append("mark_up", Number(data.mark_up));
-    formData.append("watt", data.watt || "");
+    formData.append("watt", data.watt || 0);
     formData.append("power_system", data.power_system || "");
 
     mutate({
@@ -155,7 +152,7 @@ export default function CreateProduct() {
       method: id ? "PUT" : "POST",
       toastCreateMessage: id ? "productUpdated" : "productCreated",
       navigatePath: "/",
-      mutateQueryKey: "/product-categories",
+      mutateQueryKey: "/product",
     });
   };
 
@@ -286,7 +283,7 @@ export default function CreateProduct() {
                     htmlFor="poweer_system"
                     className="text-gray-700 block dark:text-white font-medium"
                   >
-                    {t("poweerSystem")}*
+                    {t("poweerSystem")}
                   </FormLabel>
                   <FormControl>
                     <Select
@@ -326,7 +323,7 @@ export default function CreateProduct() {
                     htmlFor="watt"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("watt")}*
+                    {t("watt")}
                   </FormLabel>
                   <FormControl>
                     <Input

@@ -133,7 +133,7 @@ export default function Products() {
             <CustomDeleteDialog
               dynamicRowId={row.original.id}
               endpoint={`product`}
-              mutateQueryKey={"product-categories"}
+              mutateQueryKey={"product"}
               deleteToastMessage={"productDeleted"}
             />
           </div>
