@@ -4,6 +4,8 @@ import { getReportsQuery } from "@/quires/quires";
 import ChartComponent from "./ReportChart";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import ReCharts from "./ReCharts";
+import DateRangePicker from "@/components/component/DateRangePicker";
+import { DynamicHeader } from "@/components/component/Dynamic-Header";
 const initialParams = {
     product_name: "",
     client_name: "",
@@ -17,7 +19,6 @@ export default function Report() {
         qty: 0,
     });
     const item = data?.data?.Data;
-    console.log("item", item);
 
     const total = item?.client_products?.reduce(
         (initial, obj) => {
@@ -27,6 +28,18 @@ export default function Report() {
         },
         { price: 0 }
     );
+
+    const [range, setRange] = useState({
+        startDate: new Date(new Date().getFullYear(), 0, 1),
+        endDate: new Date(),
+    });
+
+    const handleDateChange = (newRange) => {
+        setRange(newRange);
+        const start = newRange.startDate.toISOString().split("T")[0];
+        const end = newRange.endDate.toISOString().split("T")[0];
+        setParams((res) => ({ ...res, from_date: start, to_date: end }));
+    };
 
     useEffect(() => {
         if (item?.client_products) {
@@ -48,33 +61,42 @@ export default function Report() {
     }, [item?.client_products]);
     return (
         <div className="h-screen">
+            <DynamicHeader title="Hisobot" isCreat={false}>
+                <DateRangePicker value={range} onChange={handleDateChange} />
+            </DynamicHeader>
             <div className="flex justify-between gap-3 mt-4">
                 <Card className="w-[22%] text-center pt-4">
-                    <CardTitle className="mb-2">Contract</CardTitle>
+                    <CardTitle className="mb-2">Shartnomalar</CardTitle>
                     <CardContent className="text-[22px]">
+                        {/* {item?.count} */}
                         {item?.count}
-                    </CardContent>
-                </Card>
-                <Card className="w-[22%] text-center pt-4">
-                    <CardTitle className="mb-2">Products</CardTitle>
-                    <CardContent className="text-[22px]">
-                        {totals.qty}
-                    </CardContent>
-                </Card>
-                <Card className="w-[22%] text-center pt-4">
-                    <CardTitle className="mb-2">Total Price</CardTitle>
-                    <CardContent className="text-[22px]">
-                        {total?.price?.toLocaleString()}{" "}
-                        <smal className="text-[16px]">sum</smal>
                     </CardContent>
                 </Card>
                 <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">Kvt</CardTitle>
                     <CardContent className="text-[22px]">
-                        {item?.client_products?.reduce(
-                            (sum, item) => (sum += item.kv),
-                            0
-                        )}
+                        {item?.total_kv}
+                    </CardContent>
+                </Card>
+                <Card className="w-[22%] text-center pt-4">
+                    <CardTitle className="mb-2">Foyda</CardTitle>
+                    <CardContent className="text-[22px]">
+                        {item?.profit.toLocaleString()}{" "}
+                        <smal className="text-[16px]">sum</smal>
+                    </CardContent>
+                </Card>
+                <Card className="w-[22%] text-center pt-4">
+                    <CardTitle className="mb-2">Tan narx bo'yicha</CardTitle>
+                    <CardContent className="text-[22px]">
+                        {item?.total_cost.toLocaleString()}{" "}
+                        <smal className="text-[16px]">sum</smal>
+                    </CardContent>
+                </Card>
+                <Card className="w-[22%] text-center pt-4">
+                    <CardTitle className="mb-2">Umumiy summa</CardTitle>
+                    <CardContent className="text-[22px]">
+                        {item?.total_selling.toLocaleString()}{" "}
+                        <smal className="text-[16px]">sum</smal>
                     </CardContent>
                 </Card>
             </div>
