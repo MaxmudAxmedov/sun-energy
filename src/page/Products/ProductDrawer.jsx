@@ -69,6 +69,10 @@ export default function ProductDrawer({
             <p>{t("markUp")} :</p>
             {selectedRowData?.mark_up} %
           </div>
+          <div className="flex gap-x-2">
+            <p>{t("powerSystem")} :</p>
+            {selectedRowData?.power_system}
+          </div>
         </div>
 
         {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-5">

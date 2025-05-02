@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 import { useGetData } from "@/hook/useApi";
 import { MainScletot } from "@/components/component/main-scletot";
