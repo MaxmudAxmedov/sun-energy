@@ -71,25 +71,30 @@ export default function ProductItem({ item, setProducts, products }) {
             }
         });
     }, [productCount, item]);
+    console.log(item);
     return (
-        <Card className="w-[340px]">
+        <Card className="w-[340px] relative">
             <CardContent>
                 <div
                     ref={sliderRef}
                     className="keen-slider pt-5 rounded overflow-hidden"
                 >
-                    {item?.photos?.map((src, index) => (
-                        <div className="keen-slider__slide" key={index}>
-                            <img
-                                src={src}
-                                alt={`Uploaded image ${index + 1}`}
-                                className="w-full h-[200px] object-cover"
-                            />
-                        </div>
-                    ))}
+                    <div className="keen-slider__slide">
+                        <img
+                            src={item?.photo}
+                            alt={`Uploaded image`}
+                            className="w-full h-[200px] object-cover"
+                        />
+                    </div>
                 </div>
 
                 <CardTitle className="my-3 text-[19px]">{item?.name}</CardTitle>
+                {item?.watt > 0 && (
+                    <p className="my-3 text-[19px] absolute top-0 left-2 z-10 bg-gray-100 p-2 rounded-md">
+                        {item?.watt} watt
+                    </p>
+                )}
+
                 <div className="border-l-[3px] p-3">
                     <p className="h-[45px]">
                         {item.description.length > 25 ? (
