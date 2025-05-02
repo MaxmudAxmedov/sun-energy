@@ -87,28 +87,28 @@ export default function EmployeDrawer({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-5">
-                    <div className="border p-4 rounded-md capitalize">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-5">
+                    <div className="border p-3 rounded-md capitalize">
                         {selectedRowData?.region}
                     </div>
-                    <div className="border p-4 rounded-md capitalize">
+                    <div className="border p-3 rounded-md capitalize">
                         {selectedRowData?.district}
                     </div>
-                    <div className="border p-4 rounded-md capitalize">
+                    <div className="border p-3 rounded-md capitalize">
                         {selectedRowData?.quarter}
                     </div>
-                    <div className="border p-4 rounded-md capitalize">
+                    <div className="border p-3 rounded-md capitalize">
                         {selectedRowData?.street}
                     </div>
                 </div>
 
                 <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
-                        <div className="p-8 border rounded-md flex justify-between">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+                        <div className="p-4 border rounded-md flex justify-between">
                             <p>{selectedRowData?.cashback}</p>
                             <p>CASHBACK</p>
                         </div>
-                        <div className=" p-8 border rounded-md flex justify-between">
+                        <div className=" p-4 border rounded-md flex justify-between">
                             <p>{selectedRowData?.salary.toLocaleString()}</p>
                             <p>UZS</p>
                         </div>
@@ -136,11 +136,11 @@ export default function EmployeDrawer({
                         </TableHeader>
                         <TableBody>
                             {data?.Data?.client_products &&
-                                data?.Data?.client_products?.map((item) => {
+                                data?.Data?.client_products?.map((item, index) => {
                                     return (
                                         <TableRow>
                                             <TableCell className="w-[5%]">
-                                                1
+                                                {index+1}
                                             </TableCell>
                                             <TableCell className="w-[26%]">
                                                 {item.created_at}

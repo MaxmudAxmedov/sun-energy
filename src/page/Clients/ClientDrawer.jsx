@@ -97,7 +97,7 @@ export default function ClientDrawer({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-5">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5 my-5">
                     <div className="border p-3 rounded-md capitalize">
                         {selectedRowData?.region}
                     </div>
@@ -113,8 +113,8 @@ export default function ClientDrawer({
                 </div>
                 {data?.Data?.count > 0 ? (
                     <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
-                            <div className="p-5 border rounded-md flex justify-between">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                            <div className="p-4 border rounded-md flex justify-between">
                                 <p>
                                     {data?.Data?.client_products?.reduce(
                                         (sum, item) => {
@@ -125,7 +125,7 @@ export default function ClientDrawer({
                                 </p>
                                 <p>KVT</p>
                             </div>
-                            <div className="p-5 border rounded-md flex justify-between">
+                            <div className="p-4 border rounded-md flex justify-between">
                                 <p>
                                     {data?.Data?.client_products
                                         ?.reduce((sum, item) => {
@@ -164,11 +164,11 @@ export default function ClientDrawer({
                             </TableHeader>
                             <TableBody>
                                 {data?.Data?.client_products &&
-                                    data?.Data?.client_products?.map((item) => {
+                                    data?.Data?.client_products?.map((item, index) => {
                                         return (
                                             <TableRow>
                                                 <TableCell className="w-[5%]">
-                                                    1
+                                                    {index+1}
                                                 </TableCell>
                                                 <TableCell className="w-[26%]">
                                                     {item.created_at}
