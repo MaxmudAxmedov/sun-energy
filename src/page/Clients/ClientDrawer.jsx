@@ -62,7 +62,6 @@ export default function ClientDrawer({
             <EditIcon /> Edit
           </Button>
 
-
           <CustomDeleteDialog
             endpoint={`client`}
             dynamicRowId={selectedRowData?.id}
@@ -133,119 +132,6 @@ export default function ClientDrawer({
                 </p>
                 <p>Umumiy summa</p>
               </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-5 my-5">
-                    <div className="border p-3 rounded-md capitalize">
-                        {selectedRowData?.region}
-                    </div>
-                    <div className="border p-3 rounded-md capitalize">
-                        {selectedRowData?.district}
-                    </div>
-                    <div className="border p-3 rounded-md capitalize">
-                        {selectedRowData?.quarter}
-                    </div>
-                    <div className="border p-3 rounded-md capitalize">
-                        {selectedRowData?.street}
-                    </div>
-                </div>
-                {data?.Data?.count > 0 ? (
-                    <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
-                            <div className="p-4 border rounded-md flex justify-between">
-                                <p>
-                                    {data?.Data?.client_products?.reduce(
-                                        (sum, item) => {
-                                            return sum + (item.kv || 0);
-                                        },
-                                        0
-                                    )}
-                                </p>
-                                <p>KVT</p>
-                            </div>
-                            <div className="p-4 border rounded-md flex justify-between">
-                                <p>
-                                    {data?.Data?.client_products
-                                        ?.reduce((sum, item) => {
-                                            return (
-                                                sum + (item.total_price || 0)
-                                            );
-                                        }, 0)
-                                        .toLocaleString()}{" "}
-                                    sum
-                                </p>
-                                <p>Umumiy summa</p>
-                            </div>
-                        </div>
-
-                        <Table className="dark:bg-[#6d6d6d] rounded-md">
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[5%]">#</TableHead>
-                                    <TableHead className="w-[30%]">
-                                        Sana
-                                    </TableHead>
-                                    <TableHead className="w-[20%] text-center">
-                                        Mahsulot soni
-                                    </TableHead>
-                                    <TableHead className="text-center w-[22%]">
-                                        Kvt
-                                    </TableHead>
-                                    <TableHead className="text-center w-[22%]">
-                                        Summa
-                                    </TableHead>
-
-                                    <TableHead className="float-right pt-2">
-                                        Action
-                                    </TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {data?.Data?.client_products &&
-                                    data?.Data?.client_products?.map((item, index) => {
-                                        return (
-                                            <TableRow>
-                                                <TableCell className="w-[5%]">
-                                                    {index+1}
-                                                </TableCell>
-                                                <TableCell className="w-[26%]">
-                                                    {item.created_at}
-                                                </TableCell>
-                                                <TableCell className="w-[18%] text-center">
-                                                    {item?.items?.reduce(
-                                                        (sum, qty) =>
-                                                            (sum +=
-                                                                qty?.quantity),
-                                                        0
-                                                    )}
-                                                </TableCell>
-                                                <TableCell className="w-[26%] text-center">
-                                                    {item.kv}
-                                                </TableCell>
-                                                <TableCell className="text-center w-[18%]">
-                                                    {item?.total_price.toLocaleString()}{" "}
-                                                </TableCell>
-                                                <TableCell className="float-right">
-                                                    <a
-                                                        target="blank"
-                                                        href={item?.contract}
-                                                    >
-                                                        <img
-                                                            src={DownloadIcon}
-                                                            width={20}
-                                                            alt=""
-                                                        />
-                                                    </a>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                            </TableBody>
-                        </Table>
-                    </>
-                ) : (
-                    ""
-                )}
-
             </div>
 
             <Table className="dark:bg-[#6d6d6d] rounded-md">
