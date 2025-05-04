@@ -36,7 +36,7 @@ const CreateProductCategory = lazy(() =>
   )
 );
 const CreateContract = lazy(() =>
-  import("../page/Contract/CreateContract/creatr-contract")
+  import("../page/Contract/CreateContract/CreatrContract")
 );
 
 const EditEmploye = lazy(() =>

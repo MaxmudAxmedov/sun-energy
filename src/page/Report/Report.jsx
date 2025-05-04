@@ -30,7 +30,7 @@ export default function Report() {
     );
 
     const [range, setRange] = useState({
-        startDate: new Date(new Date().getFullYear(), 0, 1),
+        startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
         endDate: new Date(),
     });
 

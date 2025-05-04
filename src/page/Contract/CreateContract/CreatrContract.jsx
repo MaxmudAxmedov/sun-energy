@@ -25,20 +25,8 @@ import { useGetData } from "@/hook/useApi";
 import { useMutateData } from "@/hook/useApi";
 import { Spinner } from "@/components/component/spinner";
 import { NavLink, useParams } from "react-router-dom";
-import ProductItem from "./ProductItem";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import ContractTable from "./ContractTable";
 
 const isValidUUID = (uuid) => {
     const uuidRegex =
@@ -87,15 +75,6 @@ export default function CreatrContract() {
         quantity: 0,
         price: 0,
     });
-    const {
-        data: productsData,
-        isLoading: productsLoading,
-        isError: productsIsError,
-    } = useGetData({
-        endpoint: "/products",
-        enabled: true,
-        getQueryKey: "/products",
-    });
 
     const { data: clientsData } = useGetData({
         endpoint: "/clients",
@@ -121,22 +100,25 @@ export default function CreatrContract() {
         },
     });
 
+    const { watch, setValue } = form;
+    const kvat = watch("kvat");
+    const accessory = 200000;
+    const service = 300000;
+
+    useEffect(() => {
+        const numericKvat = parseFloat(kvat);
+        if (!isNaN(numericKvat)) {
+            setValue("accessory_cost", numericKvat * accessory);
+            setValue("service_cost", numericKvat * service);
+        }
+    }, [kvat, setValue]);
+
     const onSubmit = (data) => {
-        console.log(data);
-        const res = products.map((i) => {
-            return {
-                product_id: i.product_id,
-                quantity: i.count,
-                total_price: i.total_price,
-                unit_price: i.unit_price,
-            };
-        });
         const body = {
             ...data,
             accessory_cost: Number(data.accessory_cost),
-            // dont_calculate: data.dont_calculate,
             client_id: params.id ? params.id : data.client_id,
-            order_items: res,
+            order_items: products || [],
             service_cost: Number(data.service_cost),
             total_price: totalItem.price,
             kvat: Number(data.kvat),
@@ -165,7 +147,6 @@ export default function CreatrContract() {
         localStorage.setItem("products", JSON.stringify(products));
         setTotalItem(total);
     }, [products]);
-console.log(params);
     return (
         <div className="min-h-[100vh]">
             <Form {...form}>
@@ -227,15 +208,9 @@ console.log(params);
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         <SelectGroup>
-                                                            {productsLoading
-                                                                ? t("loading")
-                                                                : productsIsError
-                                                                ? "Error"
-                                                                : clientsData
-                                                                      ?.Data
-                                                                      ?.clients
-                                                                      ?.length ===
-                                                                  0
+                                                            {clientsData?.Data
+                                                                ?.clients
+                                                                ?.length === 0
                                                                 ? t(
                                                                       "datasNotFound"
                                                                   )
@@ -302,13 +277,9 @@ console.log(params);
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-                                                        {productsLoading
-                                                            ? t("loading")
-                                                            : productsIsError
-                                                            ? "Error"
-                                                            : employeeData?.Data
-                                                                  ?.employees
-                                                                  ?.length === 0
+                                                        {employeeData?.Data
+                                                            ?.employees
+                                                            ?.length === 0
                                                             ? t("datasNotFound")
                                                             : employeeData?.Data?.employees?.map(
                                                                   (item) => (
@@ -338,7 +309,7 @@ console.log(params);
                                 )}
                             />
                         </div>
-                        <div>
+                        <div className="flex items-center">
                             <FormField
                                 control={form.control}
                                 name="referred_by"
@@ -348,7 +319,7 @@ console.log(params);
                                             htmlFor="client"
                                             className="text-gray-700 dark:text-white font-medium"
                                         >
-                                            {t("referred")}
+                                            {t("attractor")}
                                         </FormLabel>
                                         <FormControl>
                                             <Select
@@ -356,7 +327,7 @@ console.log(params);
                                                 defaultValue={field.value}
                                             >
                                                 <SelectTrigger
-                                                    className="w-[300px] bg-white"
+                                                    className="w-[240px] bg-white"
                                                     {...field}
                                                 >
                                                     <SelectValue
@@ -367,13 +338,9 @@ console.log(params);
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-                                                        {productsLoading
-                                                            ? t("loading")
-                                                            : productsIsError
-                                                            ? "Error"
-                                                            : employeeData?.Data
-                                                                  ?.clients
-                                                                  ?.length === 0
+                                                        {employeeData?.Data
+                                                            ?.clients
+                                                            ?.length === 0
                                                             ? t("datasNotFound")
                                                             : employeeData?.Data?.employees?.map(
                                                                   (item) => (
@@ -399,6 +366,26 @@ console.log(params);
                                             </Select>
                                         </FormControl>
                                         <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="dont_calculate"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-center justify-between w-[60px] mt-6 p-2">
+                                            <FormControl>
+                                                <Switch
+                                                    checked={field.value}
+                                                    onCheckedChange={
+                                                        field.onChange
+                                                    }
+                                                    id="airplane-mode"
+                                                />
+                                            </FormControl>
+                                        </div>
                                     </FormItem>
                                 )}
                             />
@@ -438,12 +425,10 @@ console.log(params);
                                             htmlFor="accessory_cost"
                                             className="text-gray-700 dark:text-white font-medium"
                                         >
-                                            {/* {t("name")}* */}
                                             Accessory cost
                                         </FormLabel>
                                         <FormControl>
                                             <Input
-                                                // placeholder={t("enterName")}
                                                 {...field}
                                                 className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                                             />
@@ -464,12 +449,10 @@ console.log(params);
                                             htmlFor="service_cost"
                                             className="text-gray-700 dark:text-white font-medium"
                                         >
-                                            {/* {t("name")}* */}
                                             Service cost
                                         </FormLabel>
                                         <FormControl>
                                             <Input
-                                                // placeholder={t("enterName")}
                                                 {...field}
                                                 className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                                             />
@@ -480,98 +463,11 @@ console.log(params);
                             />
                         </div>
 
-                        <div>
-                            <FormField
-                                control={form.control}
-                                name="dont_calculate"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <div className="flex items-center justify-between min-w-[300px] mt-6 p-2">
-                                            <FormLabel FormLabel="dont_calculate">
-                                                Dont calculate
-                                            </FormLabel>
-
-                                            <FormControl>
-                                                <Switch
-                                                    checked={field.value}
-                                                    onCheckedChange={
-                                                        field.onChange
-                                                    }
-                                                    id="airplane-mode"
-                                                />
-                                            </FormControl>
-                                        </div>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
+                        <div></div>
                     </div>
 
-                    <div className="flex justify-between">
-                        <TooltipProvider>
-                            <div className="flex gap-3 w-[100%] mt-4 flex-wrap overflow-y-auto">
-                                {productsData?.Data?.products?.map((item) => {
-                                    return (
-                                        <ProductItem
-                                            item={item}
-                                            key={item.id}
-                                            setProducts={setProducts}
-                                            products={products}
-                                        />
-                                    );
-                                })}
-                            </div>
-                        </TooltipProvider>
-
-                        {/* <div className="relative mx-auto mt-4 w-[50%] ml-3 overflow-x-hidden rounded-lg bg-white dark:bg-darkSecondary p-4 dark:bg-darkMain">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow className="bg-mauiMist dark:bg-darkMainSecond">
-                                        <TableHead>N</TableHead>
-                                        <TableHead>Name</TableHead>
-                                        <TableHead className="text-end">
-                                            quantity
-                                        </TableHead>
-                                        <TableHead className="text-end">
-                                            price
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {products?.map((item, index) => {
-                                        return (
-                                            <TableRow>
-                                                <TableCell>
-                                                    {index + 1}
-                                                </TableCell>
-                                                <TableCell className="w-[30%]">
-                                                    {item.product_name}
-                                                </TableCell>
-                                                <TableCell className="text-end">
-                                                    {item.count}
-                                                </TableCell>
-                                                <TableCell className="text-end">
-                                                    {item.total_price.toLocaleString()}
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                                <TableFooter>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell className="text-end">
-                                        <p>{totalItem.quantity}</p>
-                                    </TableCell>
-                                    <TableCell className="text-end">
-                                        <p>
-                                            {totalItem.price.toLocaleString()}{" "}
-                                            sum
-                                        </p>
-                                    </TableCell>
-                                </TableFooter>
-                            </Table>
-                        </div> */}
+                    <div>
+                        <ContractTable setProducts={setProducts} />
                     </div>
                 </form>
             </Form>
