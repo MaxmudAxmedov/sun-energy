@@ -93,6 +93,7 @@ export default function EmployeDrawer({
           </div>
         </div>
 
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-5">
           <div className="border p-4 rounded-md capitalize">
             {selectedRowData?.region}
@@ -120,6 +121,34 @@ export default function EmployeDrawer({
             </div>
           </div>
 
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-5">
+                    <div className="border p-3 rounded-md capitalize">
+                        {selectedRowData?.region}
+                    </div>
+                    <div className="border p-3 rounded-md capitalize">
+                        {selectedRowData?.district}
+                    </div>
+                    <div className="border p-3 rounded-md capitalize">
+                        {selectedRowData?.quarter}
+                    </div>
+                    <div className="border p-3 rounded-md capitalize">
+                        {selectedRowData?.street}
+                    </div>
+                </div>
+
+                <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+                        <div className="p-4 border rounded-md flex justify-between">
+                            <p>{selectedRowData?.cashback}</p>
+                            <p>CASHBACK</p>
+                        </div>
+                        <div className=" p-4 border rounded-md flex justify-between">
+                            <p>{selectedRowData?.salary.toLocaleString()}</p>
+                            <p>UZS</p>
+                        </div>
+                    </div>
+
+
           <Table className="bg-white">
             <TableHeader>
               <TableRow>
@@ -128,6 +157,7 @@ export default function EmployeDrawer({
                 <TableHead className="w-[30%] text-center">Klient</TableHead>
                 <TableHead className="text-center w-[15%]">Kvt</TableHead>
                 <TableHead className="text-center w-[22%]">Summa</TableHead>
+
 
                 <TableHead className="float-right pt-2">Action</TableHead>
               </TableRow>
@@ -164,4 +194,51 @@ export default function EmployeDrawer({
       </div>
     </CustomDrawer>
   );
+
+                                <TableHead className="float-right pt-2">
+                                    Action
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {data?.Data?.client_products &&
+                                data?.Data?.client_products?.map((item, index) => {
+                                    return (
+                                        <TableRow>
+                                            <TableCell className="w-[5%]">
+                                                {index+1}
+                                            </TableCell>
+                                            <TableCell className="w-[26%]">
+                                                {item.created_at}
+                                            </TableCell>
+                                            <TableCell className="w-[30%] text-center">
+                                                {item?.client_name}
+                                            </TableCell>
+                                            <TableCell className="w-[15%] text-center">
+                                                {item.kv}
+                                            </TableCell>
+                                            <TableCell className="text-center w-[18%]">
+                                                {item?.total_price.toLocaleString()}{" "}
+                                            </TableCell>
+                                            <TableCell className="float-right">
+                                                <a
+                                                    target="blank"
+                                                    href={item?.contract}
+                                                >
+                                                    <img
+                                                        src={DownloadIcon}
+                                                        width={20}
+                                                        alt=""
+                                                    />
+                                                </a>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                </>
+            </div>
+        </CustomDrawer>
+    );
 }

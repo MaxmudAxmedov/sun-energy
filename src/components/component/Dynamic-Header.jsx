@@ -14,6 +14,7 @@ export const DynamicHeader = ({
     isInput = false,
     isCreat = true,
     onSearch = () => {},
+    children,
 }) => {
     const { t } = useTranslation();
     const [search, setSearch] = useState("");
@@ -40,7 +41,8 @@ export const DynamicHeader = ({
                     <PlusIconSmall /> {t("create")}
                 </NavLink>
             </div>
-            <div className="flex items-center gap-x-3">
+            <div className="flex items-center gap-x-3 w-full justify-end">
+                {children}
                 <img
                     src={Calc}
                     alt="Calculator"
