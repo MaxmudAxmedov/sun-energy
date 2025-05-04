@@ -104,7 +104,6 @@ export const formSchema = z.object({
   district: z.string(),
   full_name: z.string().min(3, "Ism kamida 3 ta harfdan iborat bo'lishi kerak"),
   inn_number: z.string(),
-  is_company: z.boolean(),
   quarter: z.string(),
   passport_series: z
     .string()
@@ -197,7 +196,6 @@ export default function CreateClients() {
         region: client.region,
         district: client.district,
         passport_series: client.passport_series,
-        is_company: client.is_company,
         inn_number: client.inn_number,
         company_name: client.company_name,
         quarter: client.quarter,
@@ -259,13 +257,12 @@ export default function CreateClients() {
       mutateQueryKey: "/clients",
     });
   };
-
   const handleDeleteImage = (index) => {
     const newImages = [...images];
     newImages[index];
     newImages.splice(index, 1);
     setImages(newImages);
-    onchange(newImages.map((img) => img.file));
+    onchange(newImages.map((img) => img.file || img.photo));
   };
 
   const openImageViewer = (imageUrl) => {
@@ -285,7 +282,6 @@ export default function CreateClients() {
       region,
       district,
       passport_series,
-      is_company,
       inn_number,
       company_name,
       quarter,
@@ -299,7 +295,7 @@ export default function CreateClients() {
     formData.append("street", street);
     formData.append("region", region);
     formData.append("district", district);
-    formData.append("is_company", is_company);
+    formData.append("is_company", true);
     formData.append("inn_number", inn_number);
     formData.append("company_name", company_name);
     formData.append("quarter", quarter);
@@ -711,14 +707,14 @@ export default function CreateClients() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel
-                        htmlFor="full_name"
+                        htmlFor="director_name"
                         className="text-gray-700 dark:text-white font-medium"
                       >
-                        {t("fullName")}*
+                        {t("directorName")}*
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={t("enterFullName")}
+                          placeholder={t("enterDirectorName")}
                           {...field}
                           className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                         />
@@ -988,7 +984,32 @@ export default function CreateClients() {
                   )}
                 />
 
-                {/* is_company */}
+                {/* inn_number */}
+                <FormField
+                  control={form.control}
+                  name="inn_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="inn_number"
+                        className="text-gray-700 dark:text-white font-medium"
+                      >
+                        {t("innNumber")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          maxLength={9}
+                          placeholder={t("enterInnNumber")}
+                          {...field}
+                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* is_company
                 <FormField
                   control={form.control}
                   name="is_company"
@@ -1011,33 +1032,7 @@ export default function CreateClients() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
-              </div>
-
-              <div>
-                {/* inn_number */}
-                <FormField
-                  control={form.control}
-                  name="inn_number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="inn_number"
-                        className="text-gray-700 dark:text-white font-medium"
-                      >
-                        {t("innNumber")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("enterInnNumber")}
-                          {...field}
-                          className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                /> */}
               </div>
 
               <div>
@@ -1056,6 +1051,7 @@ export default function CreateClients() {
                       <FormControl>
                         <ImageUpload
                           onChange={(files) => field.onChange(files)}
+                          multiple={true}
                         />
                       </FormControl>
                       <FormMessage />

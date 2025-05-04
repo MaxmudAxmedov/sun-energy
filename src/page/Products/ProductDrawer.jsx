@@ -1,10 +1,10 @@
 import { CustomDrawer } from "@/components/component/CustomDrawer";
 import { Button } from "@/components/ui/button";
-import { EyeIcon } from "@/assets/icons/eye-icon";
 import { EditIcon } from "@/assets/icons/edit-icon";
 import OptionalImg from "@/assets/imgs/optional-img.jpg";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { EyeIcon } from "@/assets/icons/eye-icon";
 export default function ProductDrawer({
   isSheetOpen,
   setIsSheetOpen,

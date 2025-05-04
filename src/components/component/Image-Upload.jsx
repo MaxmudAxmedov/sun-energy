@@ -9,7 +9,6 @@ export const ImageUpload = ({ maxImages = 5, onChange }) => {
   const fileInputRef = useRef(null);
   const { t } = useTranslation();
 
-
   const handleImageUpload = (e) => {
     const files = e.target.files;
     if (!files.length) return;
@@ -23,8 +22,7 @@ export const ImageUpload = ({ maxImages = 5, onChange }) => {
     });
 
     setImages([...images, ...newImages]);
-    // Pass the updated images to the parent via onChange
-    onChange([...images, ...newImages].map((img) => img.file));
+    onChange([...images, ...newImages].map((img) => img.file || img.photo));
   };
 
   const handleDeleteImage = (index) => {
@@ -32,7 +30,7 @@ export const ImageUpload = ({ maxImages = 5, onChange }) => {
     newImages[index];
     newImages.splice(index, 1);
     setImages(newImages);
-    onChange(newImages.map((img) => img.file));
+    onChange(newImages.map((img) => img.file || img.photo));
   };
 
   const openImageViewer = (imageUrl) => {
