@@ -50,19 +50,6 @@ export default function ProductCategory() {
       },
     },
     {
-      header: "updatedAt",
-      cell: ({ row }) => {
-        const updateDate = row?.original?.updated_at;
-        return (
-          <div>
-            {updateDate
-              ? dayjs(row?.original?.updated_at).format("DD/MM/YYYY")
-              : "-------------"}
-          </div>
-        );
-      },
-    },
-    {
       header: "actions",
       cell: ({ row }) => {
         console.log(row.original);

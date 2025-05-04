@@ -133,9 +133,11 @@ export default function EditEmployee() {
       });
     }
   }, [employee, form, positions]);
+  
 
   const selectedProvince = form.watch("region");
   const setValues = form.setValue;
+
 
   const handleDeleteImage = (index) => {
     const newImages = [...images];

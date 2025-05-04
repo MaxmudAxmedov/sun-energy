@@ -37,7 +37,7 @@ const productSchema = z.object({
   count_of_product: z.string().min(1, "countOfProductRequired"),
   category_id: z.string().min(1, "categoryRequired"),
   power_system: z.string().optional(),
-  show_on_landing: z.boolean().optional(),
+  show_on_landing: z.string().optional(),
   mark_up: z.string().optional(),
   watt: z.string().optional(),
   photo: z.custom(
@@ -141,7 +141,7 @@ export default function CreateProduct() {
     formData.append("category_id", data.category_id);
     formData.append("count_of_product", data.count_of_product);
     formData.append("photo", data.photo);
-    formData.append("show_on_landing", data.show_on_landing);
+    formData.append("show_on_landing", data.show_on_landing || false);
     formData.append("mark_up", Number(data.mark_up));
     formData.append("watt", data.watt || 0);
     formData.append("power_system", data.power_system || "");

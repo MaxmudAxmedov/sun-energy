@@ -12,6 +12,7 @@ import { Spinner } from "@/components/component/spinner";
 
 import OptionalImage from "@/assets/imgs/optional-img.jpg";
 import ProductDrawer from "./ProductDrawer";
+import { PriceFormater } from "@/components/component/Price-Formater";
 
 // const params = {
 //     search: "",
@@ -22,6 +23,7 @@ export default function Products() {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
   const { data, isLoading, isError } = useQuery({
     ...getProductsQuery({ limit: 100, search: searchTerm }),
     staleTime: Infinity,
@@ -71,7 +73,7 @@ export default function Products() {
             <img
               src={row?.original?.photo || OptionalImage}
               alt=""
-              className="w-[40px] h-[35px] rounded-md"
+              className="w-[80px] h-[55px] rounded-md"
             />
           </div>
         );
@@ -90,7 +92,7 @@ export default function Products() {
     {
       header: "price",
       cell: ({ row }) => {
-        return <div>{row.original.price}</div>;
+        return <PriceFormater price={row.original.price} />;
       },
     },
     {
@@ -103,19 +105,6 @@ export default function Products() {
       header: "createdAt",
       cell: ({ row }) => {
         return <div>{dayjs(row.original.created_at).format("DD/MM/YYYY")}</div>;
-      },
-    },
-    {
-      header: "updatedAt",
-      cell: ({ row }) => {
-        const updateDate = row?.original?.updated_at;
-        return (
-          <div>
-            {updateDate
-              ? dayjs(row?.original?.updated_at).format("DD/MM/YYYY")
-              : "-------------"}
-          </div>
-        );
       },
     },
     {
@@ -141,14 +130,6 @@ export default function Products() {
       },
     },
   ];
-
-  // if (isLoading) {
-  //     return <MainScletot />;
-  // }
-
-  // if (isError) {
-  //     return <FetchingError />;
-  // }
 
   return (
     <div>

@@ -10,9 +10,10 @@ export const TimerButtun = ({
   endpoint,
   mutateQueryKey,
   deleteToastMessage,
+  openSet,
 }) => {
   console.log(rowId);
-  const [timer, setTimer] = useState(5);
+  const [timer, setTimer] = useState(3);
   const [isButtunEnabled, setIsButtunEnabled] = useState(false);
   const { t } = useTranslation();
 
@@ -31,12 +32,13 @@ export const TimerButtun = ({
     if (isButtunEnabled) {
       handleDeleteEmployee(rowId);
       onOpen(false);
+      openSet(false);
     }
   };
 
   useEffect(() => {
     if (open) {
-      setTimer(5);
+      setTimer(3);
       setIsButtunEnabled(false);
     }
   }, [open]);
