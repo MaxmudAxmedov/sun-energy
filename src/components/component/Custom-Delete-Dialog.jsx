@@ -17,6 +17,7 @@ export const CustomDeleteDialog = ({
   endpoint,
   mutateQueryKey,
   deleteToastMessage,
+  setIsOpen,
 }) => {
   const [open, setOpne] = useState(false);
   const { t } = useTranslation();
@@ -30,7 +31,7 @@ export const CustomDeleteDialog = ({
   return (
     <div>
       <Dialog open={open} onOpenChange={handelOpenChange}>
-        <DialogTrigger className="hover:scale-110 bg-red-600 transition-all duration-150 py-[7px] px-2 rounded-[25px]">
+        <DialogTrigger className="bg-red-400 hover:bg-red-500 transition-all duration-150 py-[7px] px-2 rounded-[25px]">
           <DeleteIcon />
         </DialogTrigger>
         <DialogContent className="max-w-[350px] p-3 pt-0">
@@ -54,6 +55,7 @@ export const CustomDeleteDialog = ({
                 onOpen={setOpne}
                 open={open}
                 deleteToastMessage={deleteToastMessage}
+                openSet={setIsOpen}
               />
             </DialogDescription>
           </DialogHeader>

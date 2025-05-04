@@ -117,7 +117,6 @@ export default function CreateEmployee() {
   const setValues = form.setValue;
 
   const onSubmit = (data) => {
-    console.log("Form Data:", data);
     const formData = new FormData();
 
     formData.append("first_name", data.first_name);
@@ -384,7 +383,7 @@ export default function CreateEmployee() {
                   </FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <FormControl >
+                      <FormControl>
                         <Button
                           variant="outline"
                           role="combobox"
