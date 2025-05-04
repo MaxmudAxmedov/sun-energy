@@ -205,11 +205,11 @@ export default function CreateEmployee() {
                     htmlFor="patronymic"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("lastName")}*
+                    {t("patronymic")}*
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t("enterLastName")}
+                      placeholder={t("enterPatronymic")}
                       {...field}
                       className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                     />

@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 import { PriceFormater } from "@/components/component/Price-Formater";
 import { NumberFormatter } from "@/components/component/Number-Formatter";
+import { Download } from "lucide-react";
 export default function EmployeDrawer({
   isSheetOpen,
   setIsSheetOpen,
@@ -120,7 +121,7 @@ export default function EmployeDrawer({
             </div>
           </div>
 
-          <Table className="bg-white">
+          <Table className="bg-white dark:bg-darkPrimaryColor rounded-md">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[5%]">#</TableHead>
@@ -152,7 +153,7 @@ export default function EmployeDrawer({
                       </TableCell>
                       <TableCell className="float-right">
                         <a target="blank" href={item?.contract}>
-                          <img src={DownloadIcon} width={20} alt="" />
+                          <Download width={20} height={20}/>
                         </a>
                       </TableCell>
                     </TableRow>

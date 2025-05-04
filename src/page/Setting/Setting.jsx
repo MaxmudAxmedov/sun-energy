@@ -30,10 +30,19 @@ import { useNavigate } from "react-router-dom";
 import { DataTable } from "@/components/component/Dynamic-Table";
 import { MainScletot } from "@/components/component/main-scletot";
 import { FetchingError } from "@/components/component/FetchingError";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function Setting() {
   const { i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
+  const [open, setOpne] = React.useState(false);
   const { t } = useTranslation();
   const { mutate } = useMutateData();
   let percentMain = localStorage.getItem("percent") || 0;
@@ -126,6 +135,13 @@ export default function Setting() {
       },
     },
   ];
+
+  const handelOpenChange = (newOpen) => {
+    if (!newOpen) {
+      return;
+    }
+    setOpne(newOpen);
+  };
 
   const submitData = (data) => {
     const percentNummeric = parseFloat(data?.percent?.replace(",", "."));
@@ -245,9 +261,42 @@ export default function Setting() {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="mt-4">
+                  <Dialog open={open} onOpenChange={handelOpenChange}>
+                    <DialogTrigger className=" bg-white text-black hover:bg-gray-100 dark:bg-gray-200 hover:dark:bg-gray-300 transition-all duration-150 py-[6px] px-2 rounded-md">
+                      {t("submit")}
+                    </DialogTrigger>
+                    <DialogContent className="max-w-[350px] p-3 pt-0">
+                      <DialogHeader>
+                        <DialogTitle className="text-center">
+                          <p className="font-extrabold text-[40px]">!</p>
+                          <p className="leading-5 text-[18px]">{t("sureChangeCashback")}</p>
+                        </DialogTitle>
+                        <DialogDescription className="flex justify-center pt-2 items-center gap-2">
+                          <Button
+                            onClick={() => setOpne(false)}
+                            variant="default"
+                            className=" pb-2 pt-[6px] px-2 rounded-[5px]"
+                          >
+                            {t("cencel")}
+                          </Button>
+                          <Button
+                            type="submit"
+                            variant="destructive"
+                            className="pb-2 pt-[6px] px-2 rounded-[5px]"
+                            onClick={() => {
+                              setOpne(false);
+                              form.handleSubmit(submitData)();
+                            }}
+                          >
+                            {t("agree")}
+                          </Button>
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                  {/* <Button type="submit" className="mt-4">
                     {t("submit")}
-                  </Button>
+                  </Button> */}
                 </div>
               </form>
             </Form>

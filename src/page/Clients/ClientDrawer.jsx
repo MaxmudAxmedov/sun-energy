@@ -16,6 +16,7 @@ import DownloadIcon from "@/assets/imgs/download.png";
 import { useNavigate } from "react-router-dom";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 import { NumberFormatter } from "@/components/component/Number-Formatter";
+import { Download } from "lucide-react";
 export default function ClientDrawer({
   isSheetOpen,
   setIsSheetOpen,
@@ -134,7 +135,7 @@ export default function ClientDrawer({
               </div>
             </div>
 
-            <Table className="dark:bg-[#6d6d6d] rounded-md">
+            <Table className="dark:bg-darkPrimaryColor rounded-md">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[5%]">#</TableHead>
@@ -171,7 +172,7 @@ export default function ClientDrawer({
                         </TableCell>
                         <TableCell className="float-right">
                           <a target="blank" href={item?.contract}>
-                            <img src={DownloadIcon} width={20} alt="" />
+                            <Download width={20} height={20} />
                           </a>
                         </TableCell>
                       </TableRow>

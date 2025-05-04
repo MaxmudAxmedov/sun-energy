@@ -22,6 +22,8 @@ export default function Clients() {
     getQueryKey: "/clients",
   });
 
+  console.log(data?.Data?.clients);
+
   const infoClick = (row) => () => {
     setSelectedRowData(row);
     setIsSheetOpen(true);

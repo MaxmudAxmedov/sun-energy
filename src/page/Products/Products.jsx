@@ -69,12 +69,17 @@ export default function Products() {
       header: "image",
       cell: ({ row }) => {
         return (
-          <div>
+          <div className="relative">
             <img
               src={row?.original?.photo || OptionalImage}
               alt=""
               className="w-[80px] h-[55px] rounded-md"
             />
+            {row.original.watt !== 0 && (
+              <span className="absolute -top-2.5 -left-3 bg-primaryColor text-white text-[10px] py-[2px] px-1.5 rounded-md">
+                {row.original.watt} W
+              </span>
+            )}
           </div>
         );
       },
@@ -93,6 +98,12 @@ export default function Products() {
       header: "price",
       cell: ({ row }) => {
         return <PriceFormater price={row.original.price} />;
+      },
+    },
+    {
+      header: "sellingPrice",
+      cell: ({ row }) => {
+        return <PriceFormater price={row.original.selling_price} />;
       },
     },
     {
