@@ -30,6 +30,8 @@ export default function Products() {
     cacheTime: 0,
   });
 
+  console.log("data", data?.data?.Data?.products);
+
   {
     isLoading && <MainScletot />;
   }

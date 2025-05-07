@@ -28,7 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 
 const productSchema = z.object({
   name: z.string().min(1, "productRequired"),
@@ -37,7 +36,6 @@ const productSchema = z.object({
   count_of_product: z.string().min(1, "countOfProductRequired"),
   category_id: z.string().min(1, "categoryRequired"),
   power_system: z.string().optional(),
-  show_on_landing: z.string().optional(),
   mark_up: z.string().optional(),
   watt: z.string().optional(),
   photo: z.custom(
@@ -100,7 +98,6 @@ export default function CreateProduct() {
   const { mutate, isLoading: mutateLoading } = useMutateData();
 
   const form = useForm({
-    resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
       description: "",
@@ -108,7 +105,6 @@ export default function CreateProduct() {
       category_id: "",
       count_of_product: "",
       photo: "",
-      show_on_landing: "",
       mark_up: "",
       watt: "",
       power_system: "",
@@ -124,7 +120,6 @@ export default function CreateProduct() {
         count_of_product: String(productDataById.count_of_product) || "",
         category_id: productDataById.category_id || "",
         photo: productDataById?.photo,
-        show_on_landing: productDataById?.show_on_landing || false,
         mark_up: productDataById.mark_up || "",
         watt: String(productDataById.watt) || 0,
         power_system: productDataById.power_system || "",
@@ -141,7 +136,7 @@ export default function CreateProduct() {
     formData.append("category_id", data.category_id);
     formData.append("count_of_product", data.count_of_product);
     formData.append("photo", data.photo);
-    formData.append("show_on_landing", data.show_on_landing || false);
+    formData.append("show_on_landing", true);
     formData.append("mark_up", Number(data.mark_up));
     formData.append("watt", data.watt || 0);
     formData.append("power_system", data.power_system || "");
@@ -165,7 +160,7 @@ export default function CreateProduct() {
   }
 
   return (
-    <div className="max-w-[980px] tablet:p-6 pt-2">
+    <div className="max-w-[980px] h-screen tablet:p-6 pt-2">
       <h1 className="text-2xl font-bold mb-6">
         {" "}
         {id ? "Edit Product" : t("createProduct")}
@@ -382,8 +377,9 @@ export default function CreateProduct() {
                 </FormItem>
               )}
             />
-
             {/* show_on_landing */}
+            {/*
+          
             <FormField
               control={form.control}
               name="show_on_landing"
@@ -407,10 +403,7 @@ export default function CreateProduct() {
                 </FormItem>
               )}
             />
-          </div>
-
-          <div>
-            {/* mark_up */}
+              {/* mark_up */}
             <FormField
               control={form.control}
               name="mark_up"
