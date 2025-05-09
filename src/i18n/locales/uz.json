@@ -76,6 +76,8 @@
   "enterPercentForEmployee": "Xodimlarga foizni kiriting",
   "legalClients": "Yuridik shaxslar uchun",
   "enterCompanyName": "Kompaniya nomini kiriting",
+  "enterSellingPrice": "Sotish narxini kiriting",
+  "sellingPriceRequired": "Sotish narxi majburiy",
   "companyNameRequired": "Kompaniya nomi majburiy",
   "isCompanyRequired": "Kompaniya majburiy",
   "enterPercent": "Foizni kiriting",

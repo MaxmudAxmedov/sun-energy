@@ -15,14 +15,36 @@ export default function Clients() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const limit = 1000;
   const [searchTerm, setSearchTerm] = useState("");
-  const { data } = useGetData({
-    endpoint: "/clients",
+
+  const { data: clientCustomer } = useGetData({
+    endpoint: "/client-customers",
     enabled: true,
     params: { limit, search: searchTerm },
     getQueryKey: "/clients",
   });
 
-  console.log(data?.Data?.clients);
+  // const { data: clientBusiness } = useGetData({
+  //   endpoint: "/client-businesses",
+  //   enabled: true,
+  //   params: { limit, search: searchTerm },
+  //   getQueryKey: "/clients",
+  // });
+
+  // const clientCheck = clientCustomer?.Data?.customers?.map((item) => {
+  //   return {
+  //     ...item,
+  //     type: "customer",
+  //   };
+  // });
+
+  // console.log(clientCheck);
+  // const clientBusinessCheck = clientBusiness?.Data?.businesses?.map((item) => {
+  //   return {
+  //     ...item,
+  //     type: "business",
+  //   };
+  // });
+  // console.log(clientBusinessCheck);
 
   const infoClick = (row) => () => {
     setSelectedRowData(row);
@@ -51,8 +73,20 @@ export default function Clients() {
       },
     },
     {
-      accessorKey: "full_name",
-      header: "fullName",
+      accessorKey: "first_name",
+      header: "name",
+    },
+    {
+      accessorKey: "last_name",
+      header: "lastName",
+    },
+    {
+      accessorKey: "region",
+      header: "region",
+    },
+    {
+      accessorKey: "district",
+      header: "district",
     },
     {
       header: "phoneNumber",
@@ -86,20 +120,6 @@ export default function Clients() {
     },
   ];
 
-  // if (isLoading)
-  //     return (
-  //         <div>
-  //             <MainScletot />
-  //         </div>
-  //     );
-
-  // if (isError)
-  //     return (
-  //         <div>
-  //             <FetchingError />
-  //         </div>
-  //     );
-
   return (
     <div>
       <DynamicHeader
@@ -112,17 +132,11 @@ export default function Clients() {
       />
 
       <div className="mt-6">
-        <DataTable data={data?.Data?.clients || []} columns={column} />
+        <DataTable
+          data={clientCustomer?.Data?.customers || []}
+          columns={column}
+        />
       </div>
-
-      {/* <div className="mt-3">
-                <DynamicPagination
-                    data={data}
-                    setPage={setPage}
-                    limit={limit}
-                    page={page}
-                />
-            </div> */}
     </div>
   );
 }
