@@ -38,6 +38,7 @@ const productSchema = z.object({
   power_system: z.string().optional(),
   mark_up: z.string().optional(),
   watt: z.string().optional(),
+  // selling_price: z.string().min(1, "sellingPriceRequired"),
   photo: z.custom(
     (value) => {
       if (!value) return false;
@@ -93,17 +94,17 @@ export default function CreateProduct() {
     getQueryKey: "products",
   });
 
-  console.log(productDataById);
-
   const { mutate, isLoading: mutateLoading } = useMutateData();
 
   const form = useForm({
+    resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
       description: "",
       price: "",
       category_id: "",
       count_of_product: "",
+      selling_price: "",
       photo: "",
       mark_up: "",
       watt: "",
@@ -123,12 +124,12 @@ export default function CreateProduct() {
         mark_up: productDataById.mark_up || "",
         watt: String(productDataById.watt) || 0,
         power_system: productDataById.power_system || "",
+        selling_price: String(productDataById.selling_price) || "",
       });
     }
   }, [productDataById, id, form]);
 
   const onSubmit = (data) => {
-    console.log(data);
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
@@ -140,6 +141,10 @@ export default function CreateProduct() {
     formData.append("mark_up", Number(data.mark_up));
     formData.append("watt", data.watt || 0);
     formData.append("power_system", data.power_system || "");
+    formData.append(
+      "selling_price",
+      Number((data.price * data.mark_up) / 100) + Number(data.price) || 0
+    );
 
     mutate({
       endpoint: id ? `/product/${id}/images` : "/product-images",
@@ -243,24 +248,49 @@ export default function CreateProduct() {
           </div>
 
           <div className="flex items-center flex-wrap gap-x-3">
-            {/* Product Description */}
-            <FormField
+            {/* Selling Price */}
+            {/* <FormField
               control={form.control}
-              name="description"
+              name="selling_price"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="description"
+                    htmlFor="selling_price"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("description")}*
+                    {t("sellingPrice")}*
                   </FormLabel>
                   <FormControl>
-                    <Textarea
+                    <Input
                       type="text"
-                      placeholder={t("enterDescription")}
+                      placeholder={t("enterSellingPrice")}
                       {...field}
-                      className="bigTablet:w-[611px] w-[300px] tablet:w-[450px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                      className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            /> */}
+
+            {/* mark_up */}
+            <FormField
+              control={form.control}
+              name="mark_up"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    htmlFor="mark_up"
+                    className="text-gray-700 dark:text-white font-medium"
+                  >
+                    {t("markUp")}*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder={t("enterMarkUp")}
+                      {...field}
+                      className="w-[300px] tablet:w-[450px] bigTablet:w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -306,8 +336,6 @@ export default function CreateProduct() {
                 </FormItem>
               )}
             />
-          </div>
-          <div className="flex items-end space-y-4 flex-wrap gap-x-3">
             {/* Watt */}
             <FormField
               control={form.control}
@@ -331,6 +359,9 @@ export default function CreateProduct() {
                 </FormItem>
               )}
             />
+          </div>
+
+          <div className="flex items-start flex-wrap gap-x-3">
             <FormField
               control={form.control}
               name="category_id"
@@ -377,50 +408,25 @@ export default function CreateProduct() {
                 </FormItem>
               )}
             />
-            {/* show_on_landing */}
-            {/*
-          
+
+            {/* Product Description */}
             <FormField
               control={form.control}
-              name="show_on_landing"
-              render={({ field }) => (
-                <FormItem className="ml-4 pb-1">
-                  <FormLabel
-                    htmlFor="show_on_landing"
-                    className="text-gray-700 dark:text-white font-medium"
-                  >
-                    {t("show_on_landing")}
-                  </FormLabel>
-                  <FormControl>
-                    <Switch
-                      className="block"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                      id="show_on_landing"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-              {/* mark_up */}
-            <FormField
-              control={form.control}
-              name="mark_up"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel
-                    htmlFor="mark_up"
+                    htmlFor="description"
                     className="text-gray-700 dark:text-white font-medium"
                   >
-                    {t("markUp")}*
+                    {t("description")}*
                   </FormLabel>
                   <FormControl>
-                    <Input
+                    <Textarea
                       type="text"
-                      placeholder={t("enterMarkUp")}
+                      placeholder={t("enterDescription")}
                       {...field}
-                      className="w-[300px] tablet:w-[450px] bigTablet:w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                      className="bigTablet:w-[611px] w-[300px] tablet:w-[450px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                     />
                   </FormControl>
                   <FormMessage />

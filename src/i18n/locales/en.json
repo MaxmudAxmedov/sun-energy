@@ -51,6 +51,8 @@
   "sureChangeCashback": "This change will affect all employees' cashback. Do you want to change it ?",
   "leader": "Leader",
   "editProductCategory": "Edit Product Category",
+  "enterSellingPrice": "Enter selling price",
+  "sellingPriceRequired": "Selling price is required",
   "loginRequired": "Login is required",
   "passwordRequired": "Password is required",
   "whoRequired": "Who is required",
