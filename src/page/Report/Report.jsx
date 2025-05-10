@@ -7,8 +7,11 @@ import ReCharts from "./ReCharts";
 import DateRangePicker from "@/components/component/DateRangePicker";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 const initialParams = {
-    product_name: "",
-    client_name: "",
+    client_id: "",
+    employee_id: "",
+    from_date: "",
+    to_date: "",
+    is_company: true,
     page: "1",
     limit: "10",
 };
