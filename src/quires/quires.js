@@ -1,3 +1,4 @@
+import { getCategorys } from "@/service/category";
 import { getClientsBusiness, getClientsCustomers } from "@/service/client";
 import { getProducts } from "@/service/product";
 import { getReports } from "@/service/report";
@@ -21,9 +22,17 @@ export function getClientsBusinessQuery(params) {
         queryFn: async () => getClientsBusiness(params),
     };
 }
+
 export function getClientsCustomersQuery(params) {
     return {
         queryKey: ["client-customers", params],
         queryFn: async () => getClientsCustomers(params),
+    };
+}
+
+export function getCategorysQuery(params) {
+    return {
+        queryKey: ["categorys", params],
+        queryFn: async () => getCategorys(params),
     };
 }

@@ -21,27 +21,23 @@ export default function Clients() {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const limit = 1000;
     const [searchTerm, setSearchTerm] = useState("");
-
-    // const { data: clientCustomer } = useGetData({
-    //     endpoint: "/client-customers",
-    //     enabled: true,
-    //     params: { limit, search: searchTerm },
-    //     getQueryKey: "/clients",
-    // });
-
+    const [activeTab, setActiveTab] = useState("customers");
     const { data: clientCustomer } = useQuery({
-        ...getClientsCustomersQuery({ limit: "10", page: "1", search: "" }),
+        ...getClientsCustomersQuery({
+            limit: "1000",
+            page: "1",
+            search: searchTerm,
+        }),
+        enabled: activeTab === "customers",
     });
     const { data: clientBusiness } = useQuery({
-        ...getClientsBusinessQuery({ limit: "10", page: "1", search: "" }),
+        ...getClientsBusinessQuery({
+            limit: "1000",
+            page: "1",
+            search: searchTerm,
+        }),
+        enabled: activeTab === "businesses",
     });
-
-    // const { data: clientBusiness } = useGetData({
-    //   endpoint: "/client-businesses",
-    //   enabled: true,
-    //   params: { limit, search: searchTerm },
-    //   getQueryKey: "/clients",
-    // });
 
     // const clientCheck = clientCustomer?.Data?.customers?.map((item) => {
     //   return {
@@ -136,6 +132,78 @@ export default function Clients() {
             },
         },
     ];
+    const business = [
+        {
+            header: "No",
+            cell: ({ row }) => {
+                return <div>{row.index + 1}</div>;
+            },
+        },
+        {
+            header: "image",
+            cell: ({ row }) => {
+                return (
+                    <div>
+                        <img
+                            src={row?.original?.file || OptionImg}
+                            alt=""
+                            className="w-[80px] h-[55px] rounded-md object-cover"
+                        />
+                    </div>
+                );
+            },
+        },
+        {
+            accessorKey: "company_name",
+            header: "Kompaniya",
+        },
+        {
+            accessorKey: "full_name",
+            header: "Direktor",
+        },
+        {
+            accessorKey: "region",
+            header: "region",
+        },
+        {
+            accessorKey: "district",
+            header: "district",
+        },
+        {
+            header: "phoneNumber",
+            cell: ({ row }) => {
+                return <NumberFormatter phone={row.original.phone} />;
+            },
+        },
+        {
+            header: "createdAt",
+            cell: ({ row }) => {
+                return (
+                    <div>
+                        {dayjs(row.original.created_at).format("DD/MM/YYYY")}
+                    </div>
+                );
+            },
+        },
+
+        {
+            header: "actions",
+            cell: ({ row }) => {
+                // console.log(row.original.id);
+                return (
+                    <div className="flex gap-3">
+                        <ClientDrawer
+                            isSheetOpen={isSheetOpen}
+                            setIsSheetOpen={setIsSheetOpen}
+                            row={row}
+                            selectedRowData={selectedRowData}
+                            infoClick={infoClick}
+                        />
+                    </div>
+                );
+            },
+        },
+    ];
 
     return (
         <div>
@@ -147,12 +215,16 @@ export default function Clients() {
                 onSearch={(value) => setSearchTerm(value)}
                 isInput={true}
             />
-            <Tabs defaultValue="customers" className="w-full mt-6">
+            <Tabs
+                defaultValue="customers"
+                value={activeTab}
+                onValueChange={(val) => setActiveTab(val)}
+                className="w-full mt-6"
+            >
                 <TabsList>
                     <TabsTrigger value="customers">Jismoniy shaxs</TabsTrigger>
                     <TabsTrigger value="businesses">Yuridik shaxs</TabsTrigger>
                 </TabsList>
-                {/* shu table larni ikki xil dataga moslashtirish kerak, keyin drawerni ham tekshirish kerak */}
                 <TabsContent value="customers">
                     <DataTable
                         data={clientCustomer?.data?.Data?.customers || []}
@@ -163,7 +235,7 @@ export default function Clients() {
                 <TabsContent value="businesses">
                     <DataTable
                         data={clientBusiness?.data?.Data?.businesses || []}
-                        columns={column}
+                        columns={business}
                     />
                 </TabsContent>
             </Tabs>
