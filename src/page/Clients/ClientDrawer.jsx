@@ -17,6 +17,18 @@ import { useNavigate } from "react-router-dom";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 import { NumberFormatter } from "@/components/component/Number-Formatter";
 import { Download } from "lucide-react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getTradesQuery } from "@/quires/quires";
+const initialParams = {
+    client_id: "",
+    employee_id: "",
+    from_date: "",
+    to_date: "",
+    is_company: true,
+    page: "1",
+    limit: "10",
+};
 export default function ClientDrawer({
     isSheetOpen,
     setIsSheetOpen,
@@ -25,14 +37,9 @@ export default function ClientDrawer({
     infoClick,
 }) {
     const navigate = useNavigate();
-    const { data } = useGetData({
-        endpoint: "/trades",
-        getQueryKey: "/trades",
-        params: {
-            limit: "10",
-            page: "1",
-            client_id: selectedRowData?.id,
-        },
+    const [params, setParams] = useState(initialParams);
+    const { data, isLoading, isError } = useQuery({
+        ...getTradesQuery(params),
     });
 
     return (
@@ -129,12 +136,12 @@ export default function ClientDrawer({
                         {selectedRowData?.street}
                     </div>
                 </div>
-                {data?.Data?.count > 0 ? (
+                {data?.data?.Data?.count > 0 ? (
                     <>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
                             <div className="p-5 border rounded-md flex justify-between">
                                 <p>
-                                    {data?.Data?.client_products?.reduce(
+                                    {data?.data?.Data?.client_products?.reduce(
                                         (sum, item) => {
                                             return sum + (item.kv || 0);
                                         },

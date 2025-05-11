@@ -7,13 +7,8 @@ import ReCharts from "./ReCharts";
 import DateRangePicker from "@/components/component/DateRangePicker";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 const initialParams = {
-    client_id: "",
-    employee_id: "",
-    from_date: "",
-    to_date: "",
-    is_company: true,
-    page: "1",
-    limit: "10",
+    from_date: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    to_date: new Date(),
 };
 export default function Report() {
     const [params, setParams] = useState(initialParams);
@@ -78,27 +73,27 @@ export default function Report() {
                 <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">Kvt</CardTitle>
                     <CardContent className="text-[22px]">
-                        {item?.total_kv}
+                        {item?.total_kv || 0}
                     </CardContent>
                 </Card>
                 <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">Foyda</CardTitle>
                     <CardContent className="text-[22px]">
-                        {item?.profit.toLocaleString()}{" "}
+                        {item?.profit?.toLocaleString() || 0}{" "}
                         <smal className="text-[16px]">sum</smal>
                     </CardContent>
                 </Card>
                 <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">Tan narx bo'yicha</CardTitle>
                     <CardContent className="text-[22px]">
-                        {item?.total_cost.toLocaleString()}{" "}
+                        {item?.total_cost?.toLocaleString() || 0}{" "}
                         <smal className="text-[16px]">sum</smal>
                     </CardContent>
                 </Card>
                 <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">Umumiy summa</CardTitle>
                     <CardContent className="text-[22px]">
-                        {item?.total_selling.toLocaleString()}{" "}
+                        {item?.total_selling?.toLocaleString() || 0}{" "}
                         <smal className="text-[16px]">sum</smal>
                     </CardContent>
                 </Card>
