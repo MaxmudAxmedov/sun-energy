@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -27,6 +27,11 @@ import { Spinner } from "@/components/component/spinner";
 import { NavLink, useParams } from "react-router-dom";
 import { Switch } from "@/components/ui/switch";
 import ContractTable from "./ContractTable";
+import { useQuery } from "@tanstack/react-query";
+import {
+    getClientsBusinessQuery,
+    getClientsCustomersQuery,
+} from "@/quires/quires";
 
 const isValidUUID = (uuid) => {
     const uuidRegex =
@@ -76,11 +81,32 @@ export default function CreatrContract() {
         price: 0,
     });
 
-    const { data: clientsData } = useGetData({
-        endpoint: "/clients",
-        enabled: true,
-        getQueryKey: "/clients",
+    // const { data: clientsData } = useGetData({
+    //     endpoint: "/clients",
+    //     enabled: true,
+    //     getQueryKey: "/clients",
+    // });
+    const { data: clientCustomer } = useQuery({
+        ...getClientsCustomersQuery({
+            limit: "1000",
+            page: "1",
+            search: "",
+        }),
     });
+
+    const { data: clientBusiness } = useQuery({
+        ...getClientsBusinessQuery({
+            limit: "1000",
+            page: "1",
+            search: "",
+        }),
+    });
+    const clientsData = useMemo(() => {
+        const customers = clientCustomer?.data?.Data?.customers || [];
+        const businesses = clientBusiness?.data?.Data?.businesses || [];
+        return [...customers, ...businesses];
+    }, [clientCustomer, clientBusiness]);
+    console.log(clientsData);
     const { data: employeeData } = useGetData({
         endpoint: "/employees",
         enabled: true,
@@ -208,13 +234,12 @@ export default function CreatrContract() {
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         <SelectGroup>
-                                                            {clientsData?.Data
-                                                                ?.clients
-                                                                ?.length === 0
+                                                            {clientsData?.length ===
+                                                            0
                                                                 ? t(
                                                                       "datasNotFound"
                                                                   )
-                                                                : clientsData?.Data?.clients?.map(
+                                                                : clientsData?.map(
                                                                       (
                                                                           item
                                                                       ) => (
