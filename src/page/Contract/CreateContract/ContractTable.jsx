@@ -4,12 +4,10 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useGetData } from "@/hook/useApi";
 import { getProductsQuery } from "@/quires/quires";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState, useEffect } from "react";
@@ -207,20 +205,6 @@ export default function ContractTable({ setProducts }) {
                         );
                     })}
                 </TableBody>
-                {/* <TableFooter className='fixed w-[1170px]'>
-                    <TableRow>
-                        <TableCell
-                            colSpan={6}
-                            className="text-end font-semibold"
-                        >
-                            Umumiy summa:
-                        </TableCell>
-                        <TableCell className="font-semibold">
-                            {totalPrice.toLocaleString()} so'm
-                        </TableCell>
-                        <TableCell></TableCell>
-                    </TableRow>
-                </TableFooter> */}
             </Table>
         </div>
     );

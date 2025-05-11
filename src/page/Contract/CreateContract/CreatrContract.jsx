@@ -148,6 +148,7 @@ export default function CreatrContract() {
             service_cost: Number(data.service_cost),
             total_price: totalItem.price,
             kvat: Number(data.kvat),
+            is_company: true,
         };
         mutate({
             endpoint: "/trade",
@@ -253,9 +254,8 @@ export default function CreatrContract() {
                                                                                       item.id
                                                                                   }
                                                                               >
-                                                                                  {
-                                                                                      item?.full_name
-                                                                                  }
+                                                                                  {item?.full_name ||
+                                                                                      item?.first_name}
                                                                               </SelectItem>
                                                                           </SelectGroup>
                                                                       )

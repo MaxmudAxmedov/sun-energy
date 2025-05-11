@@ -10,6 +10,17 @@ import { DynamicDrawer } from "@/components/component/dynamic-drawer";
 import { EyeIcon } from "@/assets/icons/eye-icon";
 import { PriceFormater } from "@/components/component/Price-Formater";
 import ContractTable from "./CreateContract/ContractTable";
+import { getTradesQuery } from "@/quires/quires";
+import { useQuery } from "@tanstack/react-query";
+const initialParams = {
+    client_id: "",
+    employee_id: "",
+    from_date: "",
+    to_date: "",
+    is_company: true,
+    page: "1",
+    limit: "10",
+};
 export default function Contract() {
     const [page, setPage] = useState(1);
     //   const [search, setSearch] = useState("");
@@ -17,15 +28,11 @@ export default function Contract() {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const limit = 1000;
     const [searchTerm, setSearchTerm] = useState("");
-    const { data, isLoading, isError } = useGetData({
-        endpoint: "/trades",
-        getQueryKey: "/trades",
-        params: {
-            limit,
-            // search: searchTerm,
-        },
-    });
+    const [params, setParams] = useState(initialParams);
 
+    const { data, isLoading, isError } = useQuery({
+        ...getTradesQuery(params),
+    });
     const column = [
         {
             header: "No",
@@ -93,7 +100,7 @@ export default function Contract() {
             />
             <div>
                 <DataTable
-                    data={data?.Data?.client_products || []}
+                    data={data?.data?.Data?.client_products || []}
                     columns={column}
                 />
             </div>

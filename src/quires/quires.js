@@ -1,12 +1,24 @@
 import { getCategorys } from "@/service/category";
 import { getClientsBusiness, getClientsCustomers } from "@/service/client";
 import { getProducts } from "@/service/product";
-import { getReports } from "@/service/report";
+import { getReports, getTrade, getTrades } from "@/service/report";
 
 export function getProductsQuery(params) {
     return {
         queryKey: ["/product", params.search],
         queryFn: async () => getProducts(params),
+    };
+}
+export function getTradesQuery(params) {
+    return {
+        queryKey: ["trades", params],
+        queryFn: async () => getTrades(params),
+    };
+}
+export function getTradeQuery(params) {
+    return {
+        queryKey: ["trade", params],
+        queryFn: async () => getTrade(params),
     };
 }
 export function getReportsQuery(params) {
