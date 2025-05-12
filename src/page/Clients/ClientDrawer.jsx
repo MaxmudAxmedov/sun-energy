@@ -38,7 +38,7 @@ export default function ClientDrawer({
 }) {
     const navigate = useNavigate();
     const [params, setParams] = useState(initialParams);
-    const { data, isLoading, isError } = useQuery({
+    const { data } = useQuery({
         ...getTradesQuery(params),
     });
 

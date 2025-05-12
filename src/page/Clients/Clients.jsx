@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
 import { DataTable } from "@/components/component/Dynamic-Table";
-import { useGetData } from "@/hook/useApi";
 import dayjs from "dayjs";
 
 import OptionImg from "@/assets/imgs/optional-img.jpg";
@@ -19,7 +18,6 @@ export default function Clients() {
     // const [page, setPage] = useState(1);
     const [selectedRowData, setSelectedRowData] = useState(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
-    const limit = 1000;
     const [searchTerm, setSearchTerm] = useState("");
     const [activeTab, setActiveTab] = useState("customers");
     const { data: clientCustomer } = useQuery({
