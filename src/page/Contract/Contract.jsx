@@ -12,12 +12,13 @@ import { PriceFormater } from "@/components/component/Price-Formater";
 import ContractTable from "./CreateContract/ContractTable";
 import { getTradesQuery } from "@/quires/quires";
 import { useQuery } from "@tanstack/react-query";
+import { Switch } from "@/components/ui/switch";
 const initialParams = {
     client_id: "",
     employee_id: "",
     from_date: "",
     to_date: "",
-    is_company: true,
+    is_company: false,
     page: "1",
     limit: "10",
 };
@@ -42,7 +43,7 @@ export default function Contract() {
         },
         {
             accessorKey: "client_name",
-            header: "fullName",
+            header: `${params.is_company ? "Direktor" : "fullName"} `,
         },
         {
             header: "totalPrice",
@@ -99,6 +100,18 @@ export default function Contract() {
                 // isInput={true}
             />
             <div>
+                <div className="mt-4">
+                    <Switch
+                        checked={params.is_company}
+                        onCheckedChange={(value) =>
+                            setParams((prev) => ({
+                                ...prev,
+                                is_company: value,
+                            }))
+                        }
+                        id="airplane-mode"
+                    />
+                </div>
                 <DataTable
                     data={data?.data?.Data?.client_products || []}
                     columns={column}

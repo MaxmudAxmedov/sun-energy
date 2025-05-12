@@ -49,7 +49,7 @@ const formSchema = z.object({
     accessory_cost: z.string().min(1, {
         message: "Accessory cost",
     }),
-    dont_calculate: z.boolean().default(false).optional(),
+    do_calculate: z.boolean().default(false).optional(),
     service_cost: z.string().min(1, {
         message: "Service cost",
     }),
@@ -102,10 +102,19 @@ export default function CreatrContract() {
         }),
     });
     const clientsData = useMemo(() => {
-        const customers = clientCustomer?.data?.Data?.customers || [];
-        const businesses = clientBusiness?.data?.Data?.businesses || [];
+        const customers =
+            clientCustomer?.data?.Data?.customers?.map((item) => ({
+                ...item,
+                type: "customer",
+            })) || [];
+        const businesses =
+            clientBusiness?.data?.Data?.businesses?.map((item) => ({
+                ...item,
+                type: "business",
+            })) || [];
         return [...customers, ...businesses];
     }, [clientCustomer, clientBusiness]);
+
     console.log(clientsData);
     const { data: employeeData } = useGetData({
         endpoint: "/employees",
@@ -120,7 +129,7 @@ export default function CreatrContract() {
             referred_by: "",
             kvat: 0,
             accessory_cost: 0,
-            dont_calculate: false,
+            do_calculate: false,
             service_cost: 0,
             total_price: 0,
         },
@@ -139,6 +148,18 @@ export default function CreatrContract() {
         }
     }, [kvat, setValue]);
 
+    const isCompany = useMemo(() => {
+        if (params.id) {
+            const selected = clientsData.find((item) => item.id === params.id);
+            return !!selected?.full_name;
+        }
+
+        const selected = clientsData.find(
+            (item) => item.id === form.watch("client_id")
+        );
+        return !!selected?.full_name;
+    }, [params.id, clientsData, form]);
+
     const onSubmit = (data) => {
         const body = {
             ...data,
@@ -148,8 +169,9 @@ export default function CreatrContract() {
             service_cost: Number(data.service_cost),
             total_price: totalItem.price,
             kvat: Number(data.kvat),
-            is_company: true,
+            is_company: isCompany,
         };
+
         mutate({
             endpoint: "/trade",
             data: body,
@@ -157,6 +179,7 @@ export default function CreatrContract() {
             toastCreateMessage: "contractCreated",
             mutateQueryKey: "/trades",
         });
+
         localStorage.removeItem("products");
     };
 
@@ -397,7 +420,7 @@ export default function CreatrContract() {
 
                             <FormField
                                 control={form.control}
-                                name="dont_calculate"
+                                name="do_calculate"
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="flex items-center justify-between w-[60px] mt-6 p-2">
