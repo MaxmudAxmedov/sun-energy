@@ -24,7 +24,6 @@ export default function ContractTable({ setProducts }) {
         staleTime: Infinity,
         cacheTime: 0,
     });
-
     useEffect(() => {
         if (data?.data?.Data?.products) {
             setLocalProducts(data?.data?.Data?.products);
@@ -41,7 +40,7 @@ export default function ContractTable({ setProducts }) {
                         return {
                             ...p,
                             quantity: newQuantity,
-                            total_price: newQuantity * p.retail_price,
+                            total_price: newQuantity * +p.selling_price,
                         };
                     }
                     return p;
@@ -51,10 +50,11 @@ export default function ContractTable({ setProducts }) {
                 return [
                     ...prev,
                     {
+                        price: +product.price,
                         product_id: product.id,
                         quantity: 1,
-                        retail_price: product.selling_price,
-                        total_price: product.selling_price * 1,
+                        selling_price: +product.selling_price,
+                        total_price: +product.selling_price * 1,
                     },
                 ];
             }
@@ -74,6 +74,7 @@ export default function ContractTable({ setProducts }) {
     useEffect(() => {
         setProducts(selectedProducts);
     }, [selectedProducts]);
+    console.log(selectedProducts);
 
     const totalPrice = selectedProducts.reduce(
         (sum, p) => sum + p.quantity * p.retail_price,
