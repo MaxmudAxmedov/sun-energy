@@ -44,6 +44,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { SingleImageUpload } from "@/components/component/SingleUpload";
 
 const legalFormSchema = z.object({
   full_name: z.string().min(1, {
@@ -84,6 +85,31 @@ const legalFormSchema = z.object({
     .refine((value) => /^\d{9}$/.test(value), {
       message: "phoneNumberRequired",
     }),
+
+  file: z.custom(
+    (value) => {
+      if (!value) return false;
+      if (value instanceof File) {
+        const maxSize = 5 * 1024 * 1024;
+        const allowedTypes = [
+          "image/jpeg",
+          "image/png",
+          "image/jpg",
+          "image/webp",
+        ];
+        return value.size <= maxSize && allowedTypes.includes(value.type);
+      }
+      if (typeof value === "string") {
+        return true;
+      }
+
+      return false;
+    },
+    {
+      message:
+        "Image must be JPG, JPEG or PNG or WEBP format and less than 5MB",
+    }
+  ),
 });
 
 export const LegalForm = () => {
@@ -112,16 +138,17 @@ export const LegalForm = () => {
       company_name: "",
       account_number: "",
       info_number: "",
+      file: "",
     },
   });
 
   useEffect(() => {
     if (clientData?.data && id) {
       const client = clientData?.data;
-      //   const formatePhoneNumber = client.phone.splice(3);
+      const formatePhoneNumber = client.phone.slice(3);
       legalForm.reset({
         full_name: client.full_name,
-        phone: client.phone,
+        phone: formatePhoneNumber,
         street: client.street,
         region: client.region,
         district: client.district,
@@ -130,12 +157,8 @@ export const LegalForm = () => {
         quarter: client.quarter,
         account_number: client.account_number,
         info_number: client.info_number,
+        file: client.file,
       });
-      //   if (client?.is_company) {
-      //     selectedTab("yuridik");
-      //   } else {
-      //     selectedTab("jismoniy");
-      //   }
     }
   }, [clientData, id, legalForm]);
 
@@ -168,9 +191,7 @@ export const LegalForm = () => {
     formData.append("quarter", quarter);
     formData.append("account_number", data.account_number);
     formData.append("info_number", data.info_number);
-    for (let i = 0; i < file?.length; i++) {
-      formData.append("file", file[i]);
-    }
+    formData.append("file", file);
 
     mutate({
       endpoint: "/client-business",
@@ -533,9 +554,16 @@ export const LegalForm = () => {
                   {t("image")}*
                 </FormLabel>
                 <FormControl>
-                  <ImageUpload
+                  {/* <ImageUpload
                     onChange={(files) => field.onChange(files)}
                     // multiple={true}
+                  /> */}
+
+                  <SingleImageUpload
+                    defaultImage={id ? clientData?.data?.file : ""}
+                    onChange={(file) => {
+                      field.onChange(file);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />

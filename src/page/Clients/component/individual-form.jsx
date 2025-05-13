@@ -42,6 +42,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SingleImageUpload } from "@/components/component/SingleUpload";
 const individualFormSchema = z.object({
   first_name: z.string().min(1, {
     message: "firstNameRequired",
@@ -81,11 +82,35 @@ const individualFormSchema = z.object({
     .regex(/^[A-Z]{2}\d{7}$/, {
       message: "Pasport seriyasi AA1234567 formatida bo‘lishi kerak",
     }),
+  file: z.custom(
+    (value) => {
+      if (!value) return false;
+      if (value instanceof File) {
+        const maxSize = 5 * 1024 * 1024;
+        const allowedTypes = [
+          "image/jpeg",
+          "image/png",
+          "image/jpg",
+          "image/webp",
+        ];
+        return value.size <= maxSize && allowedTypes.includes(value.type);
+      }
+      if (typeof value === "string") {
+        return true;
+      }
+
+      return false;
+    },
+    {
+      message:
+        "Image must be JPG, JPEG or PNG or WEBP format and less than 5MB",
+    }
+  ),
 });
 
 export const IndividualForm = () => {
-  const [viewingImage, setViewingImage] = React.useState(null);
-  const [images, setImages] = React.useState([]);
+  //   const [viewingImage, setViewingImage] = React.useState(null);
+  //   const [images, setImages] = React.useState([]);
   const { id } = useParams();
   const { mutate, isLoading: isMutating } = useMutateData();
 
@@ -112,44 +137,45 @@ export const IndividualForm = () => {
       district: "",
       quarter: "",
       passport_series: "",
-      file: null,
+      file: "",
     },
   });
 
   useEffect(() => {
     if (clientData?.data && id) {
       const client = clientData?.data;
-      //   const formatePhoneNumber = client.phone.slice(3);
+      const formatePhoneNumber = client.phone.slice(3);
       idividualForm.setValue("first_name", client.first_name);
       idividualForm.setValue("last_name", client.last_name);
       idividualForm.setValue("patronymic", client.patronymic);
-      idividualForm.setValue("phone", client.phone);
+      idividualForm.setValue("phone", formatePhoneNumber);
       idividualForm.setValue("street", client.street);
       idividualForm.setValue("region", client.region);
       idividualForm.setValue("district", client.district);
       idividualForm.setValue("quarter", client.quarter);
       idividualForm.setValue("passport_series", client.passport_series);
+      idividualForm.setValue("file", client.file);
     }
   }, [clientData, idividualForm, id]);
 
   const selectedProvince = idividualForm.watch("region");
   const setValues = idividualForm.setValue;
 
-  const handleDeleteImage = (index) => {
-    const newImages = [...images];
-    newImages[index];
-    newImages.splice(index, 1);
-    setImages(newImages);
-    onchange(newImages.map((img) => img.file || img.photo));
-  };
+  //   const handleDeleteImage = (index) => {
+  //     const newImages = [...images];
+  //     newImages[index];
+  //     newImages.splice(index, 1);
+  //     setImages(newImages);
+  //     onchange(newImages.map((img) => img.file || img.photo));
+  //   };
 
-  const openImageViewer = (imageUrl) => {
-    setViewingImage(imageUrl);
-  };
+  //   const openImageViewer = (imageUrl) => {
+  //     setViewingImage(imageUrl);
+  //   };
 
-  const closeImageViewer = () => {
-    setViewingImage(null);
-  };
+  //   const closeImageViewer = () => {
+  //     setViewingImage(null);
+  //   };
 
   const onSubmitIndividual = (data) => {
     const formData = new FormData();
@@ -176,9 +202,7 @@ export const IndividualForm = () => {
     formData.append("region", region);
     formData.append("district", district);
     formData.append("quarter", quarter);
-    for (let i = 0; i < file?.length; i++) {
-      formData.append("file", file[i]);
-    }
+    formData.append("file", file);
 
     mutate({
       endpoint: "/client-customer",
@@ -412,7 +436,7 @@ export const IndividualForm = () => {
           />
         </div>
 
-        <div className="flex items-center gap-x-4">
+        <div className="flex items-center flex-wrap gap-x-4">
           {/* Street */}
           <FormField
             control={idividualForm.control}
@@ -512,14 +536,20 @@ export const IndividualForm = () => {
                 {t("image")}*
               </FormLabel>
               <FormControl>
-                <ImageUpload onChange={(files) => field.onChange(files)} />
+                {/* <ImageUpload onChange={(files) => field.onChange(files)} /> */}
+                <SingleImageUpload
+                  defaultImage={id ? clientData?.data?.file : ""}
+                  onChange={(file) => {
+                    field.onChange(file);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {id && (
+        {/* {id && (
           <div className="flex gap-2 mt-2">
             <div className="relative h-[100px] group w-32 desktop:hover:opacity-80 transition-all duration-300">
               <div
@@ -546,9 +576,9 @@ export const IndividualForm = () => {
               </button>
             </div>
           </div>
-        )}
+        )} */}
         {/* Image viewer modal */}
-        {viewingImage && (
+        {/* {viewingImage && (
           <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
             <div className="relative max-w-4xl max-h-[90vh] w-full">
               <Button
@@ -570,7 +600,7 @@ export const IndividualForm = () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="flex items-center gap-4">
           <NavLink

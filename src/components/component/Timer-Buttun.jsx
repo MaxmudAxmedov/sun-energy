@@ -17,14 +17,17 @@ export const TimerButtun = ({
   const [isButtunEnabled, setIsButtunEnabled] = useState(false);
   const { t } = useTranslation();
 
+  const clientBusiness = "client-business";
+  const clientBusinessMutate = "client-businesses";
+
   const { mutate, isLoading: muatateLoading } = useMutateData();
 
   const handleDeleteEmployee = (productCategoryId) => {
     mutate({
-      endpoint: `/${endpoint}/${productCategoryId}`,
+      endpoint: `/${clientBusiness || endpoint}/${productCategoryId}`,
       method: "DELETE",
       toastCreateMessage: deleteToastMessage,
-      mutateQueryKey: `/${mutateQueryKey}`,
+      mutateQueryKey: `/${clientBusinessMutate || mutateQueryKey}`,
     });
   };
 
