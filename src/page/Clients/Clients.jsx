@@ -13,6 +13,7 @@ import {
   getClientsCustomersQuery,
 } from "@/quires/quires";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ClientDrawerBusiness from "./ClientDrawerBusiness";
 
 export default function Clients() {
   // const [page, setPage] = useState(1);
@@ -167,7 +168,7 @@ export default function Clients() {
         // console.log(row.original.id);
         return (
           <div className="flex gap-3">
-            <ClientDrawer
+            <ClientDrawerBusiness
               isSheetOpen={isSheetOpen}
               setIsSheetOpen={setIsSheetOpen}
               row={row}
