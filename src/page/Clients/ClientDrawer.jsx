@@ -42,7 +42,6 @@ export default function ClientDrawer({
     ...getTradesQuery(params),
   });
 
-
   return (
     <CustomDrawer
       title="Klient"
@@ -132,20 +131,20 @@ export default function ClientDrawer({
         {data?.data?.Data?.count > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
-              <div className="p-5 border rounded-md flex justify-between">
+              <div className="p-5 border dark:border-gray-600 rounded-md flex justify-between">
+                <p>KVT</p>
                 <p>
                   {data?.data?.Data?.client_products?.reduce((sum, item) => {
                     return sum + (item.kv || 0);
                   }, 0)}
                 </p>
-                <p>KVT</p>
               </div>
-              <div className="p-5 border rounded-md flex justify-between">
+              <div className="p-5 dark:border-gray-600 border rounded-md flex justify-between">
+                <p>Umumiy summa</p>
                 <p>
                   {selectedRowData?.total_price}
                   sum
                 </p>
-                <p>Umumiy summa</p>
               </div>
             </div>
 
