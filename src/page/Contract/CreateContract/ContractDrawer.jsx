@@ -48,9 +48,9 @@ export default function ContractDrawer({
                             alt=""
                             className="w-[260px] h-[200px] object-cover rounded-lg border"
                         />
-                        {row.watt !== 0 && (
+                        {selectedRowData?.watt !== 0 && (
                             <span className="absolute -top-2.5 -left-3 bg-primaryColor text-white text-[16px] py-[2px] px-1.5 rounded-md">
-                                {row.watt} W
+                                {selectedRowData?.watt} W
                             </span>
                         )}
                     </div>
@@ -71,10 +71,38 @@ export default function ContractDrawer({
                         </h2> */}
                         <h2 className="text-[20px] mb-4 ">
                             <span className="font-semibold mx-1">
-                                {selectedRowData?.selling_price.toLocaleString()}
+                                {Number(
+                                    selectedRowData?.selling_price
+                                ).toLocaleString()}
                             </span>
                             sum
                         </h2>
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 my-5">
+                    <div className="border dark:border-gray-600 p-4 rounded-md flex items-center justify-between">
+                        <p className=" text-[14px]">Narxi :</p>
+                        <p className="float-right">
+                            {Number(selectedRowData?.price).toLocaleString()}{" "}
+                            sum
+                        </p>
+                    </div>
+
+                    <div className="border dark:border-gray-600 p-4 rounded-md flex items-center justify-between">
+                        <p className=" text-[14px]">Belgilangan foiz :</p>
+                        <p className="float-right">
+                            {selectedRowData?.mark_up} %
+                        </p>
+                    </div>
+
+                    <div className="border dark:border-gray-600 p-4 rounded-md flex items-center justify-between">
+                        <p className=" text-[14px]">Sotuv narxi :</p>
+                        <p className="float-right">
+                            {Number(
+                                selectedRowData?.selling_price
+                            ).toLocaleString()}{" "}
+                            sum
+                        </p>
                     </div>
                 </div>
 
