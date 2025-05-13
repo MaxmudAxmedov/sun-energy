@@ -40,7 +40,7 @@ export default function ReCharts({ data }) {
     if (loading) return <h1>Loading...</h1>;
 
     return (
-        <div className="max-w-[1400px] overflow-x-auto mt-6">
+        <div className="max-w-[1200px] overflow-x-auto mt-6">
             <AreaChart width={1100} height={500} data={item} syncId="anyId">
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis

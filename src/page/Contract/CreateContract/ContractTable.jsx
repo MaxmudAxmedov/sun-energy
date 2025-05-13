@@ -74,10 +74,9 @@ export default function ContractTable({ setProducts }) {
     useEffect(() => {
         setProducts(selectedProducts);
     }, [selectedProducts]);
-    console.log(selectedProducts);
 
-    const totalPrice = selectedProducts.reduce(
-        (sum, p) => sum + p.quantity * p.retail_price,
+    const totalPrice = selectedProducts?.reduce(
+        (sum, p) => sum + p.quantity * p.selling_price,
         0
     );
 
@@ -97,7 +96,7 @@ export default function ContractTable({ setProducts }) {
                 <div>
                     <p className="text-[12px]">Umumiy summa </p>
                     <p className="font-semibold">
-                        {totalPrice.toLocaleString()} so'm
+                        {totalPrice?.toLocaleString()} so'm
                     </p>
                 </div>
             </div>
@@ -146,11 +145,18 @@ export default function ContractTable({ setProducts }) {
                                     />
                                 </TableCell>
                                 <TableCell className="text-wrap w-[20%]">
-                                    {item.description}
+                                    {item.description.split(" ").length > 10
+                                        ? item.description
+                                              .split(" ")
+                                              .slice(0, 10)
+                                              .join(" ") + "..."
+                                        : item.description}
                                 </TableCell>
                                 <TableCell>{item.count_of_product}</TableCell>
                                 <TableCell>
-                                    {item.selling_price.toLocaleString()}
+                                    {Number(
+                                        item.selling_price
+                                    ).toLocaleString()}
                                 </TableCell>
                                 <TableCell>
                                     {count > 0
