@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getReportsQuery } from "@/quires/quires";
-import ChartComponent from "./ReportChart";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import ReCharts from "./ReCharts";
 import DateRangePicker from "@/components/component/DateRangePicker";
@@ -13,19 +12,19 @@ const initialParams = {
 export default function Report() {
     const [params, setParams] = useState(initialParams);
     const { data } = useQuery({ ...getReportsQuery(params) });
-    const [totals, setTotals] = useState({
+    const [_, setTotals] = useState({
         qty: 0,
     });
     const item = data?.data?.Data;
 
-    const total = item?.client_products?.reduce(
-        (initial, obj) => {
-            return {
-                price: (initial.price += obj.total_price),
-            };
-        },
-        { price: 0 }
-    );
+    // const total = item?.client_products?.reduce(
+    //     (initial, obj) => {
+    //         return {
+    //             price: (initial.price += obj.total_price),
+    //         };
+    //     },
+    //     { price: 0 }
+    // );
 
     const [range, setRange] = useState({
         startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),

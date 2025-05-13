@@ -18,20 +18,18 @@ export default function CreateClients() {
     enabled: !!id,
   });
 
-  // useEffect(() => {
-  //   if (clientData?.company_name) {
-  //     setSelectedTab("yuridik");
-  //   } else {
-  //     setSelectedTab("jismoniy");
-  //   }
-  // }, [clientData, id]);
+  console.log("clientData", clientData);
+
   useEffect(() => {
-    if (clientData?.company_name && id) {
-      setSelectedTab(clientData?.company_name ? "yuridik" : "jismoniy");
+    if (clientData?.company_name) {
+      setSelectedTab("jismoniy");
+    } else {
+      setSelectedTab("yuridik");
     }
-  }, [id, clientData]);
+  }, [clientData, id]);
+
   return (
-    <div className="tablet:h-screen">
+    <div>
       <h1 className="text-2xl font-bold mb-6 pt-6">
         {id ? "Edit client" : t("createClient")}
       </h1>
@@ -50,7 +48,7 @@ export default function CreateClients() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="jismoniy">
+        <TabsContent className="h-[80vh]" value="jismoniy">
           <IndividualForm />
         </TabsContent>
 

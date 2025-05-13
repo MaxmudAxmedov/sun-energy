@@ -30,14 +30,14 @@ export function getReportsQuery(params) {
 
 export function getClientsBusinessQuery(params) {
     return {
-        queryKey: ["client-businesses", params],
+        queryKey: ["/client-businesses", params],
         queryFn: async () => getClientsBusiness(params),
     };
 }
 
 export function getClientsCustomersQuery(params) {
     return {
-        queryKey: ["client-customers", params],
+        queryKey: ["/client-customers", params],
         queryFn: async () => getClientsCustomers(params),
     };
 }
