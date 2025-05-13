@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { EditIcon } from "@/assets/icons/edit-icon";
 import OptionalImg from "@/assets/imgs/optional-img.jpg";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { EyeIcon } from "@/assets/icons/eye-icon";
 import { useQuery } from "@tanstack/react-query";
 import { getCategorysQuery } from "@/quires/quires";
@@ -15,7 +14,6 @@ export default function ProductDrawer({
   infoClick,
 }) {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const { data } = useQuery({
     ...getCategorysQuery({ limit: "100", page: "1", search: "" }),
   });

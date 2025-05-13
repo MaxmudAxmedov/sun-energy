@@ -39,7 +39,7 @@ const productSchema = z.object({
   power_system: z.string().optional(),
   mark_up: z.string().optional(),
   watt: z.string().optional(),
-  show_on_landing: z.boolean().optional(),
+  show_on_landing: z.boolean().optional().default(false),
   // selling_price: z.string().min(1, "sellingPriceRequired"),
   photo: z.custom(
     (value) => {
@@ -111,7 +111,7 @@ export default function CreateProduct() {
       mark_up: "",
       watt: "",
       power_system: "",
-      show_on_landing: "",
+      show_on_landing: false,
     },
   });
   const { watch } = form;
@@ -149,7 +149,6 @@ export default function CreateProduct() {
       "selling_price",
       Number((data.price * data.mark_up) / 100) + Number(data.price) || 0
     );
-    console.log(data);
     mutate({
       endpoint: id ? `/product/${id}/images` : "/product-images",
       data: formData,
@@ -275,30 +274,6 @@ export default function CreateProduct() {
           </div>
 
           <div className="flex items-center flex-wrap gap-x-3 relative">
-            {/* Selling Price */}
-            {/* <FormField
-                            control={form.control}
-                            name="selling_price"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel
-                                        htmlFor="selling_price"
-                                        className="text-gray-700 dark:text-white font-medium"
-                                    >
-                                        {t("sellingPrice")}*
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="text"
-                                            placeholder={t("enterSellingPrice")}
-                                            {...field}
-                                            className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        /> */}
             {/* Watt */}
             <FormField
               control={form.control}
@@ -472,16 +447,6 @@ export default function CreateProduct() {
                         field.onChange(file);
                       }}
                     />
-
-                    {/* <ImageUpload
-                                        maxImages={5}
-                                        onChange={(files) =>
-                                            field.onChange(files)
-                                        }
-                                        defaultImages={
-                                            productDataById?.photo || []
-                                        }
-                                    /> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
