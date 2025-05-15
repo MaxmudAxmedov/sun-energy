@@ -19,7 +19,7 @@ import { PriceFormater } from "@/components/component/Price-Formater";
 import { NumberFormatter } from "@/components/component/Number-Formatter";
 import { Download } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getTradesQuery } from "@/quires/quires";
+import { getEmployeeByIdQuery, getTradesQuery } from "@/quires/quires";
 import { useEffect, useState } from "react";
 const initialParams = {
     client_id: "",
@@ -41,6 +41,11 @@ export default function EmployeDrawer({
     const [params, setParams] = useState(initialParams);
     const { data } = useQuery({
         ...getTradesQuery(params),
+    });
+
+    const { data: employee } = useQuery({
+        ...getEmployeeByIdQuery(selectedRowData?.id),
+        enabled: !!selectedRowData?.id,
     });
 
     useEffect(() => {
@@ -76,7 +81,7 @@ export default function EmployeDrawer({
                         <EditIcon /> Edit
                     </Button>
                     <CustomDeleteDialog
-                        dynamicRowId={selectedRowData?.id}
+                        dynamicRowId={employee?.data?.id}
                         endpoint={"employee"}
                         mutateQueryKey={"employees"}
                         deleteToastMessage={"employeeDeleted"}
@@ -89,8 +94,8 @@ export default function EmployeDrawer({
                 <div className="flex gap-10">
                     <img
                         src={
-                            selectedRowData?.file ||
-                            selectedRowData?.photo ||
+                            employee?.data?.file ||
+                            employee?.data?.photo ||
                             OptionalImg
                         }
                         alt=""
@@ -98,50 +103,83 @@ export default function EmployeDrawer({
                     />
                     <div>
                         <h2 className="text-[22px] capitalize mb-2 flex gap-3 flex-wrap">
-                            <p>{selectedRowData?.last_name}</p>
-                            <p>{selectedRowData?.first_name}</p>
-                            <p>{selectedRowData?.patronymic}</p>
+                            <p>{employee?.data?.last_name}</p>
+                            <p>{employee?.data?.first_name}</p>
+                            <p>{employee?.data?.patronymic}</p>
                         </h2>
-                        <h2></h2>
                         <NumberFormatter
-                            phone={selectedRowData?.phone}
+                            phone={employee?.data?.phone}
                             fontSize={"22px"}
                         />
-                        <h2 className="text-[20px] mb-4">
-                            {capitalize(selectedRowData?.position_name)}
+                        <h2 className="text-[20px] mt-2">
+                            {capitalize(employee?.data?.position_name)}
                         </h2>
-                    </div>
-                </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-5">
-                    <div className="border p-4 rounded-md capitalize">
-                        {selectedRowData?.region}
-                    </div>
-                    <div className="border p-4 rounded-md capitalize">
-                        {selectedRowData?.district}
-                    </div>
-                    <div className="border p-4 rounded-md capitalize">
-                        {selectedRowData?.quarter}
-                    </div>
-                    <div className="border p-4 rounded-md capitalize">
-                        {selectedRowData?.street}
-                    </div>
-                </div>
-
-                <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
-                        <div className="p-4 border dark:border-gray-600 rounded-md flex justify-between">
-                            {console.log()}
-                            <p>{selectedRowData?.cashback || 0}</p>
-                            <p>CASHBACK</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 my-3">
+                            <div className="capitalize">
+                                {employee?.data?.region}
+                            </div>
+                            <div className="capitalize">
+                                {employee?.data?.district}
+                            </div>
+                            <div className="capitalize">
+                                {employee?.data?.quarter}
+                            </div>
+                            <div className="capitalize">
+                                {employee?.data?.street}
+                            </div>
                         </div>
-                        <div className=" p-4 border dark:border-gray-600 rounded-md flex justify-between">
-                            <PriceFormater
-                                price={selectedRowData?.salary || 0}
-                            />
-                            {
-                                console.log(selectedRowData)
-                            }
+                    </div>
+                </div>
+
+                <div className="mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
+                        <div className="relative p-4 border dark:border-gray-600 rounded-md flex justify-between">
+                            <p className="absolute top-[-14px] left-2">
+                                Keshbek
+                            </p>
+                            <p>
+                                {Number(
+                                    employee?.data?.payments?.total_cashback
+                                )?.toLocaleString() || 0}
+                            </p>
+                            <p>UZS</p>
+                        </div>
+                        <div className="relative p-4 border dark:border-gray-600 rounded-md flex justify-between">
+                            <p className="absolute top-[-14px] left-2">
+                                Joriy holati
+                            </p>
+                            <p>
+                                {Number(
+                                    employee?.data?.payments?.balance_due
+                                )?.toLocaleString() || 0}
+                            </p>
+                            <p>UZS</p>
+                        </div>
+                        <div className="relative p-4 border dark:border-gray-600 rounded-md flex justify-between">
+                            <p className="absolute top-[-14px] left-2">
+                                To'landi
+                            </p>
+                            <p>
+                                {Number(
+                                    employee?.data?.payments?.total_paid
+                                )?.toLocaleString() || 0}
+                            </p>
+                            <p>UZS</p>
+                        </div>
+                        <div className="relative p-4 border dark:border-gray-600 rounded-md flex items-center justify-between">
+                            <p className="absolute top-[-14px] left-2">
+                                Umumiy daromadi
+                            </p>
+
+                            <p>
+                                <PriceFormater
+                                    price={
+                                        employee?.data?.payments
+                                            ?.total_salary || 0
+                                    }
+                                />
+                            </p>
                             <p>UZS</p>
                         </div>
                     </div>
@@ -206,7 +244,7 @@ export default function EmployeDrawer({
                                 )}
                         </TableBody>
                     </Table>
-                </>
+                </div>
             </div>
         </CustomDrawer>
     );
