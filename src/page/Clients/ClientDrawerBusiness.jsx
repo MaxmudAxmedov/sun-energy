@@ -18,6 +18,7 @@ import { Download } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getTradesQuery } from "@/quires/quires";
+import { useTranslation } from "react-i18next";
 
 const initialParams = {
   client_id: "",
@@ -38,6 +39,7 @@ export default function ClientDrawerBusiness({
 }) {
   const navigate = useNavigate();
   const [params, setParams] = useState(initialParams);
+  const { t } = useTranslation();
   const { data } = useQuery({
     ...getTradesQuery(params),
   });
@@ -61,13 +63,13 @@ export default function ClientDrawerBusiness({
             className="p-5 w-[50%] bg-primaryColor hover:bg-primaryColor text-white"
             onClick={() => navigate(`/createContract/${selectedRowData.id}`)}
           >
-            Contract
+            {t("contract")}
           </Button>
           <Button
             className="p-5 w-[50%] bg-green-600 hover:bg-green-600 text-white"
             onClick={() => navigate(`/editClient/${selectedRowData.id}`)}
           >
-            <EditIcon /> Edit
+            <EditIcon /> {t("edit")}
           </Button>
 
           <CustomDeleteDialog
@@ -140,7 +142,7 @@ export default function ClientDrawerBusiness({
                 </p>
               </div>
               <div className="p-5 dark:border-gray-600 border rounded-md flex justify-between">
-                <p>Umumiy summa</p>
+                <p>{t("grossProfit")}</p>
                 <p>
                   {selectedRowData?.total_price}
                   sum
@@ -152,14 +154,14 @@ export default function ClientDrawerBusiness({
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[5%]">#</TableHead>
-                  <TableHead className="w-[30%]">Sana</TableHead>
+                  <TableHead className="w-[30%]">{t("date")}</TableHead>
                   <TableHead className="w-[20%] text-center">
-                    Mahsulot soni
+                    {t("numberOfProducts")}
                   </TableHead>
                   <TableHead className="text-center w-[22%]">Kvt</TableHead>
-                  <TableHead className="text-center w-[22%]">Summa</TableHead>
+                  <TableHead className="text-center w-[22%]">{t("price")}</TableHead>
 
-                  <TableHead className="float-right pt-2">Action</TableHead>
+                  <TableHead className="float-right pt-2">{t("actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
