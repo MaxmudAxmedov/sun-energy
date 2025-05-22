@@ -55,9 +55,11 @@ export default function ProductDrawer({
               alt=""
               className="w-[260px] h-[200px] object-cover rounded-lg"
             />
-            <span className="absolute -top-2.5 -left-3 bg-primaryColor text-white text-[13px] py-[2px] px-1.5 rounded-md">
-              {selectedRowData?.watt} W
-            </span>
+            {selectedRowData?.watt !== 0 && (
+              <span className="absolute -top-2.5 -left-3 bg-primaryColor text-white text-[13px] py-[2px] px-1.5 rounded-md">
+                {selectedRowData?.watt} W
+              </span>
+            )}
           </div>
           <div>
             <h2 className="text-[22px] capitalize mb-4">
@@ -95,7 +97,9 @@ export default function ProductDrawer({
           </div>
 
           <div className="relative border dark:border-gray-600 p-4 rounded-md">
-            <p className="absolute left-2 top-1 text-[14px]">{t("sellingPrice")}</p>
+            <p className="absolute left-2 top-1 text-[14px]">
+              {t("sellingPrice")}
+            </p>
             <p className="mt-4">
               {Number(selectedRowData?.selling_price).toLocaleString()} sum
             </p>
