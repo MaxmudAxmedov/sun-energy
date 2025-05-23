@@ -1,5 +1,10 @@
 import { getCategorys } from "@/service/category";
-import { getClientsBusiness, getClientsCustomers } from "@/service/client";
+import {
+    getBusinessClientById,
+    getClientById,
+    getClientsBusiness,
+    getClientsCustomers,
+} from "@/service/client";
 import { getEmployeeById } from "@/service/employee";
 import { getProducts } from "@/service/product";
 import { getReports, getTrade, getTrades } from "@/service/report";
@@ -54,5 +59,19 @@ export function getEmployeeByIdQuery(id) {
     return {
         queryKey: ["employee-id", id],
         queryFn: async () => getEmployeeById(id),
+    };
+}
+
+export function getClientsBusinessByIdQuery(id) {
+    return {
+        queryKey: ["client-businesses-id", id],
+        queryFn: async () => getBusinessClientById(id),
+    };
+}
+
+export function getClientsCustomerByIdQuery(id) {
+    return {
+        queryKey: ["client-customer-id", id],
+        queryFn: async () => getClientById(id),
     };
 }

@@ -214,6 +214,14 @@ export const IndividualForm = () => {
     });
   };
 
+  function forceConvertToNewDomain(url) {
+    if (url) {
+        const path = new URL(url).pathname;
+        return `https://backend-secure.quyosh-panellari.uz${path}`;
+    }
+}
+
+
   return (
     <FormProvider {...idividualForm}>
       <form
@@ -538,7 +546,7 @@ export const IndividualForm = () => {
               <FormControl>
                 {/* <ImageUpload onChange={(files) => field.onChange(files)} /> */}
                 <SingleImageUpload
-                  defaultImage={id ? clientData?.data?.file : ""}
+                  defaultImage={id ? forceConvertToNewDomain(clientData?.data?.file) : ""}
                   onChange={(file) => {
                     field.onChange(file);
                   }}

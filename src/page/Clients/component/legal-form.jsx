@@ -203,6 +203,12 @@ export const LegalForm = () => {
     });
   };
 
+  function forceConvertToNewDomain(url) {
+    if (url) {
+        const path = new URL(url).pathname;
+        return `https://backend-secure.quyosh-panellari.uz${path}`;
+    }
+}
   return (
     <FormProvider {...legalForm}>
       <form
@@ -560,7 +566,7 @@ export const LegalForm = () => {
                   /> */}
 
                   <SingleImageUpload
-                    defaultImage={id ? clientData?.data?.file : ""}
+                    defaultImage={id ? forceConvertToNewDomain(clientData?.data?.file) : ""}
                     onChange={(file) => {
                       field.onChange(file);
                     }}

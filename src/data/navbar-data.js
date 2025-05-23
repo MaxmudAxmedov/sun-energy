@@ -52,6 +52,13 @@ export const NavbarData = [
     icon: ContractIcon,
     subNav: "/createContract",
   },
+  {
+    id: 8,
+    title: "additional_expense",
+    path: "/cost",
+    icon: ContractIcon,
+    subNav: "/createCost",
+  },
   // {
   //   id: 8,
   //   title: "users",
