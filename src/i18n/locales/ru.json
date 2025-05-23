@@ -250,5 +250,8 @@
   "chooseEmployeeRequired": "Выберите сотрудника является обязательным",
   "datePickRequired": "Дата является обязательной",
   "whenInstalledRequired": "Дата установки является обязательной",
-  "search": "Поиск"
+  "search": "Поиск",
+  "additional_expense": "Дополнительные расходы",
+  "additional_expense_add": "Добавить дополнительные расходы",
+  "add": "Добавлять"
 }

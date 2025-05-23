@@ -260,5 +260,8 @@
   "datePickRequired": "Date pick is required",
   "whenInstalledRequired": "When installed is required",
   "purchasedProducts": "Purchased products",
-  "search": "Search"
+  "search": "Search",
+  "additional_expense": "Additional Expense",
+  "additional_expense_add": "Add Additional Expense",
+  "add": "Add"
 }

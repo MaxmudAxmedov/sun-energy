@@ -4,86 +4,71 @@ import { useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IndividualForm } from "../component/individual-form";
 import { LegalForm } from "../component/legal-form";
-import { getBusinessClientById } from "@/service/client";
 import { useQuery } from "@tanstack/react-query";
+import {
+    getClientsBusinessByIdQuery,
+    getClientsCustomerByIdQuery,
+} from "@/quires/quires";
 
 export default function CreateClients() {
-  const { t } = useTranslation();
-  const { id } = useParams();
-  const [selectedTab, setSelectedTab] = useState("jismoniy");
+    const { t } = useTranslation();
+    const { id } = useParams();
+    const [selectedTab, setSelectedTab] = useState("jismoniy");
 
-  const { data: clientData } = useQuery({
-    queryKey: ["client", id],
-    queryFn: () => getBusinessClientById(id),
-    enabled: !!id,
-  });
+    const { data: clientsBusiness } = useQuery({
+        ...getClientsBusinessByIdQuery(id),
+        enabled: !!id,
+    });
 
-  console.log("clientData", clientData);
+    const { data: clientsCustomer } = useQuery({
+        ...getClientsCustomerByIdQuery(id),
+        enabled: !!id,
+    });
 
-  useEffect(() => {
-    if (clientData?.company_name) {
-      setSelectedTab("jismoniy");
-    } else {
-      setSelectedTab("yuridik");
-    }
-  }, [clientData, id]);
+    useEffect(() => {
+        if (clientsBusiness != undefined) {
+            setSelectedTab("yuridik");
+        } else {
+            setSelectedTab("jismoniy");
+        }
+    }, [id]);
 
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6 pt-6">
-        {id ? "Edit client" : t("createClient")}
-      </h1>
+    return (
+        <div>
+            <h1 className="text-2xl font-bold mb-6 pt-6">
+                {id ? "Edit client" : t("createClient")}
+            </h1>
 
-      <Tabs
-        className="w-full"
-        value={selectedTab}
-        onValueChange={setSelectedTab}
-      >
-        <TabsList className="grid max-w-[460px] grid-cols-2">
-          <TabsTrigger className="max-w-[230px]" value="jismoniy">
-            {t("individualsClients")}
-          </TabsTrigger>
-          <TabsTrigger className="max-w-[230px]" value="yuridik">
-            {t("legalClients")}
-          </TabsTrigger>
-        </TabsList>
+            <Tabs
+                className="w-full"
+                value={selectedTab}
+                onValueChange={setSelectedTab}
+            >
+                <TabsList className="grid max-w-[460px] grid-cols-2">
+                    <TabsTrigger
+                        className="max-w-[230px]"
+                        value="jismoniy"
+                        disabled={!!id && clientsBusiness != undefined}
+                    >
+                        {t("individualsClients")}
+                    </TabsTrigger>
+                    <TabsTrigger
+                        className="max-w-[230px]"
+                        value="yuridik"
+                        disabled={!!id && clientsCustomer != undefined}
+                    >
+                        {t("legalClients")}
+                    </TabsTrigger>
+                </TabsList>
 
-        <TabsContent className="h-[80vh]" value="jismoniy">
-          <IndividualForm />
-        </TabsContent>
+                <TabsContent className="h-[80vh]" value="jismoniy">
+                    <IndividualForm />
+                </TabsContent>
 
-        <TabsContent value="yuridik">
-          <LegalForm />
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-}
-
-{
-  /*
-    <FormField
-    control={form.control}
-    name="percent_for_employee_custom"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel
-          htmlFor="percent_for_employee_custom"
-          className="text-gray-700 dark:text-white font-medium"
-        >
-          {t("percentForEmployee")}
-        </FormLabel>
-        <FormControl>
-          <Input
-            placeholder={t("enterPercentForEmployee")}
-            {...field}
-            className="w-[300px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
-          />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-  
-  */
+                <TabsContent value="yuridik">
+                    <LegalForm />
+                </TabsContent>
+            </Tabs>
+        </div>
+    );
 }

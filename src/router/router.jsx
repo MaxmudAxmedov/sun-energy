@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Layout from "../layout/Layout";
 
+
 // Sahifalarni `lazy` bilan yuklash
 const Clients = lazy(() => import("../page/Clients/Clients"));
 const Products = lazy(() => import("../page/Products/Products"));
@@ -15,6 +16,8 @@ const Contract = lazy(() => import("../page/Contract/Contract"));
 const Users = lazy(() => import("../page/Users/users"));
 // const Position = lazy(() => import("../page/Position/Position"));
 const Setting = lazy(() => import("../page/Setting/Setting"));
+const Cost = lazy(() => import("../page/Cost/Cost"));
+const CostCreate = lazy(() => import("../page/Cost/CostCreate"));
 const NotFound = lazy(() => import("../page/NotFound/NotFound"));
 const LoginPaage = lazy(() => import("../auth/login"));
 
@@ -246,6 +249,22 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <CreateUsers />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/cost",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Cost />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/createCost",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <CostCreate />
           </Suspense>
         ),
       },

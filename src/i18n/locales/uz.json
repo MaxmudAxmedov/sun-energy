@@ -258,5 +258,8 @@
   "chooseEmployeeRequired": "Xodimni tanlang",
   "datePickRequired": "Sanani tanlang",
   "whenInstalledRequired": "Qo'shilgan vaqtini kiriting",
-  "search": "Qidirish"
+  "search": "Qidirish",
+  "additional_expense": "Qo'shimcha xarajat",
+  "additional_expense_add": "Qo'shimcha xarajat qo'shish",
+  "add": "Qo'shish"
 }
