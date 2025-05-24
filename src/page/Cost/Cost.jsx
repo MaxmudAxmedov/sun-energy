@@ -27,8 +27,12 @@ export default function Cost() {
             header: "name",
         },
         {
-            accessorKey: "amount",
             header: "price",
+            cell: ({ row }) => {
+                return (
+                    <div>{Number(row.original.amount).toLocaleString()}</div>
+                );
+            },
         },
         {
             accessorKey: "description",
