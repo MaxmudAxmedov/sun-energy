@@ -1,15 +1,77 @@
+import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 import { DynamicHeader } from "@/components/component/Dynamic-Header";
-import React from "react";
+import { DataTable } from "@/components/component/Dynamic-Table";
+import { getExpensesQuery } from "@/quires/quires";
+import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+
+const initialParams = {
+    limit: "10",
+    page: "1",
+    search: "",
+};
 
 export default function Cost() {
-  return (
-    <div>
-      <DynamicHeader
-        title="additional_expense"
-        btnName="create"
-        inputPlacholder="searchCost"
-        btnNavigate="/createCost"
-      />
-    </div>
-  );
+    const [params, setParams] = useState(initialParams);
+    const { data } = useQuery(getExpensesQuery(params));
+
+    const column = [
+        {
+            header: "No",
+            cell: ({ row }) => {
+                return <div>{row.index + 1}</div>;
+            },
+        },
+        {
+            accessorKey: "name",
+            header: "name",
+        },
+        {
+            accessorKey: "amount",
+            header: "price",
+        },
+        {
+            accessorKey: "description",
+            header: "description",
+        },
+
+        {
+            header: "createdAt",
+            cell: ({ row }) => {
+                return <div>{row.original.created_at}</div>;
+            },
+        },
+        {
+            header: "actions",
+            cell: ({ row }) => {
+                return (
+                    <div>
+                        <CustomDeleteDialog
+                            dynamicRowId={row.original.id}
+                            endpoint={`expense`}
+                            mutateQueryKey={"expenses"}
+                            deleteToastMessage={"productCategoryDeleted"}
+                        />
+                    </div>
+                );
+            },
+        },
+    ];
+    return (
+        <div>
+            <DynamicHeader
+                title="additional_expense"
+                btnName="create"
+                inputPlacholder="searchCost"
+                btnNavigate="/createCost"
+            />
+
+            <div>
+                <DataTable
+                    data={data?.data?.Data?.extra_expenses || []}
+                    columns={column}
+                />
+            </div>
+        </div>
+    );
 }
