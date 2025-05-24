@@ -36,7 +36,7 @@ export default function Cost() {
         },
         {
             accessorKey: "description",
-            header: "description",
+            header: "info",
         },
 
         {
