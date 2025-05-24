@@ -31,45 +31,66 @@ export default function ContractTable({ setProducts }) {
         }
     }, [data]);
 
-    const handleCountChange = (product, delta) => {
+    const updateQuantity = (product, delta) => {
         setSelectedProducts((prev) => {
             const exists = prev.find((p) => p.product_id === product.id);
             if (exists) {
-                const updated = prev.map((p) => {
-                    if (p.product_id === product.id) {
-                        const newQuantity = Math.max(0, p.quantity + delta);
-                        return {
-                            ...p,
-                            quantity: newQuantity,
-                            total_price: newQuantity * +p.selling_price,
-                        };
-                    }
-                    return p;
-                });
-                return updated.filter((p) => p.quantity > 0);
+                const newQuantity = exists.quantity + delta;
+                if (newQuantity <= 0) {
+                    return prev.filter((p) => p.product_id !== product.id);
+                }
+                return prev.map((p) =>
+                    p.product_id === product.id
+                        ? {
+                              ...p,
+                              quantity: newQuantity,
+                              total_price: newQuantity * +p.selling_price,
+                          }
+                        : p
+                );
             } else if (delta > 0) {
                 return [
                     ...prev,
                     {
                         price: +product.price,
                         product_id: product.id,
-                        quantity: 1,
+                        quantity: delta,
                         selling_price: +product.selling_price,
-                        total_price: +product.selling_price * 1,
+                        total_price: +product.selling_price * delta,
                     },
                 ];
             }
             return prev;
         });
+
         setLocalProducts((prev) =>
             prev.map((p) => {
                 if (p.id === product.id) {
-                    const newCount = Math.max(0, p.count_of_product - delta);
-                    return { ...p, count_of_product: newCount };
+                    const usedCount =
+                        selectedProducts.find(
+                            (sp) => sp.product_id === product.id
+                        )?.quantity || 0;
+                    const remaining = Math.max(
+                        0,
+                        product.count_of_product +
+                            usedCount -
+                            (usedCount + delta)
+                    );
+                    return { ...p, count_of_product: remaining };
                 }
                 return p;
             })
         );
+    };
+
+    const handleInputChange = (product, value) => {
+        const newValue = parseInt(value) || 0;
+        if (newValue < 0) return;
+
+        const old = selectedProducts.find((p) => p.product_id === product.id);
+        const oldQuantity = old?.quantity || 0;
+        const delta = newValue - oldQuantity;
+        updateQuantity(product, delta);
     };
 
     useEffect(() => {
@@ -171,20 +192,39 @@ export default function ContractTable({ setProducts }) {
                                 </TableCell>
                                 <TableCell className="w-[15%]">
                                     {count > 0 ? (
-                                        <div className="flex justify-between w-full mx-auto">
+                                        <div className="flex justify-between w-full mx-auto gap-2">
                                             <Button
                                                 variant="destructive"
                                                 className="w-[30%]"
                                                 type="button"
                                                 onClick={() =>
-                                                    handleCountChange(item, -1)
+                                                    updateQuantity(item, -1)
                                                 }
                                             >
                                                 -
                                             </Button>
-                                            <p className="border w-[35%] rounded px-3 pt-[5px] text-center">
-                                                {count}
-                                            </p>
+
+                                            <Input
+                                                value={count}
+                                                onChange={(e) => {
+                                                    let value = parseInt(
+                                                        e.target.value
+                                                    );
+                                                    if (isNaN(value)) value = 0;
+                                                    if (
+                                                        value >=
+                                                        item.count_of_product
+                                                    )
+                                                        value =
+                                                            item.count_of_product;
+                                                    handleInputChange(
+                                                        item,
+                                                        value
+                                                    );
+                                                }}
+                                                className="w-[50px] bg-white text-center p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
+                                            />
+
                                             <Button
                                                 className="w-[30%]"
                                                 type="button"
@@ -192,7 +232,7 @@ export default function ContractTable({ setProducts }) {
                                                     item.count_of_product == 0
                                                 }
                                                 onClick={() =>
-                                                    handleCountChange(item, 1)
+                                                    updateQuantity(item, 1)
                                                 }
                                             >
                                                 +
@@ -205,7 +245,7 @@ export default function ContractTable({ setProducts }) {
                                             }
                                             className="w-[100%]"
                                             onClick={() =>
-                                                handleCountChange(item, 1)
+                                                updateQuantity(item, 1)
                                             }
                                         >
                                             Add
