@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { EyeIcon } from "@/assets/icons/eye-icon";
 import { EditIcon } from "@/assets/icons/edit-icon";
 import OptionalImg from "@/assets/imgs/optional-img.jpg";
-import { useGetData } from "@/hook/useApi";
 import {
   Table,
   TableBody,
@@ -12,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DownloadIcon from "@/assets/imgs/download.png";
 import { useNavigate } from "react-router-dom";
 import { CustomDeleteDialog } from "@/components/component/Custom-Delete-Dialog";
 import { PriceFormater } from "@/components/component/Price-Formater";
@@ -22,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getEmployeeByIdQuery, getTradesQuery } from "@/quires/quires";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { EditPopover } from "@/components/component/Edit-Popover";
 const initialParams = {
   client_id: "",
   employee_id: "",
@@ -119,7 +118,15 @@ export default function EmployeDrawer({
 
         <div className="mt-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
+            {/* cashback */}
             <div className="relative p-4 border dark:border-gray-600 rounded-md flex justify-between">
+              <span className="absolute -right-3 -top-4">
+                <EditPopover
+                  initialValue={employee?.data?.payments?.total_cashback}
+                  allData={employee?.data?.payments}
+                  customKey={"total_cashback"}
+                />
+              </span>
               <p className="absolute top-[-14px] left-2">{t("cashback")}</p>
               <p>
                 {Number(
@@ -128,8 +135,19 @@ export default function EmployeDrawer({
               </p>
               <p>UZS</p>
             </div>
+
+            {/* status */}
             <div className="relative p-4 border dark:border-gray-600 rounded-md flex justify-between">
-              <p className="absolute top-[-14px] left-2">{t("currentStatus")}</p>
+              <span className="absolute -right-3 -top-4">
+                <EditPopover
+                  allData={employee?.data?.payments}
+                  customKey={"balance_due"}
+                />
+              </span>
+
+              <p className="absolute top-[-14px] left-2">
+                {t("currentStatus")}
+              </p>
               <p>
                 {Number(
                   employee?.data?.payments?.balance_due
@@ -137,7 +155,16 @@ export default function EmployeDrawer({
               </p>
               <p>UZS</p>
             </div>
+
+            {/* paid */}
             <div className="relative p-4 border dark:border-gray-600 rounded-md flex justify-between">
+              <span className="absolute -right-3 -top-4">
+                <EditPopover
+                  initialValue={employee?.data?.payments?.total_paid}
+                  allData={employee?.data?.payments}
+                  customKey={"total_paid"}
+                />
+              </span>
               <p className="absolute top-[-14px] left-2">{t("paid")}</p>
               <p>
                 {Number(
@@ -146,7 +173,17 @@ export default function EmployeDrawer({
               </p>
               <p>UZS</p>
             </div>
+
+            {/* salary */}
             <div className="relative p-4 border dark:border-gray-600 rounded-md flex items-center justify-between">
+              <span className="absolute -right-3 -top-4">
+                <EditPopover
+                  initialValue={employee?.data?.payments?.total_paid}
+                  allData={employee?.data?.payments}
+                  customKey={"total_salary"}
+                />
+              </span>
+
               <p className="absolute top-[-14px] left-2">{t("grossProfit")}</p>
 
               <p>
@@ -163,18 +200,24 @@ export default function EmployeDrawer({
               <TableRow>
                 <TableHead className="w-[5%]">#</TableHead>
                 <TableHead className="w-[30%]">{t("date")}</TableHead>
-                <TableHead className="w-[30%] text-center">{t("clients")}</TableHead>
+                <TableHead className="w-[30%] text-center">
+                  {t("clients")}
+                </TableHead>
                 <TableHead className="text-center w-[15%]">Kvt</TableHead>
-                <TableHead className="text-center w-[22%]">{t("price")}</TableHead>
+                <TableHead className="text-center w-[22%]">
+                  {t("price")}
+                </TableHead>
 
-                <TableHead className="float-right pt-2">{t("actions")}</TableHead>
+                <TableHead className="float-right pt-2">
+                  {t("actions")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {data?.data?.Data?.client_products &&
                 data?.data?.Data?.client_products?.map((item) => {
                   return (
-                    <TableRow>
+                    <TableRow key={item.id}>
                       <TableCell className="w-[5%]">1</TableCell>
                       <TableCell className="w-[26%]">
                         {item.created_at}
