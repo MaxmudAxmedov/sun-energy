@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState, useEffect } from "react";
 import OptionalImage from "@/assets/imgs/optional-img.jpg";
 import ContractDrawer from "./ContractDrawer";
+import { forceConvertDomain } from "@/lib/forceConvertDomain";
 export default function ContractTable({ setProducts }) {
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [localProducts, setLocalProducts] = useState([]);
@@ -126,11 +127,14 @@ export default function ContractTable({ setProducts }) {
                                 <TableCell className="relative">
                                     <img
                                         className="w-[80px] h-[55px] rounded-md"
-                                        src={item.photo || OptionalImage}
+                                        src={
+                                            forceConvertDomain(item.photo) ||
+                                            OptionalImage
+                                        }
                                         alt={item.name || ""}
                                     />
                                     {item.watt !== 0 && (
-                                        <span className="absolute -top-2.5 -left-3 bg-primaryColor text-white text-[10px] py-[2px] px-1.5 rounded-md">
+                                        <span className="absolute -top-1 -left-3 bg-primaryColor text-white text-[10px] py-[2px] px-1.5 rounded-md">
                                             {item.watt} W
                                         </span>
                                     )}

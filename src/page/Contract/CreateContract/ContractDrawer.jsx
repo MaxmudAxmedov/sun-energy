@@ -4,6 +4,7 @@ import { EditIcon } from "@/assets/icons/edit-icon";
 import OptionalImg from "@/assets/imgs/optional-img.jpg";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { forceConvertDomain } from "@/lib/forceConvertDomain";
 export default function ContractDrawer({
     isSheetOpen,
     setIsSheetOpen,
@@ -40,16 +41,17 @@ export default function ContractDrawer({
                 <div className="flex gap-10">
                     <div className="relative">
                         <img
-                            src={
-                                selectedRowData?.file ||
-                                selectedRowData?.photo ||
-                                OptionalImg
-                            }
+                            // src={
+                            //     selectedRowData?.file ||
+                            //     selectedRowData?.photo ||
+                            //     OptionalImg
+                            // }
+                            src={forceConvertDomain(selectedRowData?.photo) || OptionalImg}
                             alt=""
                             className="w-[260px] h-[200px] object-cover rounded-lg border"
                         />
                         {selectedRowData?.watt !== 0 && (
-                            <span className="absolute -top-2.5 -left-3 bg-primaryColor text-white text-[16px] py-[2px] px-1.5 rounded-md">
+                            <span className="absolute -top-2 -left-3 bg-primaryColor text-white text-[16px] py-[2px] px-1.5 rounded-md">
                                 {selectedRowData?.watt} W
                             </span>
                         )}

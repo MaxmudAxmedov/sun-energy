@@ -263,5 +263,7 @@
   "search": "Search",
   "additional_expense": "Additional Expense",
   "additional_expense_add": "Add Additional Expense",
-  "add": "Add"
+  "add": "Add",
+  "service_price": "Service price",
+  "accessory_price": "Accessory price"
 }

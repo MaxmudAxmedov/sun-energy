@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { forceConvertDomain } from "@/lib/forceConvertDomain";
 
 const productSchema = z.object({
   name: z.string().min(1, "productRequired"),
@@ -442,7 +443,7 @@ export default function CreateProduct() {
                   </FormLabel>
                   <FormControl>
                     <SingleImageUpload
-                      defaultImage={id ? productDataById?.photo : ""}
+                      defaultImage={id ? forceConvertDomain(productDataById?.photo) : ""}
                       onChange={(file) => {
                         field.onChange(file);
                       }}

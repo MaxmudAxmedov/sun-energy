@@ -261,5 +261,7 @@
   "search": "Qidirish",
   "additional_expense": "Qo'shimcha xarajat",
   "additional_expense_add": "Qo'shimcha xarajat qo'shish",
-  "add": "Qo'shish"
+  "add": "Qo'shish",
+  "service_price": "Xizmat narxi",
+  "accessory_price": "Aksessuar narxi"
 }

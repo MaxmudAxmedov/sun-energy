@@ -253,5 +253,7 @@
   "search": "Поиск",
   "additional_expense": "Дополнительные расходы",
   "additional_expense_add": "Добавить дополнительные расходы",
-  "add": "Добавлять"
+  "add": "Добавлять",
+  "service_price": "Стоимость услуги",
+  "accessory_price": "Цена аксессуара"
 }
