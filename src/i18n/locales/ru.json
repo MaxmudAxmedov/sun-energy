@@ -258,5 +258,6 @@
   "additional_expense_add": "Добавить дополнительные расходы",
   "add": "Добавлять",
   "service_price": "Стоимость услуги",
-  "accessory_price": "Цена аксессуара"
+  "accessory_price": "Цена аксессуара",
+  "info": "Дополнительный"
 }

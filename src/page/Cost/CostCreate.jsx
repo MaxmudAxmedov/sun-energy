@@ -121,8 +121,7 @@ export default function CostCreate() {
                                 htmlFor={`items.${index}.description`}
                                 className="text-sm font-medium"
                             >
-                                {/* {t("description")} */}
-                                Qo'shimcha
+                                {t("info")}
                             </label>
                             <Controller
                                 name={`items.${index}.description`}
@@ -130,7 +129,7 @@ export default function CostCreate() {
                                 render={({ field }) => (
                                     <Textarea
                                         type="text"
-                                        placeholder={t("qo'shimcha...")}
+                                        placeholder={t("info")}
                                         {...field}
                                         className="bigTablet:w-[611px] w-[300px] tablet:w-[450px] bg-white p-2 border dark:bg-darkBgInputs dark:border-darkBorderInput rounded-[8px]"
                                     />
