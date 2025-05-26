@@ -6,7 +6,7 @@ import {
     getClientsCustomers,
 } from "@/service/client";
 import { getEmployeeById } from "@/service/employee";
-import { getExpenses } from "@/service/expense";
+import { getExpenseById, getExpenses } from "@/service/expense";
 import { getProducts } from "@/service/product";
 import { getReports, getTrade, getTrades } from "@/service/report";
 
@@ -79,7 +79,14 @@ export function getClientsCustomerByIdQuery(id) {
 
 export function getExpensesQuery(params) {
     return {
-        queryKey: ["expenses", params],
+        queryKey: ["/expenses", params],
         queryFn: async () => getExpenses(params),
+    };
+}
+
+export function getExpenseByIdQuery(id) {
+    return {
+        queryKey: ["/expense-id", id],
+        queryFn: async () => getExpenseById(id),
     };
 }

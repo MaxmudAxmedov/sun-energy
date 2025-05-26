@@ -7,3 +7,11 @@ export const createExpense = (data) => {
 export const getExpenses = (params) => {
     return apiClient({ method: "get", url: `/expenses`, params });
 };
+
+export const getExpenseById = (id) => {
+    return apiClient({ method: "get", url: `/expense/${id}` });
+};
+
+export const updateExpense = (data) => {
+    return apiClient({ method: "put", url: `/expense`, data });
+};

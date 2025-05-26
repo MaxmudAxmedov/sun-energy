@@ -269,6 +269,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/editCost/:id",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <CostCreate />
+          </Suspense>
+        ),
+      },
+      {
         path: "/setting",
         element: (
           <Suspense fallback={<Loader />}>

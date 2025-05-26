@@ -267,5 +267,7 @@
   "add": "Qo'shish",
   "service_price": "Xizmat narxi",
   "accessory_price": "Aksessuar narxi",
-  "info": "Qo'shimcha"
+  "info": "Qo'shimcha",
+  "expenses_create": "Qo'shimcha xarajat qo'shildi",
+  "expenses_update": "Qo'shimcha xarajat o'zgartirildi"
 }
