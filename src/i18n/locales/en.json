@@ -269,5 +269,7 @@
   "add": "Add",
   "service_price": "Service price",
   "accessory_price": "Accessory price",
-  "info": "Additional"
+  "info": "Additional",
+  "expenses_create": "Additional cost added",
+  "expenses_update": "Additional cost changed"
 }

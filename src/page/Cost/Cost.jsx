@@ -4,6 +4,7 @@ import { DataTable } from "@/components/component/Dynamic-Table";
 import { getExpensesQuery } from "@/quires/quires";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const initialParams = {
     limit: "10",
@@ -14,7 +15,7 @@ const initialParams = {
 export default function Cost() {
     const [params, setParams] = useState(initialParams);
     const { data } = useQuery(getExpensesQuery(params));
-
+    const navigate = useNavigate();
     const column = [
         {
             header: "No",
@@ -25,6 +26,16 @@ export default function Cost() {
         {
             accessorKey: "name",
             header: "name",
+            cell: ({ row }) => {
+                return (
+                    <div
+                        onClick={() => navigate(`/editCost/${row.original.id}`)}
+                        className="cursor-pointer"
+                    >
+                        {row.original.name}
+                    </div>
+                );
+            },
         },
         {
             header: "price",
