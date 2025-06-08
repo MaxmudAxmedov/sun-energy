@@ -22,12 +22,15 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EditPopover } from "@/components/component/Edit-Popover";
 import { forceConvertDomain } from "@/lib/forceConvertDomain";
+import { Switch } from "@/components/ui/switch";
+import { CustomEditIcon } from "@/assets/icons/custom-edit-icon";
+import EmployePaidDrawer from "./EmployePaidDrawer";
 const initialParams = {
     client_id: "",
     employee_id: "",
     from_date: "",
     to_date: "",
-    is_company: true,
+    is_company: false,
     page: "1",
     limit: "10",
 };
@@ -40,6 +43,7 @@ export default function EmployeDrawer({
 }) {
     const navigate = useNavigate();
     const [params, setParams] = useState(initialParams);
+    const [isOpen, setIsOpen] = useState(false);
     const { t } = useTranslation();
     const { data } = useQuery({
         ...getTradesQuery(params),
@@ -137,7 +141,7 @@ export default function EmployeDrawer({
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
                         {/* cashback */}
                         <div className="relative p-4 border dark:border-gray-600 rounded-md flex justify-between">
-                            <span className="absolute -right-3 -top-4">
+                            {/* <span className="absolute -right-3 -top-4">
                                 <EditPopover
                                     initialValue={
                                         employee?.data?.payments?.total_cashback
@@ -145,7 +149,7 @@ export default function EmployeDrawer({
                                     allData={employee?.data?.payments}
                                     customKey={"total_cashback"}
                                 />
-                            </span>
+                            </span> */}
                             <p className="absolute top-[-14px] left-2">
                                 {t("cashback")}
                             </p>
@@ -180,13 +184,19 @@ export default function EmployeDrawer({
                         {/* paid */}
                         <div className="relative p-4 border dark:border-gray-600 rounded-md flex justify-between">
                             <span className="absolute -right-3 -top-4">
-                                <EditPopover
+                                <EmployePaidDrawer
+                                    isOpen={isOpen}
+                                    setIsOpen={setIsOpen}
+                                    data={employee?.data}
+                                />
+
+                                {/* <EditPopover
                                     initialValue={
                                         employee?.data?.payments?.total_paid
                                     }
                                     allData={employee?.data?.payments}
                                     customKey={"total_paid"}
-                                />
+                                /> */}
                             </span>
                             <p className="absolute top-[-14px] left-2">
                                 {t("paid")}
@@ -201,7 +211,7 @@ export default function EmployeDrawer({
 
                         {/* salary */}
                         <div className="relative p-4 border dark:border-gray-600 rounded-md flex items-center justify-between">
-                            <span className="absolute -right-3 -top-4">
+                            {/* <span className="absolute -right-3 -top-4">
                                 <EditPopover
                                     initialValue={
                                         employee?.data?.payments?.total_paid
@@ -209,7 +219,7 @@ export default function EmployeDrawer({
                                     allData={employee?.data?.payments}
                                     customKey={"total_salary"}
                                 />
-                            </span>
+                            </span> */}
 
                             <p className="absolute top-[-14px] left-2">
                                 {t("grossProfit")}
@@ -225,6 +235,20 @@ export default function EmployeDrawer({
                             </p>
                             <p>UZS</p>
                         </div>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                        <Switch
+                            checked={params.is_company}
+                            onCheckedChange={(value) =>
+                                setParams((prev) => ({
+                                    ...prev,
+                                    is_company: value,
+                                }))
+                            }
+                            id="airplane-mode"
+                        />
+                        <p>{!params.is_company ? "Jismoniy" : "Yuridik"}</p>
                     </div>
 
                     <Table className="bg-white dark:bg-darkPrimaryColor rounded-md">

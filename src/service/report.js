@@ -5,7 +5,7 @@ export const getReports = (params) => {
 };
 
 export const getTrades = (params) => {
-    return apiClient({ method: "get", url: `/trades`, params });
+    return apiClient({ method: "get", url: `/trades-reports`, params });
 };
 
 export const getTrade = (params) => {
