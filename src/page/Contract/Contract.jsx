@@ -102,7 +102,7 @@ export default function Contract() {
                 // isInput={true}
             />
             <div>
-                <div className="mt-4">
+                <div className="mt-4 flex gap-3">
                     <Switch
                         checked={params.is_company}
                         onCheckedChange={(value) =>
@@ -113,6 +113,7 @@ export default function Contract() {
                         }
                         id="airplane-mode"
                     />
+                    <p>{!params.is_company ? "Jismoniy" : "Yuridik"}</p>
                 </div>
                 <DataTable
                     data={data?.data?.Data?.client_products || []}

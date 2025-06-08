@@ -101,20 +101,8 @@ export default function Employee() {
         {
             header: "actions",
             cell: ({ row }) => {
-                // console.log(row.original.id);
                 return (
                     <div className="flex gap-3">
-                        {/* <button
-                            onClick={infoClick(row.original)}
-                            className=" bg-green-600 py-2 px-3 rounded-[15px]"
-                        >
-                            <EyeIcon />
-                        </button> */}
-                        {/* <DynamicDrawer
-              selectedRowData={selectedRowData}
-              isSheetOpen={isSheetOpen}
-              setIsSheetOpen={setIsSheetOpen}
-            /> */}
                         <EmployeDrawer
                             isSheetOpen={isSheetOpen}
                             setIsSheetOpen={setIsSheetOpen}
