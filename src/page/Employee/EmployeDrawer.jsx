@@ -17,23 +17,32 @@ import { PriceFormater } from "@/components/component/Price-Formater";
 import { NumberFormatter } from "@/components/component/Number-Formatter";
 import { Download } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getEmployeeByIdQuery, getTradesQuery } from "@/quires/quires";
+import {
+    getEmployeeByIdQuery,
+    getEmployeesQuery,
+    getTradesQuery,
+} from "@/quires/quires";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EditPopover } from "@/components/component/Edit-Popover";
 import { forceConvertDomain } from "@/lib/forceConvertDomain";
-import { Switch } from "@/components/ui/switch";
-import { CustomEditIcon } from "@/assets/icons/custom-edit-icon";
 import EmployePaidDrawer from "./EmployePaidDrawer";
 const initialParams = {
     client_id: "",
     employee_id: "",
-    from_date: "",
-    to_date: "",
-    is_company: false,
+    from_date: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    to_date: new Date(),
     page: "1",
     limit: "10",
 };
+const initialPaid = {
+    employee_id: "",
+    from_date: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    to_date: new Date(),
+    page: "1",
+    limit: "100",
+};
+
 export default function EmployeDrawer({
     isSheetOpen,
     setIsSheetOpen,
@@ -43,8 +52,23 @@ export default function EmployeDrawer({
 }) {
     const navigate = useNavigate();
     const [params, setParams] = useState(initialParams);
+    const [paramsPaid, setParamsPaid] = useState(initialPaid);
     const [isOpen, setIsOpen] = useState(false);
     const { t } = useTranslation();
+    const [paids, setPaids] = useState([]);
+    const [trades, setTrades] = useState([]);
+
+    // useEffect(() => {
+    //     setParams((prev) => ({ ...prev, employee_id: selectedRowData?.id }));
+    // }, [selectedRowData]);
+
+    useEffect(() => {
+        setParamsPaid((prev) => ({
+            ...prev,
+            employee_id: selectedRowData?.id,
+        }));
+    }, [selectedRowData]);
+
     const { data } = useQuery({
         ...getTradesQuery(params),
     });
@@ -54,9 +78,28 @@ export default function EmployeDrawer({
         enabled: !!selectedRowData?.id,
     });
 
+    const { data: employeeData } = useQuery({
+        ...getEmployeesQuery(paramsPaid),
+    });
+
     useEffect(() => {
-        setParams((prev) => ({ ...prev, employee_id: selectedRowData?.id }));
-    }, [selectedRowData]);
+        if (data?.data?.Data) {
+            const trade = data?.data?.Data?.client_products?.filter(
+                (i) => i.employee_id == selectedRowData?.id
+            );
+            setTrades(trade);
+        }
+    }, [selectedRowData?.id, data]);
+
+    useEffect(() => {
+        if (employeeData?.data?.Data) {
+            const paid =
+                employeeData?.data?.Data?.employees_detail_payments?.filter(
+                    (i) => i.emp_id == selectedRowData?.id
+                );
+            setPaids(paid);
+        }
+    }, [selectedRowData?.id, employeeData]);
 
     const capitalize = (str) => {
         if (!str) return "";
@@ -188,6 +231,7 @@ export default function EmployeDrawer({
                                     isOpen={isOpen}
                                     setIsOpen={setIsOpen}
                                     data={employee?.data}
+                                    paid={paids}
                                 />
 
                                 {/* <EditPopover
@@ -237,7 +281,7 @@ export default function EmployeDrawer({
                         </div>
                     </div>
 
-                    <div className="flex gap-3 items-center">
+                    {/* <div className="flex gap-3 items-center">
                         <Switch
                             checked={params.is_company}
                             onCheckedChange={(value) =>
@@ -249,7 +293,7 @@ export default function EmployeDrawer({
                             id="airplane-mode"
                         />
                         <p>{!params.is_company ? "Jismoniy" : "Yuridik"}</p>
-                    </div>
+                    </div> */}
 
                     <Table className="bg-white dark:bg-darkPrimaryColor rounded-md">
                         <TableHeader>
@@ -274,43 +318,41 @@ export default function EmployeDrawer({
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {data?.data?.Data?.client_products &&
-                                data?.data?.Data?.client_products?.map(
-                                    (item) => {
-                                        return (
-                                            <TableRow key={item.id}>
-                                                <TableCell className="w-[5%]">
-                                                    1
-                                                </TableCell>
-                                                <TableCell className="w-[26%]">
-                                                    {item.created_at}
-                                                </TableCell>
-                                                <TableCell className="w-[30%] text-center">
-                                                    {item?.client_name}
-                                                </TableCell>
-                                                <TableCell className="w-[15%] text-center">
-                                                    {item.kv}
-                                                </TableCell>
-                                                <TableCell className="text-center w-[18%]">
-                                                    {Number(
-                                                        item?.total_price
-                                                    )?.toLocaleString()}
-                                                </TableCell>
-                                                <TableCell className="float-right">
-                                                    <a
-                                                        target="blank"
-                                                        href={item?.contract}
-                                                    >
-                                                        <Download
-                                                            width={20}
-                                                            height={20}
-                                                        />
-                                                    </a>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    }
-                                )}
+                            {trades &&
+                                trades?.map((item) => {
+                                    return (
+                                        <TableRow key={item.id}>
+                                            <TableCell className="w-[5%]">
+                                                1
+                                            </TableCell>
+                                            <TableCell className="w-[26%]">
+                                                {item.created_at}
+                                            </TableCell>
+                                            <TableCell className="w-[30%] text-center">
+                                                {item?.client_name}
+                                            </TableCell>
+                                            <TableCell className="w-[15%] text-center">
+                                                {item.kv}
+                                            </TableCell>
+                                            <TableCell className="text-center w-[18%]">
+                                                {Number(
+                                                    item?.total_price
+                                                )?.toLocaleString()}
+                                            </TableCell>
+                                            <TableCell className="float-right">
+                                                <a
+                                                    target="blank"
+                                                    href={item?.contract}
+                                                >
+                                                    <Download
+                                                        width={20}
+                                                        height={20}
+                                                    />
+                                                </a>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
                         </TableBody>
                     </Table>
                 </div>
