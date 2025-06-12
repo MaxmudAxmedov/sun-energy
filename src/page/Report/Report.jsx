@@ -64,7 +64,15 @@ export default function Report() {
                 <Card className="w-[22%] text-center pt-4">
                     <CardTitle className="mb-2">Foyda</CardTitle>
                     <CardContent className="text-[22px]">
-                        {/* {Number(item?.profit)?.toLocaleString() || 0}{" "} */}
+                        {Number(item?.profit)?.toLocaleString() || 0}{" "}
+                        <smal className="text-[16px]">sum</smal>
+                    </CardContent>
+                </Card>
+                <Card className="w-[22%] text-center pt-4">
+                    <CardTitle className="mb-2">
+                        Qo'shimcha xarajatlar
+                    </CardTitle>
+                    <CardContent className="text-[22px]">
                         {Number(item?.total_extra_expenses)?.toLocaleString() ||
                             0}{" "}
                         <smal className="text-[16px]">sum</smal>

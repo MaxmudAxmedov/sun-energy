@@ -5,7 +5,7 @@ import {
     getClientsBusiness,
     getClientsCustomers,
 } from "@/service/client";
-import { getEmployeeById } from "@/service/employee";
+import { getEmployeeById, getEmployees } from "@/service/employee";
 import { getExpenseById, getExpenses } from "@/service/expense";
 import { getProducts } from "@/service/product";
 import { getReports, getTrade, getTrades } from "@/service/report";
@@ -60,6 +60,13 @@ export function getEmployeeByIdQuery(id) {
     return {
         queryKey: ["employee-id", id],
         queryFn: async () => getEmployeeById(id),
+    };
+}
+
+export function getEmployeesQuery(params) {
+    return {
+        queryKey: ["employees", params],
+        queryFn: async () => getEmployees(params),
     };
 }
 
