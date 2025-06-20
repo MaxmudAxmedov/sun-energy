@@ -6,8 +6,18 @@ import React, { useState } from "react";
 import DownloadIcon from "@/assets/imgs/download.png";
 import { PriceFormater } from "@/components/component/Price-Formater";
 import { getTradesQuery } from "@/quires/quires";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { deleteTrade } from "@/service/trade";
+import { toast } from "sonner";
 const initialParams = {
     client_id: "",
     employee_id: "",
@@ -20,10 +30,22 @@ const initialParams = {
 export default function Contract() {
     //   const [search, setSearch] = useState("");
     const [params, setParams] = useState(initialParams);
-
+    const queryClient = useQueryClient();
     const { data, isLoading, isError } = useQuery({
         ...getTradesQuery(params),
     });
+
+    const { mutate, isPending } = useMutation({
+        mutationFn: (id) => deleteTrade(id),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries(["trades"]);
+            toast.success("Shartnoma o'chirildi");
+        },
+        onError: (err) => {
+            toast.error("Shartnomani o'chirib bo'lmadi");
+        },
+    });
+
     const column = [
         {
             header: "No",
@@ -38,21 +60,29 @@ export default function Contract() {
         {
             header: "totalPrice",
             cell: ({ row }) => {
-                return <PriceFormater price={row.original.total_price} />;
+                return (
+                    <PriceFormater
+                        price={
+                            Number(row.original.total_price) +
+                            Number(row.original.service_cost) +
+                            Number(row.original.accessory_cost)
+                        }
+                    />
+                );
             },
         },
-        {
-            header: "service_price",
-            cell: ({ row }) => {
-                return <PriceFormater price={row.original.service_cost} />;
-            },
-        },
-        {
-            header: "accessory_price",
-            cell: ({ row }) => {
-                return <PriceFormater price={row.original.accessory_cost} />;
-            },
-        },
+        // {
+        //     header: "service_price",
+        //     cell: ({ row }) => {
+        //         return <PriceFormater price={row.original.service_cost} />;
+        //     },
+        // },
+        // {
+        //     header: "accessory_price",
+        //     cell: ({ row }) => {
+        //         return <PriceFormater price={row.original.accessory_cost} />;
+        //     },
+        // },
         {
             header: "lastPurchaseDate",
             cell: ({ row }) => {
@@ -68,18 +98,44 @@ export default function Contract() {
         },
         {
             header: "actions",
+            accessorKey: "actions",
             cell: ({ row }) => {
                 return (
-                    <div className="flex items-center gap-3">
-                        <a
-                            target="blank"
-                            href={row.original.contract}
-                            className="bg-green-100 py-2 px-3 rounded-[15px]"
-                        >
-                            <img src={DownloadIcon} width={20} alt="" />
-                        </a>
+                    <div className="flex items-center justify-end gap-3">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <MoreHorizontal className="h-5 w-5" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem>
+                                    <a
+                                        target="_blank"
+                                        href={row.original.contract}
+                                        className="bg-green-100 py-2 px-3 rounded-[15px]"
+                                    >
+                                        <img
+                                            src={DownloadIcon}
+                                            width={20}
+                                            alt="Download"
+                                        />
+                                    </a>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => mutate(row.original.id)}
+                                    disabled={isPending}
+                                    className="text-red-500"
+                                >
+                                    Delete
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 );
+            },
+            meta: {
+                align: "right",
             },
         },
     ];

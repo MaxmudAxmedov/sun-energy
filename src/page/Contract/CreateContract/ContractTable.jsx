@@ -14,7 +14,7 @@ import React, { useState, useEffect } from "react";
 import OptionalImage from "@/assets/imgs/optional-img.jpg";
 import ContractDrawer from "./ContractDrawer";
 import { forceConvertDomain } from "@/lib/forceConvertDomain";
-export default function ContractTable({ setProducts }) {
+export default function ContractTable({ setProducts, kvat }) {
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [localProducts, setLocalProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -109,17 +109,32 @@ export default function ContractTable({ setProducts }) {
     return (
         <div className="w-full max-h-[70vh] overflow-auto bg-white dark:bg-darkSecondary p-4 dark:bg-darkMain rounded-lg">
             <div className="flex justify-between items-center">
-                <div className="w-8/12">
+                <div className="w-6/12">
                     <Input
                         placeholder="qidirish"
                         onInput={(e) => setSearchTerm(e?.target?.value)}
                     />
                 </div>
-                <div>
-                    <p className="text-[12px]">Umumiy summa </p>
-                    <p className="font-semibold">
-                        {totalPrice?.toLocaleString()} so'm
-                    </p>
+                <div className="flex justify-between w-5/12">
+                    <span className="flex flex-col gap-1">
+                        <strong>Acc va Ser</strong>
+                        {(kvat * 200000 + kvat * 300000).toLocaleString()} sum
+                    </span>
+
+                    <span className="flex flex-col gap-1">
+                        <strong>Mahsulotlar</strong>
+                        {totalPrice?.toLocaleString()} sum
+                    </span>
+
+                    <span className="flex flex-col gap-1">
+                        <strong>Umumiy summa</strong>
+                        {(
+                            kvat * 200000 +
+                            kvat * 300000 +
+                            totalPrice
+                        ).toLocaleString()}
+                        sum
+                    </span>
                 </div>
             </div>
             <Table className="relative">

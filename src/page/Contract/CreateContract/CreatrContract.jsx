@@ -115,7 +115,6 @@ export default function CreatrContract() {
         return [...customers, ...businesses];
     }, [clientCustomer, clientBusiness]);
 
-    console.log(clientsData);
     const { data: employeeData } = useGetData({
         endpoint: "/employees",
         enabled: true,
@@ -515,7 +514,7 @@ export default function CreatrContract() {
                     </div>
 
                     <div>
-                        <ContractTable setProducts={setProducts} />
+                        <ContractTable kvat={kvat} setProducts={setProducts} />
                     </div>
                 </form>
             </Form>
