@@ -16,11 +16,6 @@ import { PriceFormater } from "@/components/component/Price-Formater";
 import { forceConvertDomain } from "@/lib/forceConvertDomain";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// const params = {
-//     search: "",
-//     limit: 20,
-// };
-
 export default function Products() {
     const [selectedRowData, setSelectedRowData] = useState(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
