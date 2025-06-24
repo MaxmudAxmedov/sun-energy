@@ -17,9 +17,6 @@ import { forceConvertDomain } from "@/lib/forceConvertDomain";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Products() {
-    const [selectedRowData, setSelectedRowData] = useState(null);
-    const [isSheetOpen, setIsSheetOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
     const [activeTab, setActiveTab] = useState("site");
     const [activeData, setActiveData] = useState([]);
     const { data, isLoading, isError } = useQuery({
@@ -27,6 +24,11 @@ export default function Products() {
         staleTime: Infinity,
         cacheTime: 0,
     });
+    const [selectedRowData, setSelectedRowData] = useState(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    console.log(data);
 
     {
         isLoading && <MainScletot />;
@@ -40,21 +42,16 @@ export default function Products() {
         setIsSheetOpen(true);
     };
 
-    const handleCategory = (categoryId) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const { data, isLoading, isError } = useGetData({
-            endpoint: `/product-category/${categoryId}`,
-            enabled: true,
-            getQueryKey: "/product-category",
-        });
-        {
-            isLoading && <Spinner />;
-        }
-        {
-            isError && "error";
-        }
-        return data?.name;
-    };
+    // Fetch all categories once in the main component
+    const {
+        data: categoriesData,
+        isLoading: isCategoriesLoading,
+        isError: isCategoriesError,
+    } = useGetData({
+        endpoint: `/product-categories`,
+        enabled: true,
+        getQueryKey: "/product-categories",
+    });
 
     useEffect(() => {
         if (activeTab == "site") {
@@ -69,6 +66,15 @@ export default function Products() {
             setActiveData(res);
         }
     }, [activeTab, data]);
+
+    const handleCategory = (categoryId) => {
+        if (isCategoriesLoading) return <Spinner />;
+        if (isCategoriesError) return "error";
+        const category = categoriesData?.Data?.product_categories?.find(
+            (cat) => cat.id === categoryId
+        );
+        return category?.name || "";
+    };
 
     const column = [
         {
@@ -155,6 +161,39 @@ export default function Products() {
                             mutateQueryKey={"product"}
                             deleteToastMessage={"productDeleted"}
                         />
+                        {/* <div className="mt-6">
+                <DataTable
+                    data={data?.data?.Data?.products || []}
+                    columns={column}
+                />
+            </div> */}
+
+                        <Tabs
+                            defaultValue="site"
+                            value={activeTab}
+                            onValueChange={(val) => setActiveTab(val)}
+                            className="w-full mt-6"
+                        >
+                            <TabsList>
+                                <TabsTrigger value="site">Web site</TabsTrigger>
+                                <TabsTrigger value="admin">
+                                    Admin panel
+                                </TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="site">
+                                <DataTable
+                                    data={activeData || []}
+                                    columns={column}
+                                />
+                            </TabsContent>
+
+                            <TabsContent value="admin">
+                                <DataTable
+                                    data={activeData || []}
+                                    columns={column}
+                                />
+                            </TabsContent>
+                        </Tabs>
                     </div>
                 );
             },
@@ -171,31 +210,12 @@ export default function Products() {
                 onSearch={(value) => setSearchTerm(value)}
                 isInput={true}
             />
-            {/* <div className="mt-6">
+            <div className="mt-6">
                 <DataTable
                     data={data?.data?.Data?.products || []}
                     columns={column}
                 />
-            </div> */}
-
-            <Tabs
-                defaultValue="site"
-                value={activeTab}
-                onValueChange={(val) => setActiveTab(val)}
-                className="w-full mt-6"
-            >
-                <TabsList>
-                    <TabsTrigger value="site">Web site</TabsTrigger>
-                    <TabsTrigger value="admin">Admin panel</TabsTrigger>
-                </TabsList>
-                <TabsContent value="site">
-                    <DataTable data={activeData || []} columns={column} />
-                </TabsContent>
-
-                <TabsContent value="admin">
-                    <DataTable data={activeData || []} columns={column} />
-                </TabsContent>
-            </Tabs>
+            </div>
         </div>
     );
 }
