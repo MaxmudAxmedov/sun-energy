@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FetchingError } from "@/components/component/FetchingError";
 import { MainScletot } from "@/components/component/main-scletot";
 import { DataTable } from "@/components/component/Dynamic-Table";
@@ -14,6 +14,7 @@ import OptionalImage from "@/assets/imgs/optional-img.jpg";
 import ProductDrawer from "./ProductDrawer";
 import { PriceFormater } from "@/components/component/Price-Formater";
 import { forceConvertDomain } from "@/lib/forceConvertDomain";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // const params = {
 //     search: "",
@@ -24,7 +25,8 @@ export default function Products() {
     const [selectedRowData, setSelectedRowData] = useState(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-
+    const [activeTab, setActiveTab] = useState("site");
+    const [activeData, setActiveData] = useState([]);
     const { data, isLoading, isError } = useQuery({
         ...getProductsQuery({ limit: 100, search: searchTerm }),
         staleTime: Infinity,
@@ -58,6 +60,20 @@ export default function Products() {
         }
         return data?.name;
     };
+
+    useEffect(() => {
+        if (activeTab == "site") {
+            let res = data?.data?.Data?.products.filter(
+                (i) => i.show_on_landing == true
+            );
+            setActiveData(res);
+        } else {
+            let res = data?.data?.Data?.products.filter(
+                (i) => i.show_on_landing == false
+            );
+            setActiveData(res);
+        }
+    }, [activeTab, data]);
 
     const column = [
         {
@@ -160,12 +176,31 @@ export default function Products() {
                 onSearch={(value) => setSearchTerm(value)}
                 isInput={true}
             />
-            <div className="mt-6">
+            {/* <div className="mt-6">
                 <DataTable
                     data={data?.data?.Data?.products || []}
                     columns={column}
                 />
-            </div>
+            </div> */}
+
+            <Tabs
+                defaultValue="site"
+                value={activeTab}
+                onValueChange={(val) => setActiveTab(val)}
+                className="w-full mt-6"
+            >
+                <TabsList>
+                    <TabsTrigger value="site">Web site</TabsTrigger>
+                    <TabsTrigger value="admin">Admin panel</TabsTrigger>
+                </TabsList>
+                <TabsContent value="site">
+                    <DataTable data={activeData || []} columns={column} />
+                </TabsContent>
+
+                <TabsContent value="admin">
+                    <DataTable data={activeData || []} columns={column} />
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }
