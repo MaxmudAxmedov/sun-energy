@@ -19,16 +19,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function Products() {
     const [activeTab, setActiveTab] = useState("site");
     const [activeData, setActiveData] = useState([]);
+    const [selectedRowData, setSelectedRowData] = useState(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    
     const { data, isLoading, isError } = useQuery({
         ...getProductsQuery({ limit: 100, search: searchTerm }),
         staleTime: Infinity,
         cacheTime: 0,
     });
-    const [selectedRowData, setSelectedRowData] = useState(null);
-    const [isSheetOpen, setIsSheetOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
-
-    console.log(data);
 
     {
         isLoading && <MainScletot />;
@@ -161,13 +160,6 @@ export default function Products() {
                             mutateQueryKey={"product"}
                             deleteToastMessage={"productDeleted"}
                         />
-                        {/* <div className="mt-6">
-                <DataTable
-                    data={data?.data?.Data?.products || []}
-                    columns={column}
-                />
-            </div> */}
-
                         <Tabs
                             defaultValue="site"
                             value={activeTab}
