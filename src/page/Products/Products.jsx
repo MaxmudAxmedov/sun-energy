@@ -22,7 +22,6 @@ export default function Products() {
     const [selectedRowData, setSelectedRowData] = useState(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-    
     const { data, isLoading, isError } = useQuery({
         ...getProductsQuery({ limit: 100, search: searchTerm }),
         staleTime: Infinity,
@@ -160,32 +159,6 @@ export default function Products() {
                             mutateQueryKey={"product"}
                             deleteToastMessage={"productDeleted"}
                         />
-                        <Tabs
-                            defaultValue="site"
-                            value={activeTab}
-                            onValueChange={(val) => setActiveTab(val)}
-                            className="w-full mt-6"
-                        >
-                            <TabsList>
-                                <TabsTrigger value="site">Web site</TabsTrigger>
-                                <TabsTrigger value="admin">
-                                    Admin panel
-                                </TabsTrigger>
-                            </TabsList>
-                            <TabsContent value="site">
-                                <DataTable
-                                    data={activeData || []}
-                                    columns={column}
-                                />
-                            </TabsContent>
-
-                            <TabsContent value="admin">
-                                <DataTable
-                                    data={activeData || []}
-                                    columns={column}
-                                />
-                            </TabsContent>
-                        </Tabs>
                     </div>
                 );
             },
@@ -203,10 +176,24 @@ export default function Products() {
                 isInput={true}
             />
             <div className="mt-6">
-                <DataTable
-                    data={data?.data?.Data?.products || []}
-                    columns={column}
-                />
+                <Tabs
+                    defaultValue="site"
+                    value={activeTab}
+                    onValueChange={(val) => setActiveTab(val)}
+                    className="w-full mt-6"
+                >
+                    <TabsList>
+                        <TabsTrigger value="site">Web site</TabsTrigger>
+                        <TabsTrigger value="admin">Admin panel</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="site">
+                        <DataTable data={activeData || []} columns={column} />
+                    </TabsContent>
+
+                    <TabsContent value="admin">
+                        <DataTable data={activeData || []} columns={column} />
+                    </TabsContent>
+                </Tabs>
             </div>
         </div>
     );
