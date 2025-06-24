@@ -136,6 +136,8 @@ export default function CreatrContract() {
 
     const { watch, setValue } = form;
     const kvat = watch("kvat");
+    const accessory_cost = watch("accessory_cost");
+    const service_cost = watch("service_cost");
     const accessory = 200000;
     const service = 300000;
 
@@ -509,12 +511,15 @@ export default function CreatrContract() {
                                 )}
                             />
                         </div>
-
-                        <div></div>
                     </div>
 
                     <div>
-                        <ContractTable kvat={kvat} setProducts={setProducts} />
+                        <ContractTable
+                            serviceCost={service_cost}
+                            accessoryCost={accessory_cost}
+                            kvat={kvat}
+                            setProducts={setProducts}
+                        />
                     </div>
                 </form>
             </Form>

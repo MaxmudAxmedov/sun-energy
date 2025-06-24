@@ -14,17 +14,57 @@ import React, { useState, useEffect } from "react";
 import OptionalImage from "@/assets/imgs/optional-img.jpg";
 import ContractDrawer from "./ContractDrawer";
 import { forceConvertDomain } from "@/lib/forceConvertDomain";
-export default function ContractTable({ setProducts, kvat }) {
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { useGetData } from "@/hook/useApi";
+
+export default function ContractTable({
+    setProducts,
+    kvat,
+    serviceCost,
+    accessoryCost,
+}) {
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [localProducts, setLocalProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [selectedRowData, setSelectedRowData] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const { data, isLoading } = useQuery({
         ...getProductsQuery({ limit: 500, search: searchTerm }),
         staleTime: Infinity,
         cacheTime: 0,
     });
+    const { data: categorys } = useGetData({
+        endpoint: "/product-categories",
+        enabled: true,
+        params: {
+            limit: 30,
+            search: searchTerm,
+        },
+        getQueryKey: "/product-category",
+    });
+
+    useEffect(() => {
+        if (categorys) {
+            const res = categorys?.Data?.product_categories?.map((item) => ({
+                value: String(item?.id),
+                label: item?.name,
+            }));
+            setCategories(res);
+            if (res?.length) {
+                setSelectedCategory(res[0]?.value);
+            }
+        }
+    }, [categorys]);
+
     useEffect(() => {
         if (data?.data?.Data?.products) {
             setLocalProducts(data?.data?.Data?.products);
@@ -102,23 +142,53 @@ export default function ContractTable({ setProducts, kvat }) {
         0
     );
 
+    const handleCategoryChange = (value) => {
+        setSelectedCategory(value);
+    
+        const filtered = localProducts?.filter(
+            (product) => String(product?.category_id) === value
+        );
+    
+        setFilteredProducts(filtered);
+    };
+
     const infoClick = (row) => () => {
         setSelectedRowData(row);
         setIsSheetOpen(true);
     };
+    const numericKvat = parseFloat(kvat);
     return (
         <div className="w-full max-h-[70vh] overflow-auto bg-white dark:bg-darkSecondary p-4 dark:bg-darkMain rounded-lg">
             <div className="flex justify-between items-center">
-                <div className="w-6/12">
+                <div className="w-6/12 flex gap-2">
                     <Input
                         placeholder="qidirish"
                         onInput={(e) => setSearchTerm(e?.target?.value)}
                     />
+                    <Select
+                        value={selectedCategory}
+                        onValueChange={handleCategoryChange}
+                    >
+                        <SelectTrigger className="w-[200px]">
+                            <SelectValue placeholder="Kategoriya tanlang" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {categories?.map((item) => (
+                                <SelectItem key={item.value} value={item.value}>
+                                    {item.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="flex justify-between w-5/12">
                     <span className="flex flex-col gap-1">
                         <strong>Acc va Ser</strong>
-                        {(kvat * 200000 + kvat * 300000).toLocaleString()} sum
+                        {(
+                            numericKvat * Number(serviceCost) +
+                            numericKvat * Number(accessoryCost)
+                        ).toLocaleString()}{" "}
+                        sum
                     </span>
 
                     <span className="flex flex-col gap-1">
@@ -129,8 +199,8 @@ export default function ContractTable({ setProducts, kvat }) {
                     <span className="flex flex-col gap-1">
                         <strong>Umumiy summa</strong>
                         {(
-                            kvat * 200000 +
-                            kvat * 300000 +
+                            numericKvat * Number(serviceCost) +
+                            numericKvat * Number(accessoryCost) +
                             totalPrice
                         ).toLocaleString()}
                         sum
@@ -151,7 +221,7 @@ export default function ContractTable({ setProducts, kvat }) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {localProducts?.map((item, index) => {
+                    {filteredProducts?.map((item, index) => {
                         const current = selectedProducts.find(
                             (p) => p.product_id === item.id
                         );
