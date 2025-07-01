@@ -198,8 +198,8 @@ export default function ContractTable({
                     <span className="flex flex-col gap-1">
                         <strong>Umumiy summa</strong>
                         {(
-                            numericKvat * Number(serviceCost) +
-                            numericKvat * Number(accessoryCost) +
+                            Number(serviceCost) +
+                            Number(accessoryCost) +
                             totalPrice
                         ).toLocaleString()}
                         sum
