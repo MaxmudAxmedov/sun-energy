@@ -185,8 +185,7 @@ export default function ContractTable({
                     <span className="flex flex-col gap-1">
                         <strong>Acc va Ser</strong>
                         {(
-                            numericKvat * Number(serviceCost) +
-                            numericKvat * Number(accessoryCost)
+                            Number(serviceCost) + Number(accessoryCost)
                         ).toLocaleString()}{" "}
                         sum
                     </span>
