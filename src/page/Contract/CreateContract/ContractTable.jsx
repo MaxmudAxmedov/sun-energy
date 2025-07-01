@@ -144,11 +144,11 @@ export default function ContractTable({
 
     const handleCategoryChange = (value) => {
         setSelectedCategory(value);
-    
+
         const filtered = localProducts?.filter(
             (product) => String(product?.category_id) === value
         );
-    
+
         setFilteredProducts(filtered);
     };
 
@@ -159,7 +159,7 @@ export default function ContractTable({
     const numericKvat = parseFloat(kvat);
     return (
         <div className="w-full max-h-[70vh] overflow-auto bg-white dark:bg-darkSecondary p-4 dark:bg-darkMain rounded-lg">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center sticky top-[-16px] z-10 bg-white dark:bg-darkSecondary p-2">
                 <div className="w-6/12 flex gap-2">
                     <Input
                         placeholder="qidirish"
@@ -170,7 +170,7 @@ export default function ContractTable({
                         onValueChange={handleCategoryChange}
                     >
                         <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Kategoriya tanlang" />
+                            <SelectValue placeholder="Kategoriyani tanlang" />
                         </SelectTrigger>
                         <SelectContent>
                             {categories?.map((item) => (
