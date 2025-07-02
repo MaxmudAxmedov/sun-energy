@@ -20,10 +20,12 @@ React Hook Form — Formalarni boshqarish va validatsiya
 ✅ Real-time statistika va umumiy ko'rsatkichlar paneli
 ✅ Responsiv dizayn va foydalanuvchi uchun qulay interfeys
 
+<img width="1588" alt="Снимок экрана 2025-07-02 в 11 18 12" src="https://github.com/user-attachments/assets/f0186023-36db-49bb-afe6-2a57b1eba96b" />
+
 👨‍💻 Muallif
 Ism: Mahmud Ahmedov
 
 Lavozim: Frontend Developer
 
 linkedin.com/in/mahmud-ahmedov-950806240
-<img width="1588" alt="Снимок экрана 2025-07-02 в 11 18 12" src="https://github.com/user-attachments/assets/f0186023-36db-49bb-afe6-2a57b1eba96b" />
+
