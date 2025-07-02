@@ -1,12 +1,29 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🌞 Sun Energy Admin Panel
+Sun Energy — Renewable energy mahsulotlari, mijozlar, shartnomalar va moliyaviy hisobotlarni boshqarish uchun zamonaviy admin panel.
 
-Currently, two official plugins are available:
+⚡ Texnologiyalar
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+React.js — Tez va dinamik foydalanuvchi interfeysi
+Tailwind CSS — Zamonaviy va moslashuvchan UI dizayn
+Shadcn UI — Tayyor UI komponentlar
+React Query — API bilan integratsiya
+React Hook Form — Formalarni boshqarish va validatsiya
 
-## Expanding the ESLint configuration
+📦 Funksiyalar
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+✅ Mahsulotlarni qo'shish, tahrirlash va boshqarish
+✅ Mijozlar va shartnomalar modulini boshqarish
+✅ Ishchilar maoshlarini hisoblash va nazorat qilish
+✅ Foydalanuvchi rollari va kirish huquqlarini sozlash
+✅ Real-time statistika va umumiy ko'rsatkichlar paneli
+✅ Responsiv dizayn va foydalanuvchi uchun qulay interfeys
+
+👨‍💻 Muallif
+Ism: Mahmud Ahmedov
+
+Lavozim: Frontend Developer
+
+linkedin.com/in/mahmud-ahmedov-950806240
+<img width="1588" alt="Снимок экрана 2025-07-02 в 11 18 12" src="https://github.com/user-attachments/assets/f0186023-36db-49bb-afe6-2a57b1eba96b" />
