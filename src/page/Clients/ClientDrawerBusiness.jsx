@@ -25,7 +25,7 @@ const initialParams = {
     employee_id: "",
     from_date: "",
     to_date: "",
-    is_company: true,
+    // is_company: true,
     page: "1",
     limit: "100",
 };
