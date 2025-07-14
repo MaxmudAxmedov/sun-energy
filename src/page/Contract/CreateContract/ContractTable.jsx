@@ -31,14 +31,15 @@ export default function ContractTable({
 }) {
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [localProducts, setLocalProducts] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [selectedRowData, setSelectedRowData] = useState(null);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [productSearchTerm, setProductSearchTerm] = useState("");
+
     const { data, isLoading } = useQuery({
-        ...getProductsQuery({ limit: 500, search: searchTerm }),
+        ...getProductsQuery({ limit: 500, search: productSearchTerm }),
         staleTime: Infinity,
         cacheTime: 0,
     });
@@ -47,7 +48,7 @@ export default function ContractTable({
         enabled: true,
         params: {
             limit: 30,
-            search: searchTerm,
+            search: "",
         },
         getQueryKey: "/product-category",
     });
@@ -67,7 +68,10 @@ export default function ContractTable({
 
     useEffect(() => {
         if (data?.data?.Data?.products) {
-            setLocalProducts(data?.data?.Data?.products);
+            let res = data?.data?.Data?.products?.filter(
+                (i) => i.show_on_landing == true
+            );
+            setLocalProducts(res);
         }
     }, [data]);
 
@@ -163,7 +167,7 @@ export default function ContractTable({
                 <div className="w-6/12 flex gap-2">
                     <Input
                         placeholder="qidirish"
-                        onInput={(e) => setSearchTerm(e?.target?.value)}
+                        onInput={(e) => setProductSearchTerm(e?.target?.value)}
                     />
                     <Select
                         value={selectedCategory}
