@@ -17,7 +17,7 @@ import { NumberFormatter } from "@/components/component/Number-Formatter";
 import { Download } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getClientsCustomerByIdQuery, getTradesQuery } from "@/quires/quires";
+import { getClientsCustomerByIdQuery, getTradeQuery, getTradesQuery } from "@/quires/quires";
 import { useTranslation } from "react-i18next";
 
 const initialParams = {
@@ -41,7 +41,7 @@ export default function ClientDrawer({
     const [params, setParams] = useState(initialParams);
     const { t } = useTranslation();
     const { data } = useQuery({
-        ...getTradesQuery(params),
+        ...getTradeQuery(params),
         enabled: !!selectedRowData?.id,
     });
 

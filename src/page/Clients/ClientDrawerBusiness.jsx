@@ -17,7 +17,7 @@ import { NumberFormatter } from "@/components/component/Number-Formatter";
 import { Download } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getClientsBusinessByIdQuery, getTradesQuery } from "@/quires/quires";
+import { getClientsBusinessByIdQuery, getTradeQuery, getTradesQuery } from "@/quires/quires";
 import { useTranslation } from "react-i18next";
 
 const initialParams = {
@@ -25,7 +25,7 @@ const initialParams = {
     employee_id: "",
     from_date: "",
     to_date: "",
-    // is_company: true,
+    is_company: true,
     page: "1",
     limit: "100",
 };
@@ -41,7 +41,7 @@ export default function ClientDrawerBusiness({
     const [params, setParams] = useState(initialParams);
     const { t } = useTranslation();
     const { data } = useQuery({
-        ...getTradesQuery(params),
+        ...getTradeQuery(params),
         enabled: !!selectedRowData?.id,
     });
 
