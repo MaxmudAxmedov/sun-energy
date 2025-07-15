@@ -9,5 +9,5 @@ export const getTrades = (params) => {
 };
 
 export const getTrade = (params) => {
-    return apiClient({ method: "get", url: `/trade`, params });
+    return apiClient({ method: "get", url: `/trades`, params });
 };
