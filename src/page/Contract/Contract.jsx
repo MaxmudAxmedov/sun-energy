@@ -25,7 +25,7 @@ const initialParams = {
     to_date: "",
     is_company: false,
     page: "1",
-    limit: "10",
+    limit: "200",
 };
 export default function Contract() {
     //   const [search, setSearch] = useState("");
