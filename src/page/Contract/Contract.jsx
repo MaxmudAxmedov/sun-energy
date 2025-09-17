@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import React, { useState } from "react";
 import DownloadIcon from "@/assets/imgs/download.png";
 import { PriceFormater } from "@/components/component/Price-Formater";
-import { getTradesQuery } from "@/quires/quires";
+import { getTradeQuery, getTradesQuery } from "@/quires/quires";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
@@ -32,7 +32,7 @@ export default function Contract() {
     const [params, setParams] = useState(initialParams);
     const queryClient = useQueryClient();
     const { data, isLoading, isError } = useQuery({
-        ...getTradesQuery(params),
+        ...getTradeQuery(params),
     });
 
     const { mutate, isPending } = useMutation({
