@@ -68,10 +68,10 @@ export default function ContractTable({
 
     useEffect(() => {
         if (data?.data?.Data?.products) {
-            let res = data?.data?.Data?.products?.filter(
-                (i) => i.show_on_landing == true
-            );
-            setLocalProducts(res);
+            // let res = data?.data?.Data?.products?.filter(
+            //     (i) => i.show_on_landing == true
+            // );
+            setLocalProducts(data?.data?.Data?.products);
         }
     }, [data]);
 
